@@ -10,7 +10,7 @@ REQUIREMENTS = [
 setuptools.setup(
     name='shell-releaser',
     version='0.1.1',
-    description='Release shell scripts directly to Homebrew.',  # noqa
+    description='Release shell scripts directly to Homebrew via GitHub Actions.',  # noqa
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='http://github.com/Justintime50/shell-releaser',

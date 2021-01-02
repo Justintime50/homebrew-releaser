@@ -1,5 +1,5 @@
 name: 'Shell Releaser'
-description: 'Release shell scripts directly to Homebrew.'
+description: 'Release shell scripts directly to Homebrew via GitHub Actions.'
 inputs:
   owner:
     description: 'GitHub owner (username)'
@@ -11,7 +11,7 @@ inputs:
     description: 'GitHub repo name'
     required: true
   bin_install:
-    description: 'The path to the shell script'
+    description: 'The Homebrew command to install the script to bin'
     required: true
   homebrew_tap:
     description: 'The url for the GitHub Homebrew tap'
