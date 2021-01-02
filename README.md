@@ -2,7 +2,7 @@
 
 # Shell Releaser
 
-Release shell scripts directly via Homebrew.
+Release shell scripts directly to Homebrew via GitHub Actions.
 
 [![Build](https://github.com/Justintime50/shell-releaser/workflows/build/badge.svg)](https://github.com/Justintime50/shell-releaser/actions)
 [![Coverage Status](https://coveralls.io/repos/github/Justintime50/shell-releaser/badge.svg?branch=main)](https://coveralls.io/github/Justintime50/shell-releaser?branch=main)
@@ -31,23 +31,31 @@ make help
 ## Usage
 
 **Note:** Do not edit auto-generated formula files, it could lead to failures during operation.
+**Note:** Shell scripts distributed via Shell Releaser must be executable and contain a proper shebang to work.
 
 Shell Releaser will always use the latest release of a GitHub project.
 
 ```bash
-# Run manually
-INPUT_GITHUB_TOKEN=123... OWNER=Justintime50 OWNER_EMAIL=justin@example.com REPO=freedom BIN_INSTALL='"src/secure-browser-kiosk.sh" => "secure-browser-kiosk"' HOMEBREW_TAP=homebrew-formulas HOMEBREW_FORMULA_FOLDER=formula venv/bin/python shell_releaser/releaser.py
+# Run Shell Releaser manually
+INPUT_GITHUB_TOKEN=123... \
+INPUT_OWNER=Justintime50 \
+INPUT_OWNER_EMAIL=justin@example.com \
+INPUT_REPO=my_repo_name \
+INPUT_BIN_INSTALL='"src/my-script.sh" => "my-script"' \
+INPUT_HOMEBREW_TAP=homebrew-formulas \
+INPUT_HOMEBREW_FORMULA_FOLDER=formula \
+venv/bin/python shell_releaser/releaser.py
 ```
 
 Add the following to your `.github/workflows/release.yml` file in your GitHub repo. Alter the below records as needed.
 
-* owner: GitHub username
-* owner_email: Email of the GitHub user (for commit config)
-* repo: Name of the repository as it appears on GitHub
-* bin_install: The Homebrew command to copy your script to `bin`
-* homebrew_tap: The name of the homebrew tap as it appears on GitHub
-* homebrew_formula_folder: The directory where your formula reside in your tap repo
-* github_token: The GitHub Token secret that has `repo` permissions to the repo you want to release to.
+* `owner`: GitHub username
+* `owner_email`: Email of the GitHub user (for commit config)
+* `repo`: Name of the repository as it appears on GitHub
+* `bin_install`: The Homebrew command to copy your script to `bin`
+* `homebrew_tap`: The name of the homebrew tap as it appears on GitHub
+* `homebrew_formula_folder`: The directory where your formula reside in your tap repo
+* `github_token`: The GitHub Token secret that has `repo` permissions to the repo you want to release to
 
 ```yml
 on:
@@ -58,7 +66,7 @@ on:
 jobs:
   shell-releaser:
     runs-on: ubuntu-latest
-    name: Release my shell script to Homebrew
+    name: shell-releaser
     steps:
     - name: Release my shell script to Homebrew
       uses: Justintime50/shell-releaser@v0.1.1
