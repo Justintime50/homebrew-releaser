@@ -1,0 +1,5 @@
+version: "3.7"
+services: 
+    shell-releaser:
+      container_name: shell-releaser
+      build: .

@@ -3,18 +3,18 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-# REQUIREMENTS = [
-#     'requests >= 1.0.0',
-# ]
+REQUIREMENTS = [
+    'requests >= 1.0.0'
+]
 
 setuptools.setup(
-    name='PROJECT_NAME',
-    version='1.0.0',
-    description='Your project description here',  # noqa
+    name='shell-releaser',
+    version='0.1.0',
+    description='Release shell scripts directly to Homebrew.',  # noqa
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='http://github.com/USERNAME/PROJECT_NAME',
-    author='USERNAME',
+    url='http://github.com/Justintime50/shell-releaser',
+    author='Justintime50',
     license='MIT',
     packages=setuptools.find_packages(),
     classifiers=[
@@ -22,7 +22,7 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    # install_requires=REQUIREMENTS,
+    install_requires=REQUIREMENTS,
     extras_require={
         'dev': [
             'pytest >= 6.0.0',
@@ -34,7 +34,7 @@ setuptools.setup(
     },
     entry_points={
         'console_scripts': [
-            'PROJECT_NAME=python_project.my_module:main'
+            'shell-releaser=shell_releaser.releaser:main'
         ]
     },
     python_requires='>=3.6',
