@@ -145,6 +145,7 @@ def main():
     # print(template)
     git = commit_formula(OWNER, OWNER_EMAIL, REPO, version)
     print(git)
+    print(f'Shell Releaser released {version} of {REPO} successfully!')
 
 
 if __name__ == '__main__':

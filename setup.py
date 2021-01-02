@@ -9,7 +9,7 @@ REQUIREMENTS = [
 
 setuptools.setup(
     name='shell-releaser',
-    version='0.1.0',
+    version='0.1.1',
     description='Release shell scripts directly to Homebrew.',  # noqa
     long_description=long_description,
     long_description_content_type="text/markdown",

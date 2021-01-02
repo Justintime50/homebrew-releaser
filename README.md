@@ -53,12 +53,12 @@ jobs:
     - name: Release my shell script to Homebrew
       uses: Justintime50/shell-releaser@v0.1.0
       with:
-       owner: Justintime50
-       owner_email: justin@example.com
-       repo: my_repo_name
-       bin_install: "src/my-script.sh" => "my-script"
-       homebrew_tap: 'https://github.com/Justintime50/homebrew-formulas'
-       homebrew_formula_folder: formula
+        owner: Justintime50
+        owner_email: justin@example.com
+        repo: my_repo_name
+        bin_install: '"src/my-script.sh" => "my-script"'
+        homebrew_tap: 'https://github.com/Justintime50/homebrew-formulas'
+        homebrew_formula_folder: formula
 ```
 
 ## Development

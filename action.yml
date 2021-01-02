@@ -4,6 +4,9 @@ inputs:
   owner:
     description: 'GitHub owner (username)'
     required: true
+  owner_email:
+    description: 'GitHub owner email'
+    required: true
   repo:
     description: 'GitHub repo name'
     required: true
@@ -16,12 +19,17 @@ inputs:
   homebrew_formula_folder:
     description: 'The folder in the GitHub Homebrew tap that houses the formula'
     required: true
+  github_token:
+    description: 'The GitHub token with `repo` permission used to push updates to the Homebrew tap'
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.owner }}
+    - ${{ inputs.owner_email }}
     - ${{ inputs.repo }}
     - ${{ inputs.bin_install }}
     - ${{ inputs.homebrew_tap }}
     - ${{ inputs.homebrew_formula_folder }}
+    - ${{ inputs.github_token }}
