@@ -114,7 +114,7 @@ def commit_formula(owner, owner_email, repo, version):
             f'git clone https://{GITHUB_TOKEN}@github.com/{owner}/{HOMEBREW_TAP}.git && '
             f'mv new_{repo}.rb {HOMEBREW_TAP}/{HOMEBREW_FORMULA_FOLDER}/{repo}.rb && '
             f'cd {HOMEBREW_TAP} && '
-            f'git add {HOMEBREW_FORMULA_FOLDER}/{repo}.rb &&'
+            f'git add {HOMEBREW_FORMULA_FOLDER}/{repo}.rb && '
             f'git commit -m "Brew formula update for {repo} version {version}" && '
             f'git push https://{GITHUB_TOKEN}@github.com/{owner}/{HOMEBREW_TAP}.git'
         ),
