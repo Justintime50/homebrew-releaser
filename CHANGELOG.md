@@ -1,5 +1,6 @@
 # CHANGELOG
 
-## v1.0.0 (2020-11-19)
+## v0.1.0 (2021-01-02)
 
-* Replace the version and date with the changelog info you need
+* Initial release
+* Generates a Homebrew formula file based off the latest release of a project updating the name, description, checksum, and tar url

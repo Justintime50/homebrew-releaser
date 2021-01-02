@@ -1,39 +1,75 @@
 <div align="center">
 
-# Python Template
+# Shell Releaser
 
-A Python project template to save you time and energy.
+Release shell scripts directly via Homebrew.
 
-[![Build Status](https://travis-ci.com/justintime50/python-template.svg?branch=main)](https://travis-ci.com/justintime50/python-template)
-[![Licence](https://img.shields.io/github/license/justintime50/python-template)](LICENSE)
+[![Build](https://github.com/Justintime50/shell-releaser/workflows/build/badge.svg)](https://github.com/Justintime50/shell-releaser/actions)
+[![Coverage Status](https://coveralls.io/repos/github/Justintime50/shell-releaser/badge.svg?branch=main)](https://coveralls.io/github/Justintime50/shell-releaser?branch=main)
+[![Licence](https://img.shields.io/github/license/Justintime50/shell-releaser)](LICENSE)
 
 <img src="assets/showcase.png" alt="Showcase">
 
 </div>
 
-Python projects take a long time to setup with all the various files, the virtual environment, and keeping things uniform across projects. With this Python template, you can quickly setup boilerplate code and miscellaneous items for your Python project saving you time and energy so you can get back to coding. 
+**Note:** This project is still in development. Star the project and keep an eye on the releases.
+
+This project was inspired by [GoReleaser](https://github.com/goreleaser/goreleaser) which allows you to deliver Go binaries quickly via Homebrew. I wanted to do the same for shell scripts but couldn't immediately find a solution - so I decided to build one. Shell Releaser allows you to release shell scripts directly to Homebrew via a GitHub Action. Cut a new release on your favorite shell script project and let Shell Releaser publish that release via your self-hosted Homebrew tap. Shell Releaser will update the project description, version, tar archive url, and checksum for you.
 
 ## Install
 
-Click the `Use this template` button at the top of this project's GitHub page, it looks like this:
+To use in your project, see `Usage` below.
 
-<img src="assets/use_template_button.png" alt="Use Template Button">
+```bash
+# Install locally
+make install
+
+# Get Makefile help
+make help
+```
 
 ## Usage
 
-Replace/rename files as needed:
+**Note:** Do not edit auto-generated formula files, it could lead to failures during operation.
 
-1. Configure the `setup.py` file
-1. Update the Makefile targets to use your directory
-1. Update name in LICENSE
-1. Update `.travis.yml` file as needed
-1. Rename files/folders as needed 
-1. Delete this `README` and rename `README_project.md` to `README.md`
-
-**Travis-CI**
-
-To add a secure PyPi API key to your `.travis.yml` file, run the following command and replace `your-api-token` with your real API token.
+Shell Releaser will always use the latest release of a GitHub project.
 
 ```bash
-travis encrypt your-api-token --add deploy.password --com
+# Run manually
+INPUT_GITHUB_TOKEN=123... OWNER=Justintime50 OWNER_EMAIL=justin@example.com REPO=freedom BIN_INSTALL='"src/secure-browser-kiosk.sh" => "secure-browser-kiosk"' HOMEBREW_TAP=homebrew-formulas HOMEBREW_FORMULA_FOLDER=formula venv/bin/python shell_releaser/releaser.py
+```
+
+```yml
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  shell-releaser:
+    runs-on: ubuntu-latest
+    name: Release my shell script to Homebrew
+    steps:
+    - name: Release my shell script to Homebrew
+      uses: Justintime50/shell-releaser@v0.1.0
+      with:
+       owner: Justintime50
+       owner_email: justin@example.com
+       repo: my_repo_name
+       bin_install: "src/my-script.sh" => "my-script"
+       homebrew_tap: 'https://github.com/Justintime50/homebrew-formulas'
+       homebrew_formula_folder: formula
+```
+
+## Development
+
+```bash
+# Lint the project
+make lint
+
+# Run tests
+make test
+
+# Run test coverage
+make coverage
 ```

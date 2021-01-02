@@ -1,0 +1,27 @@
+name: 'Shell Releaser'
+description: 'Release shell scripts directly to Homebrew.'
+inputs:
+  owner:
+    description: 'GitHub owner (username)'
+    required: true
+  repo:
+    description: 'GitHub repo name'
+    required: true
+  bin_install:
+    description: 'The path to the shell script'
+    required: true
+  homebrew_tap:
+    description: 'The url for the GitHub Homebrew tap'
+    required: true
+  homebrew_formula_folder:
+    description: 'The folder in the GitHub Homebrew tap that houses the formula'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.owner }}
+    - ${{ inputs.repo }}
+    - ${{ inputs.bin_install }}
+    - ${{ inputs.homebrew_tap }}
+    - ${{ inputs.homebrew_formula_folder }}
