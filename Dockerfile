@@ -5,8 +5,6 @@ COPY ./setup.py /setup.py
 COPY ./README.md /README.md
 COPY ./shell_releaser /shell_releaser
 
-WORKDIR /shell_releaser
-
 RUN pip install -e .
 
 ENTRYPOINT [ "python", "/shell_releaser/releaser.py" ]
