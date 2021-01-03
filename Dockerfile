@@ -1,5 +1,10 @@
-FROM python:3.9
-# TODO: See if we can use a smaller Python image that still contains the tools we need
+FROM python:3.9-alpine
+
+RUN apk add --no-cache \
+    # Install git to push new Homebrew formula
+    git \
+    # Install perl-utils for `shasum` tool to get tar archive checksums
+    perl-utils
 
 COPY ./setup.py /setup.py
 COPY ./README.md /README.md
