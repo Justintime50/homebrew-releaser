@@ -1,5 +1,5 @@
 version: "3.7"
 services: 
-    shell-releaser:
-      container_name: shell-releaser
+    homebrew-releaser:
+      container_name: homebrew-releaser
       build: .

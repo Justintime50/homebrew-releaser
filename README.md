@@ -1,12 +1,12 @@
 <div align="center">
 
-# Shell Releaser
+# Homebrew Releaser
 
-Release shell scripts directly to Homebrew via GitHub Actions.
+Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.
 
-[![Build](https://github.com/Justintime50/shell-releaser/workflows/build/badge.svg)](https://github.com/Justintime50/shell-releaser/actions)
-[![Coverage Status](https://coveralls.io/repos/github/Justintime50/shell-releaser/badge.svg?branch=main)](https://coveralls.io/github/Justintime50/shell-releaser?branch=main)
-[![Licence](https://img.shields.io/github/license/Justintime50/shell-releaser)](LICENSE)
+[![Build](https://github.com/Justintime50/homebrew-releaser/workflows/build/badge.svg)](https://github.com/Justintime50/homebrew-releaser/actions)
+[![Coverage Status](https://coveralls.io/repos/github/Justintime50/homebrew-releaser/badge.svg?branch=main)](https://coveralls.io/github/Justintime50/homebrew-releaser?branch=main)
+[![Licence](https://img.shields.io/github/license/Justintime50/homebrew-releaser)](LICENSE)
 
 <img src="assets/showcase.png" alt="Showcase">
 
@@ -14,7 +14,7 @@ Release shell scripts directly to Homebrew via GitHub Actions.
 
 **Note:** This project is still in development. Star the project and keep an eye on the releases.
 
-This project was inspired by [GoReleaser](https://github.com/goreleaser/goreleaser) which allows you to deliver Go binaries quickly via Homebrew. I wanted to do the same for shell scripts but couldn't immediately find a solution - so I decided to build one. Shell Releaser allows you to release shell scripts directly to Homebrew via a GitHub Action. Cut a new release on your favorite shell script project and let Shell Releaser publish that release via your self-hosted Homebrew tap. Shell Releaser will update the project description, version, tar archive url, and checksum for you.
+This project was inspired by [GoReleaser](https://github.com/goreleaser/goreleaser) which allows you to deliver Go binaries quickly via Homebrew. I wanted to do the same for shell scripts but couldn't immediately find a solution - so I decided to build one. Homebrew Releaser allows you to release shell scripts directly to Homebrew via a GitHub Action. Cut a new release on your favorite shell script project and let Homebrew Releaser publish that release via your self-hosted Homebrew tap. Homebrew Releaser will update the project description, version, tar archive url, and checksum for you.
 
 ## Install
 
@@ -31,12 +31,14 @@ make help
 ## Usage
 
 **Note:** Do not edit auto-generated formula files, it could lead to failures during operation.
-**Note:** Shell scripts distributed via Shell Releaser must be executable and contain a proper shebang to work.
+**Note:** Shell scripts distributed via Homebrew Releaser must be executable and contain a proper shebang to work.
 
-Shell Releaser will always use the latest release of a GitHub project.
+Homebrew Releaser will always use the latest release of a GitHub project.
+
+**Run Homebrew Releaser manually**
 
 ```bash
-# Run Shell Releaser manually
+# The following environment variables must be set
 INPUT_GITHUB_TOKEN=123... \
 INPUT_OWNER=Justintime50 \
 INPUT_OWNER_EMAIL=justin@example.com \
@@ -44,7 +46,9 @@ INPUT_REPO=my_repo_name \
 INPUT_BIN_INSTALL='"src/my-script.sh" => "my-script"' \
 INPUT_HOMEBREW_TAP=homebrew-formulas \
 INPUT_HOMEBREW_FORMULA_FOLDER=formula \
-venv/bin/python shell_releaser/releaser.py
+
+# Run from Docker, do not run on bare metal (it will replace your git config)
+docker-compose up -d --build
 ```
 
 Add the following to your `.github/workflows/release.yml` file in your GitHub repo. Alter the below records as needed.
@@ -64,12 +68,12 @@ on:
       - '*'
 
 jobs:
-  shell-releaser:
+  homebrew-releaser:
     runs-on: ubuntu-latest
-    name: shell-releaser
+    name: homebrew-releaser
     steps:
     - name: Release my shell script to Homebrew
-      uses: Justintime50/shell-releaser@v0.1.1
+      uses: Justintime50/homebrew-releaser@v0.1.1
       with:
         owner: Justintime50
         owner_email: justin@example.com

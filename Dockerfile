@@ -8,8 +8,8 @@ RUN apk add --no-cache \
 
 COPY ./setup.py /setup.py
 COPY ./README.md /README.md
-COPY ./shell_releaser /shell_releaser
+COPY ./homebrew_releaser /homebrew_releaser
 
 RUN pip install -e .
 
-ENTRYPOINT [ "python", "/shell_releaser/releaser.py" ]
+ENTRYPOINT [ "python", "/homebrew_releaser/releaser.py" ]
