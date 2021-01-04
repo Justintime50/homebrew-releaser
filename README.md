@@ -54,7 +54,7 @@ docker-compose up -d --build
 Add the following to your `.github/workflows/release.yml` file in your GitHub repo. Alter the below records as needed.
 
 * `owner`: GitHub username
-* `owner_email`: Email of the GitHub user (for commit config)
+* `owner_email`: Email of the GitHub user (for commit config, if you'd rather not specify an email, `homebrew-releaser@example.com` will be used)
 * `repo`: Name of the repository as it appears on GitHub
 * `bin_install`: The Homebrew command to copy your script to `bin`
 * `homebrew_tap`: The name of the homebrew tap as it appears on GitHub

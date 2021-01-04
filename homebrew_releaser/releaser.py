@@ -16,7 +16,7 @@ TAR_ARCHIVE = 'tar_archive.tar.gz'
 # GitHub Action Env Variables
 GITHUB_TOKEN = os.getenv('INPUT_GITHUB_TOKEN')
 OWNER = os.getenv('INPUT_OWNER')
-OWNER_EMAIL = os.getenv('INPUT_OWNER_EMAIL')
+OWNER_EMAIL = os.getenv('INPUT_OWNER_EMAIL', 'homebrew-releaser@example.com')
 REPO = os.getenv('INPUT_REPO')
 BIN_INSTALL = os.getenv('INPUT_BIN_INSTALL')
 HOMEBREW_TAP = os.getenv('INPUT_HOMEBREW_TAP')
