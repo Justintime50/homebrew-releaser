@@ -4,7 +4,6 @@ import os
 import re
 
 
-# TODO: Add logging
 BASE_URL = 'https://api.github.com'
 HEADERS = {
     'accept': 'application/vnd.github.v3+json',
@@ -19,46 +18,63 @@ OWNER = os.getenv('INPUT_OWNER')
 OWNER_EMAIL = os.getenv('INPUT_OWNER_EMAIL', 'homebrew-releaser@example.com')
 REPO = os.getenv('INPUT_REPO')
 INSTALL = os.getenv('INPUT_INSTALL')
-TEST = os.getenv('INPUT_TEST')
+TEST = os.getenv('INPUT_TEST')  # Optional env variable
 HOMEBREW_TAP = os.getenv('INPUT_HOMEBREW_TAP')
 HOMEBREW_FORMULA_FOLDER = os.getenv('INPUT_HOMEBREW_FORMULA_FOLDER')
 
 
 def run_github_action():
-    """Runs the GitHub Actions
+    """Runs the GitHub Action and checks for required env variables
     """
-    if not any(GITHUB_TOKEN, OWNER, OWNER_EMAIL, REPO, INSTALL, TEST, HOMEBREW_TAP, HOMEBREW_FORMULA_FOLDER):  # noqa
-        raise SystemExit(
-            'You must provide all necessary environment variables. Please reference the documentation.'  # noqa
-        )
-    else:
-        repository = get_request(f'{BASE_URL}/repos/{OWNER}/{REPO}', False)
+    # TODO: Add logging
+    check_required_env_variables()
+    repository = make_get_request(f'{BASE_URL}/repos/{OWNER}/{REPO}', False)
 
-        latest_release = get_request(f'{BASE_URL}/repos/{OWNER}/{REPO}/releases/latest', False)
-        version = latest_release['name']
-        tar_url = f'https://github.com/{OWNER}/{REPO}/archive/{version}.tar.gz'
+    latest_release = make_get_request(f'{BASE_URL}/repos/{OWNER}/{REPO}/releases/latest', False)
+    version = latest_release['name']
+    tar_url = f'https://github.com/{OWNER}/{REPO}/archive/{version}.tar.gz'
 
-        get_latest_tar_archive(tar_url, True)
-        checksum = get_checksum(TAR_ARCHIVE)
+    get_latest_tar_archive(tar_url, True)
+    checksum = get_checksum(TAR_ARCHIVE)
 
-        template = generate_formula(
-            OWNER,
-            REPO,
-            version,
-            repository,
-            checksum,
-            INSTALL,
-            tar_url,
-            TEST,
-        )
-        write_file(f'new_{repository["name"]}.rb', template, 'w')
+    template = generate_formula(
+        OWNER,
+        REPO,
+        version,
+        repository,
+        checksum,
+        INSTALL,
+        tar_url,
+        TEST,
+    )
+    write_file(f'new_{repository["name"]}.rb', template, 'w')
 
-        commit_formula(OWNER, OWNER_EMAIL, REPO, version)
-        print(f'Homebrew Releaser released {version} of {REPO} successfully!')
+    commit_formula(OWNER, OWNER_EMAIL, REPO, version)
+    print(f'Homebrew Releaser released {version} of {REPO} successfully!')
 
 
-def get_request(url, stream=False):
-    """Send a GET HTTP request
+def check_required_env_variables():
+    """Checks that all required env variables are set
+    """
+    required_env_variables = [
+        GITHUB_TOKEN,
+        OWNER,
+        OWNER_EMAIL,
+        REPO,
+        INSTALL,
+        HOMEBREW_TAP,
+        HOMEBREW_FORMULA_FOLDER
+    ]
+    for env_variable in required_env_variables:
+        if not env_variable:
+            raise SystemExit(
+                'You must provide all necessary environment variables. Please reference the documentation.'  # noqa
+            )
+    return True
+
+
+def make_get_request(url, stream=False):
+    """Make a GET HTTP request
     """
     try:
         response = requests.get(
@@ -74,8 +90,8 @@ def get_request(url, stream=False):
 def get_latest_tar_archive(url):
     """Download the latest tar archive
     """
-    response = get_request(url, True)
-    write_file(TAR_ARCHIVE, response.raw.read(), 'wb')
+    response = make_get_request(url, True)
+    write_file(TAR_ARCHIVE, response.content, 'wb')
 
 
 def write_file(filename, content, mode='w'):
@@ -102,9 +118,11 @@ def get_checksum(tar_file):
         )
         checksum = output.decode().split()[0]
         checksum_file = output.decode().split()[1]  # TODO: Use this to craft the `checksums.txt` file  # noqa
-        return checksum
-    except Exception as error:
+    except subprocess.TimeoutExpired as error:
         raise SystemExit(error)
+    except subprocess.CalledProcessError as error:
+        raise SystemExit(error)
+    return checksum
 
 
 def generate_formula(username, repo_name, version, repository, checksum, install, tar_url, test):  # noqa
@@ -162,7 +180,7 @@ def commit_formula(owner, owner_email, repo, version):
             (
                 f'git config --global user.name "{owner}" && '
                 f'git config --global user.email {owner_email} && '
-                f'git clone https://{GITHUB_TOKEN}@github.com/{owner}/{HOMEBREW_TAP}.git && '
+                f'git clone --depth=5 https://{GITHUB_TOKEN}@github.com/{owner}/{HOMEBREW_TAP}.git && '
                 f'mv new_{repo}.rb {HOMEBREW_TAP}/{HOMEBREW_FORMULA_FOLDER}/{repo}.rb && '
                 f'cd {HOMEBREW_TAP} && '
                 f'git add {HOMEBREW_FORMULA_FOLDER}/{repo}.rb && '

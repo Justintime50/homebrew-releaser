@@ -11,6 +11,9 @@
 * Added checks and balances ensuring environment variables are set before running
 * Added sane defaults for a few internal variables
 * Added `license` to generate formula
+* Maxing out git clone depth to the `latest 5 commits` to greatly improve performance on large homebrew taps
+* Added unit tests
+* Added GitHub Actions to lint and test the project
 
 ## v0.1.1 (2021-01-02)
 
