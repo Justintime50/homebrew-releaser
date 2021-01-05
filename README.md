@@ -48,7 +48,7 @@ jobs:
     name: homebrew-releaser
     steps:
     - name: Release my project to my Homebrew tap
-      uses: Justintime50/homebrew-releaser@v0.2.2
+      uses: Justintime50/homebrew-releaser@v0.2.3
       with:
         owner: Justintime50
         owner_email: justin@example.com
