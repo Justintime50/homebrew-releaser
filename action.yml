@@ -1,5 +1,5 @@
-name: 'Shell Releaser'
-description: 'Release shell scripts directly to Homebrew via GitHub Actions.'
+name: 'Homebrew Releaser'
+description: 'Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.'
 inputs:
   owner:
     description: 'GitHub owner (username)'
@@ -7,12 +7,16 @@ inputs:
   owner_email:
     description: 'GitHub owner email'
     required: true
+    default: 'homebrew-releaser@example.com'
   repo:
     description: 'GitHub repo name'
     required: true
-  bin_install:
+  install:
     description: 'The Homebrew command to install the script to bin'
     required: true
+  test:
+    description: 'The Homebrew command to test your formula'
+    required: false
   homebrew_tap:
     description: 'The url for the GitHub Homebrew tap'
     required: true
@@ -29,7 +33,8 @@ runs:
     - ${{ inputs.owner }}
     - ${{ inputs.owner_email }}
     - ${{ inputs.repo }}
-    - ${{ inputs.bin_install }}
+    - ${{ inputs.install }}
+    - ${{ inputs.test }}
     - ${{ inputs.homebrew_tap }}
     - ${{ inputs.homebrew_formula_folder }}
     - ${{ inputs.github_token }}
