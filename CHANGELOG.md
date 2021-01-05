@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.2.1 (2021-01-05)
+
+* Important bug fix and more tests
+
 ## v0.2.0 (2021-01-05)
 
 * Changed name from `shell-releaser` to `homebrew-releaser` as this tool can really be used for any kind of script, binary, or executable

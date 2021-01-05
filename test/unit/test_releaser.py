@@ -9,9 +9,30 @@ from homebrew_releaser.releaser import (
     HEADERS,
     make_get_request,
     get_latest_tar_archive,
+    run_github_action,
     SUBPROCESS_TIMEOUT,
     write_file
 )
+
+
+@mock.patch('homebrew_releaser.releaser.commit_formula')
+@mock.patch('homebrew_releaser.releaser.write_file')
+@mock.patch('homebrew_releaser.releaser.generate_formula')
+@mock.patch('homebrew_releaser.releaser.get_checksum')
+@mock.patch('homebrew_releaser.releaser.get_latest_tar_archive')
+@mock.patch('homebrew_releaser.releaser.make_get_request')
+@mock.patch('homebrew_releaser.releaser.check_required_env_variables')
+def test_run_github_action(mock_check_env_variables, mock_make_get_request, mock_get_latest_tar_archive,
+                           mock_get_checksum, mock_generate_formula, mock_write_file, mock_commit_fomrula):
+    # TODO: Assert these `called_with` eventually
+    run_github_action()
+    mock_check_env_variables.assert_called_once()
+    assert mock_make_get_request.call_count == 2
+    mock_get_latest_tar_archive.assert_called_once()
+    mock_get_checksum.assert_called_once()
+    mock_generate_formula.assert_called_once()
+    mock_write_file.assert_called_once()
+    mock_commit_fomrula.assert_called_once()
 
 
 def test_check_required_env_variables_missing_env_variable():
