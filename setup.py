@@ -8,12 +8,12 @@ REQUIREMENTS = [
 ]
 
 setuptools.setup(
-    name='shell-releaser',
-    version='0.1.1',
-    description='Release shell scripts directly to Homebrew via GitHub Actions.',  # noqa
+    name='homebrew-releaser',
+    version='0.2.0',
+    description='Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.',  # noqa
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='http://github.com/Justintime50/shell-releaser',
+    url='http://github.com/Justintime50/homebrew-releaser',
     author='Justintime50',
     license='MIT',
     packages=setuptools.find_packages(),
@@ -34,7 +34,7 @@ setuptools.setup(
     },
     entry_points={
         'console_scripts': [
-            'shell-releaser=shell_releaser.releaser:main'
+            'homebrew-releaser=homebrew_releaser.releaser:main'
         ]
     },
     python_requires='>=3.6',
