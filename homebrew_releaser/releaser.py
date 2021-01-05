@@ -28,9 +28,9 @@ def run_github_action():
     """
     # TODO: Add logging
     check_required_env_variables()
-    repository = make_get_request(f'{BASE_URL}/repos/{OWNER}/{REPO}', False)
+    repository = make_get_request(f'{BASE_URL}/repos/{OWNER}/{REPO}', False).json()
 
-    latest_release = make_get_request(f'{BASE_URL}/repos/{OWNER}/{REPO}/releases/latest', False)
+    latest_release = make_get_request(f'{BASE_URL}/repos/{OWNER}/{REPO}/releases/latest', False).json()
     version = latest_release['name']
     tar_url = f'https://github.com/{OWNER}/{REPO}/archive/{version}.tar.gz'
 
@@ -84,7 +84,7 @@ def make_get_request(url, stream=False):
         )
     except requests.exceptions.RequestException as error:
         raise SystemExit(error)
-    return response.json()
+    return response
 
 
 def get_latest_tar_archive(url):
