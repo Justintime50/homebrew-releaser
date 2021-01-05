@@ -39,13 +39,14 @@ Homebrew Releaser will always use the latest release of a GitHub project.
 
 ```bash
 # The following environment variables must be set
-INPUT_GITHUB_TOKEN=123... \
-INPUT_OWNER=Justintime50 \
-INPUT_OWNER_EMAIL=justin@example.com \
-INPUT_REPO=my_repo_name \
-INPUT_BIN_INSTALL='"src/my-script.sh" => "my-script"' \
-INPUT_HOMEBREW_TAP=homebrew-formulas \
-INPUT_HOMEBREW_FORMULA_FOLDER=formula \
+INPUT_GITHUB_TOKEN=123...
+INPUT_OWNER=Justintime50
+INPUT_OWNER_EMAIL=justin@example.com
+INPUT_REPO=my_repo_name
+INPUT_INSTALL="bin.install \"src/my-script.sh\" => \"my-script\""
+INPUT_TEST="assert_match(\"my script output\", shell_output(\"my-script\"))"
+INPUT_HOMEBREW_TAP=homebrew-formulas
+INPUT_HOMEBREW_FORMULA_FOLDER=formula
 
 # Run from Docker, do not run on bare metal (it will replace your git config)
 docker-compose up -d --build
@@ -56,7 +57,8 @@ Add the following to your `.github/workflows/release.yml` file in your GitHub re
 * `owner`: GitHub username
 * `owner_email`: Email of the GitHub user (for commit config, if you'd rather not specify an email, `homebrew-releaser@example.com` will be used)
 * `repo`: Name of the repository as it appears on GitHub
-* `bin_install`: The Homebrew command to copy your script to `bin`
+* `install`: The Homebrew command to copy your script to `bin`
+* `test`: The Homebrew command to test your formula (Optional field, if no test input is provided, no test block will be generated)
 * `homebrew_tap`: The name of the homebrew tap as it appears on GitHub
 * `homebrew_formula_folder`: The directory where your formula reside in your tap repo
 * `github_token`: The GitHub Token secret that has `repo` permissions to the repo you want to release to
@@ -73,12 +75,13 @@ jobs:
     name: homebrew-releaser
     steps:
     - name: Release my shell script to Homebrew
-      uses: Justintime50/homebrew-releaser@v0.1.1
+      uses: Justintime50/homebrew-releaser@v0.2.0
       with:
         owner: Justintime50
         owner_email: justin@example.com
         repo: my_repo_name
-        bin_install: '"src/my-script.sh" => "my-script"'
+        install: "bin.install \"src/my-script.sh\" => \"my-script\""
+        test: "assert_match("my script output", shell_output("my-script"))"
         homebrew_tap: 'homebrew-formulas'
         homebrew_formula_folder: formula
         github_token: ${{ secrets.MY_GITHUB_TOKEN }}

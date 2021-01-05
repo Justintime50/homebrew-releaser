@@ -11,9 +11,12 @@ inputs:
   repo:
     description: 'GitHub repo name'
     required: true
-  bin_install:
+  install:
     description: 'The Homebrew command to install the script to bin'
     required: true
+  test:
+    description: 'The Homebrew command to test your formula'
+    required: false
   homebrew_tap:
     description: 'The url for the GitHub Homebrew tap'
     required: true
@@ -30,7 +33,8 @@ runs:
     - ${{ inputs.owner }}
     - ${{ inputs.owner_email }}
     - ${{ inputs.repo }}
-    - ${{ inputs.bin_install }}
+    - ${{ inputs.install }}
+    - ${{ inputs.test }}
     - ${{ inputs.homebrew_tap }}
     - ${{ inputs.homebrew_formula_folder }}
     - ${{ inputs.github_token }}
