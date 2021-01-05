@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## v0.2.1 (2021-01-05)
+## v0.2.1 & v0.2.2 (2021-01-05)
 
-* Important bug fix and more tests
+* Important bug fix required to get Homebrew Releaser running
+* More unit tests
 
 ## v0.2.0 (2021-01-05)
 
