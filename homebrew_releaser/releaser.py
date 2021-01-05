@@ -34,7 +34,7 @@ def run_github_action():
     version = latest_release['name']
     tar_url = f'https://github.com/{OWNER}/{REPO}/archive/{version}.tar.gz'
 
-    get_latest_tar_archive(tar_url, True)
+    get_latest_tar_archive(tar_url)
     checksum = get_checksum(TAR_ARCHIVE)
 
     template = generate_formula(
