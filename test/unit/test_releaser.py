@@ -35,9 +35,23 @@ def test_run_github_action(mock_check_env_variables, mock_make_get_request, mock
     mock_commit_fomrula.assert_called_once()
 
 
-def test_check_required_env_variables_missing_env_variable():
+@mock.patch('homebrew_releaser.releaser.HOMEBREW_FORMULA_FOLDER', 'formula')
+@mock.patch('homebrew_releaser.releaser.HOMEBREW_TAP', 'homebrew-formulas')
+@mock.patch('homebrew_releaser.releaser.INSTALL', '"bin.install \"src/my-script.sh\" => \"my-script\""')
+@mock.patch('homebrew_releaser.releaser.REPO', 'homebrew-releaser')
+@mock.patch('homebrew_releaser.releaser.OWNER', 'Justintime50')
+@mock.patch('homebrew_releaser.releaser.GITHUB_TOKEN', '123')
+@mock.patch('sys.exit')
+def test_check_required_env_variables(mock_system_exit):
+    check_required_env_variables()
+    mock_system_exit.assert_not_called()
+
+
+@mock.patch('sys.exit')
+def test_check_required_env_variables_missing_env_variable(mock_system_exit):
     with pytest.raises(SystemExit) as error:
         check_required_env_variables()
+        mock_system_exit.assert_called_once()
     assert str(error.value) == 'You must provide all necessary environment variables. Please reference the documentation.'  # noqa
 
 

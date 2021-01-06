@@ -1,34 +1,34 @@
-name: 'Homebrew Releaser'
-description: 'Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.'
+name: "Homebrew Releaser"
+description: "Release scripts, binaries, and executables directly to Homebrew via GitHub Actions."
 inputs:
   owner:
-    description: 'GitHub owner (username)'
+    description: "GitHub owner (username)"
     required: true
   owner_email:
-    description: 'GitHub owner email'
-    required: true
-    default: 'homebrew-releaser@example.com'
+    description: "GitHub owner email"
+    required: false
+    default: "homebrew-releaser@example.com"
   repo:
-    description: 'GitHub repo name'
+    description: "GitHub repo name"
     required: true
   install:
-    description: 'The Homebrew command to install the script to bin'
+    description: "The Homebrew command to install the script to bin"
     required: true
   test:
-    description: 'The Homebrew command to test your formula'
+    description: "The Homebrew command to test your formula"
     required: false
   homebrew_tap:
-    description: 'The url for the GitHub Homebrew tap'
+    description: "The url for the GitHub Homebrew tap"
     required: true
   homebrew_formula_folder:
-    description: 'The folder in the GitHub Homebrew tap that houses the formula'
+    description: "The folder in the GitHub Homebrew tap that houses the formula"
     required: true
   github_token:
-    description: 'The GitHub token with `repo` permission used to push updates to the Homebrew tap'
+    description: "The GitHub token with `repo` permission used to push updates to the Homebrew tap"
     required: true
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: "docker"
+  image: "Dockerfile"
   args:
     - ${{ inputs.owner }}
     - ${{ inputs.owner_email }}

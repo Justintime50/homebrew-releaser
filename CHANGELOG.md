@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.3.0 (TODO)
+
+* Fixes `brew audit` lint rule by adding an extra line between magic comments
+* 100% code coverage
+
 ## v0.2.1 & v0.2.2 && v0.2.3 (2021-01-05)
 
 * Important bug fix required to get Homebrew Releaser running
