@@ -9,8 +9,8 @@ REQUIREMENTS = [
 
 setuptools.setup(
     name='homebrew-releaser',
-    version='0.2.3',
-    description='Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.',  # noqa
+    version='0.3.0',
+    description='Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='http://github.com/Justintime50/homebrew-releaser',

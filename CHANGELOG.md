@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.3.0 (2021-01-06)
+
+* Fixes `brew audit` lint rules by adding an extra line between magic comments and adding missing `typed: false` comment
+* Added the `logging` module and replaced print statements
+* 100% code coverage
+* Code cleanup
+
 ## v0.2.1 & v0.2.2 && v0.2.3 (2021-01-05)
 
 * Important bug fix required to get Homebrew Releaser running
