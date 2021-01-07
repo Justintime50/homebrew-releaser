@@ -54,7 +54,7 @@ def run_github_action():
     )
     write_file(f'new_{repository["name"]}.rb', template, 'w')
 
-    logging.info(f'Attempting to releaser {version} of {REPO} to {HOMEBREW_TAP}...')
+    logging.info(f'Attempting to release {version} of {REPO} to {HOMEBREW_TAP}...')
     commit_formula(OWNER, OWNER_EMAIL, REPO, version)
     logging.info(f'Successfully released {version} of {REPO} to {HOMEBREW_TAP}!')
 
