@@ -23,6 +23,8 @@ Cut a new release on your GitHub project and let Homebrew Releaser publish that 
 
 ### GitHub Actions YML
 
+You can check the [Homebrew documentation](https://docs.brew.sh/) and the [formula cookbook](https://docs.brew.sh/Formula-Cookbook) for more details on setting up a Homebrew formula or tap.
+
 Add the following to your `.github/workflows/release.yml` file in your GitHub repo. Alter the below records as needed.
 
 ```yml
@@ -68,8 +70,8 @@ INPUT_GITHUB_TOKEN=123...
 INPUT_OWNER=Justintime50
 INPUT_OWNER_EMAIL=justin@example.com
 INPUT_REPO=my_repo_name
-INPUT_INSTALL="bin.install \"src/my-script.sh\" => \"my-script\""
-INPUT_TEST="assert_match(\"my script output\", shell_output(\"my-script\"))"
+INPUT_INSTALL='bin.install "src/my-script.sh" => "my-script"'
+INPUT_TEST='assert_match("my script output", shell_output("my-script"))'
 INPUT_HOMEBREW_TAP=homebrew-formulas
 INPUT_HOMEBREW_FORMULA_FOLDER=formula
 
