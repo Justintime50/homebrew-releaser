@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## v0.4.0 (TODO)
+
+* Overhauled the configurable options and provided more defaults out of the box. Changes include:
+    * No longer support `owner` and `repo` as these variables are given to use by GitHub already
+    * Changed `homebrew_formula_folder` to `formula_folder` - added a default of `formula`
+    * Changed `owner_email` to `commit_email` and added `commit_owner` - added defaults of `homebrew-releaser@example.com` and `homebrew-releaser` respectively
+    * Added `homebrew_owner` as an option to go alongside the already existing `homebrew_tap`, this allows you to release to a tap that may not be owned by the same person
+* Updated documentation with all changes
+* Cut out extra overhead on the Dockerfile to improve performance
+* Added additional logging for `info` and `debug` modes and fixed a typo in the output
+
 ## v0.3.0 (2021-01-06)
 
 * Fixes `brew audit` lint rules by adding an extra line between magic comments and adding missing `typed: false` comment

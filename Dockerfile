@@ -6,10 +6,8 @@ RUN apk add --no-cache \
     # Install perl-utils for `shasum` tool to get tar archive checksums
     perl-utils
 
-COPY ./setup.py /setup.py
-COPY ./README.md /README.md
 COPY ./homebrew_releaser /homebrew_releaser
 
-RUN pip install -e .
+RUN pip install requests
 
 ENTRYPOINT [ "python", "/homebrew_releaser/releaser.py" ]
