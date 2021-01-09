@@ -30,6 +30,9 @@ inputs:
   test:
     description: "Custom test command for your formula so you can run `brew test`."
     required: false
+  skip_commit:
+    description: "Skips committing the generated formula to a homebrew tap (useful for local testing)"
+    required: false
 runs:
   using: "docker"
   image: "Dockerfile"
@@ -42,3 +45,4 @@ runs:
     - ${{ inputs.commit_email }}
     - ${{ inputs.install }}
     - ${{ inputs.test }}
+    - ${{ inputs.skip_commit }}

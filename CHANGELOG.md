@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v0.4.0 (TODO)
+## v0.4.0 (2021-01-09)
 
 * Overhauled the configurable options and provided more defaults out of the box. Changes include:
     * No longer support `owner` and `repo` as these variables are given to use by GitHub already
@@ -9,7 +9,9 @@
     * Added `homebrew_owner` as an option to go alongside the already existing `homebrew_tap`, this allows you to release to a tap that may not be owned by the same person
 * Updated documentation with all changes
 * Cut out extra overhead on the Dockerfile to improve performance
+* Properly format `desc` field to pass `brew audit` by stripping articles from the beginning if present and hard stops from the end (all periods and exclamations)
 * Added additional logging for `info` and `debug` modes and fixed a typo in the output
+* Added an optional env variable `skip_commit` which will skip committing the generated formula to a homebrew tap. Useful for local testing
 
 ## v0.3.0 (2021-01-06)
 

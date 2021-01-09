@@ -66,11 +66,17 @@ jobs:
           # Custom test command for your formula so you can run `brew test`.
           # Optional.
           test: 'assert_match("my script output", shell_output("my-script-command"))'
+
+          # Skips committing the generated formula to a homebrew tap (useful for local testing)
+          # Default is shown.
+          skip_commit: false
 ```
 
 ### Run Manually
 
 Run from Docker, **do not** run on bare metal (it will replace your git config). Also Homebrew Releaser does not clean up artifacts after completing since the temporary Docker image on GitHub Actions will be discarded anyway.
+
+**Note:** All environment variables from above must be prepended with `INPUT_` for the local Docker image (eg: `INPUT_SKIP_COMMIT=True`).
 
 ```bash
 docker-compose up -d --build
