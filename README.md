@@ -16,16 +16,18 @@ Homebrew Releaser allows you to release scripts, binaries, and executables direc
 
 ## Usage
 
-Cut a new release on your GitHub project and let Homebrew Releaser publish that release via your personal Homebrew tap. Homebrew Releaser will update the project description, version, tar archive url, license, checksum, and any other required info so you don't have to.
-
-**Note:** Shell scripts distributed via Homebrew Releaser must be executable and contain a proper shebang to work.
-**Note:** Homebrew Releaser will always use the latest release of a GitHub project.
+**Notes:** 
+* Shell scripts distributed via Homebrew Releaser must be executable and contain a proper shebang to work.
+* Homebrew Releaser will always use the latest release of a GitHub project.
+* The Homebrew formula filename will match the github repo name.
 
 ### GitHub Actions YML
 
-Add the following to your `.github/workflows/release.yml` file in your GitHub repo. Alter the below records as needed.
+After releasing to GitHub, Homebrew Releaser can publish that release to a personal Homebrew tap by updating the project description, version, tar archive url, license, checksum, installation and testing command, and any other required info so you don't have to. You can check the [Homebrew documentation](https://docs.brew.sh/) and the [formula cookbook](https://docs.brew.sh/Formula-Cookbook) for more details on setting up a Homebrew formula or tap.
 
 ```yml
+# .github/workflows/release.yml
+# Start Homebrew Releaser when a new tag is created
 on:
   push:
     tags:
@@ -37,43 +39,46 @@ jobs:
     name: homebrew-releaser
     steps:
       - name: Release my project to my Homebrew tap
-        uses: Justintime50/homebrew-releaser@v0.3.0
+        uses: Justintime50/homebrew-releaser@v0.4.0
         with:
-          owner: Justintime50
-          owner_email: justin@example.com
-          repo: my_repo_name
-          install: 'bin.install "src/my-script.sh" => "my-script"'
-          test: 'assert_match("my script output", shell_output("my-script-command"))'
+          # The name of the homebrew tap to publish your formula to as it appears on GitHub.
+          # Required.
+          homebrew_owner: Justintime50
           homebrew_tap: homebrew-formulas
-          homebrew_formula_folder: formula
-          github_token: ${{ secrets.MY_GITHUB_TOKEN }}
+
+          # The name of the folder in your homebrew tap where formula will be committed to.
+          # Default is shown.
+          formula_folder: formula
+
+          # The GitHub Token (saved as a repo secret) that has `repo` permissions for the homebrew tap you want to release to.
+          # Required.
+          github_token: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+
+          # Git author info used to commit to the homebrew tap.
+          # Defaults are shown.
+          commit_owner: homebrew-releaser
+          commit_email: homebrew-releaser@example.com
+
+          # Custom install command for your formula.
+          # Required.
+          install: 'bin.install "src/my-script.sh" => "my-script"'
+
+          # Custom test command for your formula so you can run `brew test`.
+          # Optional.
+          test: 'assert_match("my script output", shell_output("my-script-command"))'
+
+          # Skips committing the generated formula to a homebrew tap (useful for local testing)
+          # Default is shown.
+          skip_commit: false
 ```
 
-**Options**
+### Run Manually
 
-* `owner`: GitHub owner (username)
-* `owner_email`: Email of the GitHub user (for commit config, if you'd rather not specify an email, `homebrew-releaser@example.com` will be used)
-* `repo`: Name of the repository as it appears on GitHub
-* `install`: The Homebrew command to copy your script to `bin`
-* `test`: The Homebrew command to test your formula (optional field, if no test input is provided, no test block will be generated)
-* `homebrew_tap`: The name of the homebrew tap as it appears on GitHub
-* `homebrew_formula_folder`: The directory where your formula reside in your tap repo
-* `github_token`: The GitHub Token secret that has `repo` permissions to the repo you want to release to
+Run from Docker, **do not** run on bare metal (it will replace your git config). Also Homebrew Releaser does not clean up artifacts after completing since the temporary Docker image on GitHub Actions will be discarded anyway.
 
-### Run manually
+**Note:** All environment variables from above must be prepended with `INPUT_` for the local Docker image (eg: `INPUT_SKIP_COMMIT=True`).
 
 ```bash
-# The following environment variables must be set
-INPUT_GITHUB_TOKEN=123...
-INPUT_OWNER=Justintime50
-INPUT_OWNER_EMAIL=justin@example.com
-INPUT_REPO=my_repo_name
-INPUT_INSTALL="bin.install \"src/my-script.sh\" => \"my-script\""
-INPUT_TEST="assert_match(\"my script output\", shell_output(\"my-script\"))"
-INPUT_HOMEBREW_TAP=homebrew-formulas
-INPUT_HOMEBREW_FORMULA_FOLDER=formula
-
-# Run from Docker, do not run on bare metal (it will replace your git config)
 docker-compose up -d --build
 ```
 
