@@ -213,7 +213,7 @@ def commit_formula(commit_owner, commit_email, homebrew_owner, homebrew_tap,
                 f'git config --global user.name "{commit_owner}" && '
                 f'git config --global user.email {commit_email} && '
                 f'git clone --depth=5 https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git && '
-                f'mv new_{repo_name}.rb {homebrew_tap}/{formula_folder}/{repo_name}.rb && '
+                f'mv new-{repo_name}.rb {homebrew_tap}/{formula_folder}/{repo_name}.rb && '
                 f'cd {homebrew_tap} && '
                 f'git add {formula_folder}/{repo_name}.rb && '
                 f'git commit -m "Brew formula update for {repo_name} version {version}" && '

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.4.1 (2021-01-09)
+
+* Small bug fix that sets the default formula folder
+
 ## v0.4.0 (2021-01-09)
 
 * Overhauled the configurable options and provided more defaults out of the box. Changes include:
