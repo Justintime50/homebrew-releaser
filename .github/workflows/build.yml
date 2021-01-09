@@ -16,6 +16,13 @@ jobs:
         run: make install
       - name: Run linting
         run: make lint
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Build Docker image
+        run: docker build . -t justintime50/homebrew-releaser
   test:
     runs-on: ubuntu-latest
     strategy:

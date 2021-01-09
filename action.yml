@@ -4,40 +4,45 @@ branding:
   icon: "package"
   color: "orange"
 inputs:
-  owner:
-    description: "GitHub owner (username)"
+  homebrew_owner:
+    description: "The name of the homebrew tap owner to publish your formula to as it appears on GitHub."
     required: true
-  owner_email:
-    description: "Email of the GitHub user (for commit config, if you'd rather not specify an email, homebrew-releaser@example.com will be used)"
-    required: false
-    default: "homebrew-releaser@example.com"
-  repo:
-    description: "Name of the repository as it appears on GitHub"
-    required: true
-  install:
-    description: "The Homebrew command to copy your script to bin"
-    required: true
-  test:
-    description: "The Homebrew command to test your formula (optional field, if no test input is provided, no test block will be generated)"
-    required: false
   homebrew_tap:
-    description: "The name of the homebrew tap as it appears on GitHub"
+    description: "The name of the homebrew tap to publish your formula to as it appears on GitHub."
     required: true
-  homebrew_formula_folder:
-    description: "The directory where your formula reside in your tap repo"
+  formula_folder:
+    description: "The name of the folder in your homebrew tap where formula will be committed to."
     required: true
   github_token:
-    description: "The GitHub Token secret that has repo permissions to the repo you want to release to"
+    description: "The GitHub Token (saved as a repo secret) that has `repo` permissions for the homebrew tap you want to release to."
     required: true
+  commit_owner:
+    description: "Git author info used to commit to the homebrew tap."
+    required: false
+    default: "homebrew-releaser@example.com"
+  commit_email:
+    description: "Git author info used to commit to the homebrew tap."
+    required: false
+    default: "homebrew-releaser@example.com"
+  install:
+    description: "Custom install command for your formula."
+    required: true
+  test:
+    description: "Custom test command for your formula so you can run `brew test`."
+    required: false
+  skip_commit:
+    description: "Skips committing the generated formula to a homebrew tap (useful for local testing)"
+    required: false
 runs:
   using: "docker"
   image: "Dockerfile"
   args:
-    - ${{ inputs.owner }}
-    - ${{ inputs.owner_email }}
-    - ${{ inputs.repo }}
+    - ${{ inputs.homebrew_owner }}
+    - ${{ inputs.homebrew_tap }}
+    - ${{ inputs.formula_folder }}
+    - ${{ inputs.github_token }}
+    - ${{ inputs.commit_owner }}
+    - ${{ inputs.commit_email }}
     - ${{ inputs.install }}
     - ${{ inputs.test }}
-    - ${{ inputs.homebrew_tap }}
-    - ${{ inputs.homebrew_formula_folder }}
-    - ${{ inputs.github_token }}
+    - ${{ inputs.skip_commit }}
