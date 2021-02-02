@@ -11,8 +11,12 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      - name: Update v1 git tag
+        with:
+          fetch-depth: "0"
+      - name: Update stable git tag
         run: |
-          git tag -d v1
-          git tag v1 ${GITHUB_REF#refs/tags/}
-          git push https://${GITHUB_TOKEN}@github.com/Justintime50/homebrew-releaser.git ${GITHUB_REF#refs/tags/}
+          git tag --force $STABLE_TAG ${GITHUB_REF##*/}
+          git push origin --delete $STABLE_TAG
+          git push origin $STABLE_TAG
+        env:
+          STABLE_TAG: v1
