@@ -101,15 +101,6 @@ make coverage
 make help
 ```
 
-### Releasing
-
-Make sure to point the `v1` tag to the latest tag of homebrew-releaser:
-
-```bash
-git tag -d v1
-git tag v1 v0.4.1
-```
-
 ## Attribution
 
 * Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
