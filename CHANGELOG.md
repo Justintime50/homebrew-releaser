@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.4.3 (2021-02-01)
+
+* Added automated releasing (retagging) of Homebrew Releaser via GitHub Actions. When a new version is released, GitHub Actions will automatically update the stable `v1` tag to point to the latest release
+
 ## v0.4.1 && v0.4.2 (2021-01-09)
 
 * Small bug fix that sets the default formula folder
