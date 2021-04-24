@@ -4,7 +4,7 @@ import re
 from pretty_tables import PrettyTables
 
 
-def main():
+def update_readme():
     formulas = format_formula_data()
     new_table = generate_table(formulas)
     old_table = retrieve_old_table()
@@ -16,7 +16,7 @@ def format_formula_data():
     files = os.listdir('formula')
     formulas = []
     for filename in sorted(files):
-        with open('formula/' + filename, 'r') as formula:
+        with open('formula/' + filename, 'r') as formula:  # TODO: Allow this /formula dir to be editable by the user
             for i, line in enumerate(formula):
                 if line.strip().startswith('class'):
                     name_line = line.split()
@@ -48,8 +48,11 @@ def generate_table(formulas):
     rows = []
     for formula in formulas:
         rows.append(
-            [f'[{formula["name"]}]({formula.get("homepage")})', formula.get(
-                'desc'), f'`brew install {formula["name"]}`']
+            [
+                f'[{formula["name"]}]({formula.get("homepage")})',
+                formula.get('desc'),
+                f'`brew install {formula["name"]}`',
+            ]
         )
 
     table = PrettyTables.generate_table(
@@ -66,10 +69,11 @@ def retrieve_old_table():
         copy = False
         old_table = ''
         for line in infile:
-            if line.strip() == '<!-- project_table_start -->':
+            # TODO: Add exception handling when these aren't present but the user asked to update the README
+            if line.strip() == '<!-- project_table_start -->':  # TODO: Allow these strings to be configured by the user
                 copy = True
                 continue
-            elif line.strip() == '<!-- project_table_end -->':
+            elif line.strip() == '<!-- project_table_end -->':  # TODO: Allow these strings to be configured by the user
                 copy = False
                 continue
             elif copy:
@@ -86,7 +90,3 @@ def read_current_readme():
 def replace_table_contents(file_content, old_table, new_table):
     with open('README.md', 'w') as outfile:
         outfile.write(file_content.replace(old_table, new_table + '\n'))
-
-
-if __name__ == '__main__':
-    main()

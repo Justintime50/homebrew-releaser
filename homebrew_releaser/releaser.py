@@ -5,6 +5,8 @@ import subprocess
 
 import requests
 
+from homebrew_releaser.readme_updater import update_readme
+
 GITHUB_BASE_URL = 'https://api.github.com'
 GITHUB_HEADERS = {
     'accept': 'application/vnd.github.v3+json',
@@ -30,6 +32,7 @@ COMMIT_EMAIL = os.getenv('INPUT_COMMIT_EMAIL', 'homebrew-releaser@example.com')
 FORMULA_FOLDER = os.getenv('INPUT_FORMULA_FOLDER', 'formula')
 TEST = os.getenv('INPUT_TEST')
 SKIP_COMMIT = os.getenv('INPUT_SKIP_COMMIT', False)
+UPDATE_README_TABLE = os.getenv('UPDATE_README_TABLE')
 
 
 def run_github_action():
@@ -68,8 +71,11 @@ def run_github_action():
         logging.info(f'Skipping commit to {HOMEBREW_TAP}.')
     else:
         logging.info(f'Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...')
-        commit_formula(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER,
-                       HOMEBREW_TAP, FORMULA_FOLDER, GITHUB_REPO, version)
+        setup_git(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER, HOMEBREW_TAP)
+        if UPDATE_README_TABLE:
+            update_readme()
+            # TODO: We need to add the updated README to the files to be committed
+        commit_formula(HOMEBREW_OWNER, HOMEBREW_TAP, FORMULA_FOLDER, GITHUB_REPO, version)
         logging.info(f'Successfully released {version} of {GITHUB_REPO} to {HOMEBREW_TAP}!')
 
 
@@ -198,26 +204,47 @@ class {class_name} < Formula
     return template
 
 
-def commit_formula(commit_owner, commit_email, homebrew_owner, homebrew_tap,
-                   formula_folder, repo_name, version):
-    """Commits the new formula to the specified Homebrew tap
+def setup_git(commit_owner, commit_email, homebrew_owner, homebrew_tap):
+    """Sets up the git environment we'll need to commit our changes to the
+    homebrew tap.
 
     1) Set global git config for the commit
     2) Clone the Homebrew tap repo
-    3) Move our generated formula into the homebrew tap repo
-    4) Commit and push the updated formula file to the repo
     """
     try:
         output = subprocess.check_output(
             (
-                f'git config --global user.name "{commit_owner}" && '
-                f'git config --global user.email {commit_email} && '
-                f'git clone --depth=5 https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git && '
-                f'mv {repo_name}.rb {homebrew_tap}/{formula_folder}/{repo_name}.rb && '
-                f'cd {homebrew_tap} && '
-                f'git add {formula_folder}/{repo_name}.rb && '
-                f'git commit -m "Brew formula update for {repo_name} version {version}" && '
-                f'git push https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git'
+                f'git config --global user.name "{commit_owner}"'
+                f' && git config --global user.email {commit_email}'
+                f' && git clone --depth=2 https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git'
+            ),
+            stdin=None,
+            stderr=None,
+            shell=True,
+            timeout=SUBPROCESS_TIMEOUT
+        )
+        logging.debug('Git environment setup successfully.')
+    except subprocess.TimeoutExpired as error:
+        raise SystemExit(error)
+    except subprocess.CalledProcessError as error:
+        raise SystemExit(error)
+    return output
+
+
+def commit_formula(homebrew_owner, homebrew_tap, formula_folder, repo_name, version):
+    """Commits the new formula to the specified Homebrew tap
+
+    1) Move our generated formula into the homebrew tap repo
+    2) Commit and push the updated formula file to the repo
+    """
+    try:
+        output = subprocess.check_output(
+            (
+                f'mv {repo_name}.rb {homebrew_tap}/{formula_folder}/{repo_name}.rb'
+                f' && cd {homebrew_tap}'
+                f' && git add {formula_folder}/{repo_name}.rb'
+                f' && git commit -m "Brew formula update for {repo_name} version {version}"'
+                f' && git push https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git'
             ),
             stdin=None,
             stderr=None,

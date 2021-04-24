@@ -32,7 +32,10 @@ inputs:
     description: "Custom test command for your formula so you can run `brew test`."
     required: false
   skip_commit:
-    description: "Skips committing the generated formula to a homebrew tap (useful for local testing)"
+    description: "Skips committing the generated formula to a homebrew tap (useful for local testing)."
+    required: false
+  update_readme_table:
+    description: "Update your homebrew tap's README with a table of all projects in the tap."
     required: false
 runs:
   using: "docker"
@@ -47,3 +50,4 @@ runs:
     - ${{ inputs.install }}
     - ${{ inputs.test }}
     - ${{ inputs.skip_commit }}
+    - ${{ inputs.update_readme_table }}
