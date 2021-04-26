@@ -5,6 +5,7 @@ import subprocess
 
 import requests
 
+from homebrew_releaser.constants import FORMULA_FOLDER, SUBPROCESS_TIMEOUT
 from homebrew_releaser.readme_updater import update_readme
 
 GITHUB_BASE_URL = 'https://api.github.com'
@@ -12,7 +13,6 @@ GITHUB_HEADERS = {
     'accept': 'application/vnd.github.v3+json',
     'agent': 'Homebrew Releaser'
 }
-SUBPROCESS_TIMEOUT = 30
 TAR_ARCHIVE = 'tar_archive.tar.gz'
 
 # GitHub Action env variables set by GitHub
@@ -29,7 +29,6 @@ HOMEBREW_TAP = os.getenv('INPUT_HOMEBREW_TAP')
 # Optional GitHub Action env variables from user
 COMMIT_OWNER = os.getenv('INPUT_COMMIT_OWNER', 'homebrew-releaser')
 COMMIT_EMAIL = os.getenv('INPUT_COMMIT_EMAIL', 'homebrew-releaser@example.com')
-FORMULA_FOLDER = os.getenv('INPUT_FORMULA_FOLDER', 'formula')
 TEST = os.getenv('INPUT_TEST')
 SKIP_COMMIT = os.getenv('INPUT_SKIP_COMMIT', False)
 UPDATE_README_TABLE = os.getenv('UPDATE_README_TABLE')
@@ -73,8 +72,7 @@ def run_github_action():
         logging.info(f'Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...')
         setup_git(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER, HOMEBREW_TAP)
         if UPDATE_README_TABLE:
-            update_readme()
-            # TODO: We need to add the updated README to the files to be committed
+            update_readme(HOMEBREW_TAP)
         commit_formula(HOMEBREW_OWNER, HOMEBREW_TAP, FORMULA_FOLDER, GITHUB_REPO, version)
         logging.info(f'Successfully released {version} of {GITHUB_REPO} to {HOMEBREW_TAP}!')
 
@@ -214,8 +212,8 @@ def setup_git(commit_owner, commit_email, homebrew_owner, homebrew_tap):
     try:
         output = subprocess.check_output(
             (
-                f'git config --global user.name "{commit_owner}"'
-                f' && git config --global user.email {commit_email}'
+                f'git config user.name "{commit_owner}"'
+                f' && git config user.email {commit_email}'
                 f' && git clone --depth=2 https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git'
             ),
             stdin=None,

@@ -1,22 +1,33 @@
+import logging
 import os
 import re
+import subprocess
 
 from pretty_tables import PrettyTables
 
+from homebrew_releaser.constants import FORMULA_FOLDER, SUBPROCESS_TIMEOUT
 
-def update_readme():
+
+def update_readme(homebrew_tap):
+    """Updates the homebrew tap README by replacing the old table string
+    with the updated table string
+    """
     formulas = format_formula_data()
     new_table = generate_table(formulas)
     old_table = retrieve_old_table()
     readme_content = read_current_readme()
-    replace_table_contents(readme_content, old_table, new_table)
+    replace_table_contents(readme_content, old_table, new_table, homebrew_tap)
 
 
 def format_formula_data():
+    """Retrieve the name, description, and homepage from each
+    Ruby formula file in the homebrew tap repo
+    """
     files = os.listdir('formula')
     formulas = []
     for filename in sorted(files):
-        with open('formula/' + filename, 'r') as formula:  # TODO: Allow this /formula dir to be editable by the user
+        with open(f'{FORMULA_FOLDER}/{filename}', 'r') as formula:
+            # TODO: Add error handling here when we retrieve bad info or no formula
             for i, line in enumerate(formula):
                 if line.strip().startswith('class'):
                     name_line = line.split()
@@ -44,6 +55,8 @@ def format_formula_data():
 
 
 def generate_table(formulas):
+    """Generates a pretty table which will be used in the README file
+    """
     headers = ['Project', 'Description', 'Installation']
     rows = []
     for formula in formulas:
@@ -65,28 +78,66 @@ def generate_table(formulas):
 
 
 def retrieve_old_table():
-    with open('README.md', 'r') as infile:
+    """Retrives all content between the start/end tags in the README file
+    """
+    with open('README.md', 'r') as readme:
         copy = False
         old_table = ''
-        for line in infile:
-            # TODO: Add exception handling when these aren't present but the user asked to update the README
-            if line.strip() == '<!-- project_table_start -->':  # TODO: Allow these strings to be configured by the user
+        for line in readme:
+            if line.strip() == '<!-- project_table_start -->':
                 copy = True
                 continue
-            elif line.strip() == '<!-- project_table_end -->':  # TODO: Allow these strings to be configured by the user
+            elif line.strip() == '<!-- project_table_end -->':
                 copy = False
                 continue
             elif copy:
                 old_table += line
+
+        # If we start copying but never find a closing tag or can't copy the old table content, raise an error
+        if copy is True or old_table == '':
+            raise SystemExit('Could not find start/end tags for project table in README.')
+
         return old_table
 
 
 def read_current_readme():
-    with open('README.md', 'r') as infile:
-        file_content = infile.read()
-        return file_content
+    """Reads the current README content
+    """
+    try:
+        with open('README.md', 'r') as readme:
+            file_content = readme.read()
+            return file_content
+        logging.debug(f'{readme} read successfully.')
+    except Exception as error:
+        raise SystemExit(error)
 
 
-def replace_table_contents(file_content, old_table, new_table):
-    with open('README.md', 'w') as outfile:
-        outfile.write(file_content.replace(old_table, new_table + '\n'))
+def replace_table_contents(file_content, old_table, new_table, homebrew_tap):
+    """Replaces the old README project table string with the new
+    project table string
+    """
+    try:
+        with open('README.md', 'w') as readme:
+            readme.write(file_content.replace(old_table, new_table + '\n'))
+        logging.debug(f'{readme} written successfully.')
+    except Exception as error:
+        raise SystemExit(error)
+
+    # TODO: Move this into its own function and rework how all git operations work
+    try:
+        output = subprocess.check_output(
+            (
+                f'cd {homebrew_tap}'
+                f' && git add README.md'
+            ),
+            stdin=None,
+            stderr=None,
+            shell=True,
+            timeout=SUBPROCESS_TIMEOUT
+        )
+        logging.debug('README added successfully.')
+    except subprocess.TimeoutExpired as error:
+        raise SystemExit(error)
+    except subprocess.CalledProcessError as error:
+        raise SystemExit(error)
+    return output

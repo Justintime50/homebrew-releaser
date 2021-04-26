@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.5.0 (NEXT UPDATE)
+
+* Adds a feature to update the project table in the homebrew tap's README which includes all the formula name, descriptions, and installation commands
+* Drops the clone depth of a repo from 5 to 2
+* Changes the git config from a global scope to local scope (helps during testing by not accidentally blowing away real credentials)
+* Various code refactor
+
 ## v0.4.3 (2021-02-01)
 
 * Added automated releasing (retagging) of Homebrew Releaser via GitHub Actions. When a new version is released, GitHub Actions will automatically update the stable `v1` tag to point to the latest release
