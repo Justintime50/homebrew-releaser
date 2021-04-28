@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.5.3 (2021-04-27)
+
+* Properly navigate to git directory
+
 ## v0.5.2 (2021-04-27)
 
 * Corrects Dockerfile copy command now that this is a package and not a single script
