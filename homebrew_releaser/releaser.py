@@ -31,7 +31,7 @@ COMMIT_OWNER = os.getenv('INPUT_COMMIT_OWNER', 'homebrew-releaser')
 COMMIT_EMAIL = os.getenv('INPUT_COMMIT_EMAIL', 'homebrew-releaser@example.com')
 TEST = os.getenv('INPUT_TEST')
 SKIP_COMMIT = os.getenv('INPUT_SKIP_COMMIT', False)
-UPDATE_README_TABLE = os.getenv('UPDATE_README_TABLE')
+UPDATE_README_TABLE = os.getenv('INPUT_UPDATE_README_TABLE')
 
 
 def run_github_action():

@@ -95,6 +95,7 @@ def retrieve_old_table():
 
         # If we start copying but never find a closing tag or can't copy the old table content, raise an error
         if copy is True or old_table == '':
+            # TODO: Do we want to exit here or simply log a warning?
             raise SystemExit('Could not find start/end tags for project table in README.')
 
         return old_table
