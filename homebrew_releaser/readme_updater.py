@@ -15,7 +15,7 @@ def update_readme(homebrew_tap):
     formulas = format_formula_data(homebrew_tap)
     new_table = generate_table(formulas)
     old_table = retrieve_old_table(homebrew_tap)
-    readme_content = read_current_readme()
+    readme_content = read_current_readme(homebrew_tap)
     replace_table_contents(readme_content, old_table, new_table, homebrew_tap)
 
 
@@ -103,11 +103,12 @@ def retrieve_old_table(homebrew_tap):
         return old_table
 
 
-def read_current_readme():
+def read_current_readme(homebrew_tap):
     """Reads the current README content
     """
     try:
-        with open('README.md', 'r') as readme:
+        # TODO: Allow opening of non-uppercased README file here
+        with open(os.path.join(homebrew_tap, 'README.md'), 'r') as readme:
             file_content = readme.read()
             return file_content
         logging.debug(f'{readme} read successfully.')
@@ -120,7 +121,8 @@ def replace_table_contents(file_content, old_table, new_table, homebrew_tap):
     project table string
     """
     try:
-        with open('README.md', 'w') as readme:
+        # TODO: Allow opening of non-uppercased README file here
+        with open(os.path.join(homebrew_tap, 'README.md'), 'w') as readme:
             readme.write(file_content.replace(old_table, new_table + '\n'))
         logging.debug(f'{readme} written successfully.')
     except Exception as error:
