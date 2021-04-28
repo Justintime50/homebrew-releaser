@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.5.6 (2021-04-27)
+
+* I'm ashamed to need to release 7 versions in a single night...
+* Bug fixes for opening/writing README file
+
 ## v0.5.5 (2021-04-27)
 
 * Setup a testing environment via Docker to assist with end-to-end testing this github action locally

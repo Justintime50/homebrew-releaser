@@ -239,6 +239,7 @@ def commit_formula(homebrew_owner, homebrew_tap, formula_folder, repo_name, vers
     2) Commit and push the updated formula file to the repo
     """
     try:
+        # TODO: Split the moving/adding logic away from the committing logic
         output = subprocess.check_output(
             (
                 f'mv {repo_name}.rb {homebrew_tap}/{formula_folder}/{repo_name}.rb'
