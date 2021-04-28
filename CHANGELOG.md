@@ -1,9 +1,9 @@
 # CHANGELOG
 
-## v0.5.0 (NEXT UPDATE)
+## v0.5.0 (2021-04-27)
 
-* Adds a feature to update the project table in the homebrew tap's README which includes all the formula name, descriptions, and installation commands
-* Drops the clone depth of a repo from 5 to 2
+* Adds a feature to update the project table in the homebrew tap's README which includes all the formula name, descriptions, and installation commands (set `update_readme_table` to `true`)
+* Drops the clone depth of a repo from `5` to `2`
 * Changes the git config from a global scope to local scope (helps during testing by not accidentally blowing away real credentials)
 * Various code refactor
 
