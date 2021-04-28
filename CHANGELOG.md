@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.5.5 (2021-04-27)
+
+* Setup a testing environment via Docker to assist with end-to-end testing this github action locally
+* Added more logging and renamed other output
+* Variious bug fixes
+
 ## v0.5.4 (2021-04-27)
 
 * Reworks git setup command order

@@ -90,16 +90,6 @@ jobs:
           update_readme_table: true
 ```
 
-### Run Manually
-
-Run from Docker, **do not** run on bare metal (it will replace your git config). Also Homebrew Releaser does not clean up artifacts after completing since the temporary Docker image on GitHub Actions will be discarded anyway.
-
-**Note:** All environment variables from above must be prepended with `INPUT_` for the local Docker image (eg: `INPUT_SKIP_COMMIT=True`).
-
-```bash
-docker-compose up -d --build
-```
-
 ## Development
 
 ```bash
@@ -117,6 +107,16 @@ make coverage
 
 # Get Makefile help
 make help
+```
+
+### Run Manually via Docker
+
+Homebrew Releaser does not clean up artifacts after completing since the temporary Docker image on GitHub Actions will be discarded anyway.
+
+**Note:** All environment variables from above must be prepended with `INPUT_` for the local Docker image (eg: `INPUT_SKIP_COMMIT=true`).
+
+```bash
+docker-compose up -d --build
 ```
 
 ## Attribution

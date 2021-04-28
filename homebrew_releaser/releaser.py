@@ -66,13 +66,15 @@ def run_github_action():
     )
     write_file(f'{repository["name"]}.rb', template, 'w')
 
-    if SKIP_COMMIT:
+    if SKIP_COMMIT:  # TODO: Ensure this only skips the commit step but runs the rest
         logging.info(f'Skipping commit to {HOMEBREW_TAP}.')
     else:
-        logging.info(f'Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...')
+        logging.info('Setting up git environment...')
         setup_git(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER, HOMEBREW_TAP)
         if UPDATE_README_TABLE:
+            logging.info('Attempting to update the README\'s project table...')
             update_readme(HOMEBREW_TAP)
+        logging.info(f'Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...')
         commit_formula(HOMEBREW_OWNER, HOMEBREW_TAP, FORMULA_FOLDER, GITHUB_REPO, version)
         logging.info(f'Successfully released {version} of {GITHUB_REPO} to {HOMEBREW_TAP}!')
 
