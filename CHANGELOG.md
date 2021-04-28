@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.5.1 (2021-04-27)
+
+* Fix bad import
+
 ## v0.5.0 (2021-04-27)
 
 * Adds a feature to update the project table in the homebrew tap's README which includes all the formula name, descriptions, and installation commands (set `update_readme_table` to `true`)

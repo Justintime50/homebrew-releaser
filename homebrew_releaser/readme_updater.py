@@ -5,7 +5,7 @@ import subprocess
 
 from pretty_tables import PrettyTables
 
-from homebrew_releaser.constants import FORMULA_FOLDER, SUBPROCESS_TIMEOUT
+from .constants import FORMULA_FOLDER, SUBPROCESS_TIMEOUT
 
 
 def update_readme(homebrew_tap):
