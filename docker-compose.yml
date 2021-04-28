@@ -2,3 +2,15 @@ services:
   homebrew-releaser:
     container_name: homebrew-releaser
     build: .
+    environment:
+      - INPUT_SKIP_COMMIT=true
+      - INPUT_HOMEBREW_OWNER=username
+      - INPUT_HOMEBREW_TAP=homebrew-formulas
+      - INPUT_FORMULA_FOLDER=formula
+      - INPUT_GITHUB_TOKEN=123...
+      - INPUT_COMMIT_OWNER=username
+      - INPUT_COMMIT_EMAIL=userid+username@users.noreply.github.com
+      - INPUT_INSTALL='bin.install "src/my-script.sh" => "my-script"'
+      - INPUT_TEST='assert_match("my script output", shell_output("my-script-command"))'
+      - INPUT_UPDATE_README_TABLE=true
+      - GITHUB_REPOSITORY=username/repo

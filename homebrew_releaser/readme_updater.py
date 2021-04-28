@@ -12,21 +12,22 @@ def update_readme(homebrew_tap):
     """Updates the homebrew tap README by replacing the old table string
     with the updated table string
     """
-    formulas = format_formula_data()
+    formulas = format_formula_data(homebrew_tap)
     new_table = generate_table(formulas)
-    old_table = retrieve_old_table()
+    old_table = retrieve_old_table(homebrew_tap)
     readme_content = read_current_readme()
     replace_table_contents(readme_content, old_table, new_table, homebrew_tap)
 
 
-def format_formula_data():
+def format_formula_data(homebrew_tap):
     """Retrieve the name, description, and homepage from each
     Ruby formula file in the homebrew tap repo
     """
-    files = os.listdir('formula')
+    homebrew_tap_path = os.path.join(homebrew_tap, FORMULA_FOLDER)
+    files = os.listdir(homebrew_tap_path)
     formulas = []
     for filename in sorted(files):
-        with open(f'{FORMULA_FOLDER}/{filename}', 'r') as formula:
+        with open(os.path.join(homebrew_tap_path, filename), 'r') as formula:
             # TODO: Add error handling here when we retrieve bad info or no formula
             for i, line in enumerate(formula):
                 if line.strip().startswith('class'):
@@ -77,10 +78,11 @@ def generate_table(formulas):
     return table
 
 
-def retrieve_old_table():
+def retrieve_old_table(homebrew_tap):
     """Retrives all content between the start/end tags in the README file
     """
-    with open('README.md', 'r') as readme:
+    # TODO: Allow opening of non-uppercased README file here
+    with open(os.path.join(homebrew_tap, 'README.md'), 'r') as readme:
         copy = False
         old_table = ''
         for line in readme:
