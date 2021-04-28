@@ -4,12 +4,13 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 REQUIREMENTS = [
-    'requests >= 1.0.0'
+    'requests >= 1.0.0',
+    'pretty_tables >= 1.1.0',
 ]
 
 setuptools.setup(
     name='homebrew-releaser',
-    version='0.4.3',
+    version='0.5.0',
     description='Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.',
     long_description=long_description,
     long_description_content_type="text/markdown",

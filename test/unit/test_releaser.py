@@ -13,6 +13,7 @@ from homebrew_releaser.releaser import (GITHUB_HEADERS, SUBPROCESS_TIMEOUT,
 
 
 @mock.patch('logging.info')
+@mock.patch('homebrew_releaser.releaser.setup_git')
 @mock.patch('homebrew_releaser.releaser.commit_formula')
 @mock.patch('homebrew_releaser.releaser.write_file')
 @mock.patch('homebrew_releaser.releaser.generate_formula')
@@ -22,7 +23,7 @@ from homebrew_releaser.releaser import (GITHUB_HEADERS, SUBPROCESS_TIMEOUT,
 @mock.patch('homebrew_releaser.releaser.check_required_env_variables')
 def test_run_github_action(mock_check_env_variables, mock_make_get_request, mock_get_latest_tar_archive,
                            mock_get_checksum, mock_generate_formula, mock_write_file, mock_commit_formula,
-                           mock_logger):
+                           mock_setup_git, mock_logger):
     # TODO: Assert these `called_with` eventually
     run_github_action()
     assert mock_logger.call_count == 6
@@ -174,38 +175,32 @@ def test_generate_formula():
 @mock.patch('subprocess.check_output')
 def test_commit_formula(mock_subprocess):
     # TODO: Mock the subprocess better to ensure it does what it's supposed to
-    commit_owner = 'Justintime50'
-    commit_email = 'justin@example.com'
     homebrew_owner = 'Justintime50'
     homebrew_tap = 'homebrew-formulas'
     formula_folder = 'formula'
     repo_name = 'repo-name'
     version = 'v0.1.0'
-    commit_formula(commit_owner, commit_email, homebrew_owner, homebrew_tap, formula_folder, repo_name, version)
+    commit_formula(homebrew_owner, homebrew_tap, formula_folder, repo_name, version)
     mock_subprocess.assert_called_once()  # TODO: Should we assert a `called_with` here since it's SO long?
 
 
 @mock.patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))  # noqa
 def test_commit_formula_subprocess_timeout(mock_subprocess):
-    commit_owner = 'Justintime50'
-    commit_email = 'justin@example.com'
     homebrew_owner = 'Justintime50'
     homebrew_tap = 'homebrew-formulas'
     formula_folder = 'formula'
     repo_name = 'repo-name'
     version = 'v0.1.0'
     with pytest.raises(SystemExit):
-        commit_formula(commit_owner, commit_email, homebrew_owner, homebrew_tap, formula_folder, repo_name, version)
+        commit_formula(homebrew_owner, homebrew_tap, formula_folder, repo_name, version)
 
 
 @mock.patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))  # noqa
 def test_commit_formula_process_error(mock_subprocess):
-    commit_owner = 'Justintime50'
-    commit_email = 'justin@example.com'
     homebrew_owner = 'Justintime50'
     homebrew_tap = 'homebrew-formulas'
     formula_folder = 'formula'
     repo_name = 'repo-name'
     version = 'v0.1.0'
     with pytest.raises(SystemExit):
-        commit_formula(commit_owner, commit_email, homebrew_owner, homebrew_tap, formula_folder, repo_name, version)
+        commit_formula(homebrew_owner, homebrew_tap, formula_folder, repo_name, version)
