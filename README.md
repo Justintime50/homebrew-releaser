@@ -67,9 +67,27 @@ jobs:
           # Optional.
           test: 'assert_match("my script output", shell_output("my-script-command"))'
 
-          # Skips committing the generated formula to a homebrew tap (useful for local testing)
+          # Skips committing the generated formula to a homebrew tap (useful for local testing).
           # Default is shown.
           skip_commit: false
+
+          # Update your homebrew tap's README with a table of all projects in the tap.
+          # This is done by pulling the information from all your formula.rb files - eg:
+          #
+          # | Project                                    | Description  | Installation             |
+          # | ------------------------------------------ | ------------ | ------------------------ |
+          # | [formula_1](https://github.com/user/repo1) | helpful text | `brew install formula_1` |
+          # | [formula_1](https://github.com/user/repo2) | helpful text | `brew install formula_2` |
+          # | [formula_1](https://github.com/user/repo3) | helpful text | `brew install formula_3` |
+          #
+          # Simply place the following in your README or wrap your project in these comment tags:
+          # <!-- project_table_start -->
+          # TABLE HERE
+          # <!--project_table_end -->
+          #
+          # Finally, mark `update_readme_table` as `true` in your GitHub Action config and we'll do the work of building a custom table for you.
+          # Default is `false`.
+          update_readme_table: true
 ```
 
 ### Run Manually
