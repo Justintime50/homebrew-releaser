@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.5.4 (2021-04-27)
+
+* Reworks git setup command order
+
 ## v0.5.3 (2021-04-27)
 
 * Properly navigate to git directory
