@@ -26,7 +26,7 @@ def test_run_github_action(mock_check_env_variables, mock_make_get_request, mock
                            mock_setup_git, mock_logger):
     # TODO: Assert these `called_with` eventually
     run_github_action()
-    assert mock_logger.call_count == 6
+    assert mock_logger.call_count == 7
     mock_check_env_variables.assert_called_once()
     assert mock_make_get_request.call_count == 2
     mock_get_latest_tar_archive.assert_called_once()
