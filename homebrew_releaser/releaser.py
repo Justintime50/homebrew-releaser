@@ -5,8 +5,8 @@ import subprocess
 
 import requests
 
-from homebrew_releaser.constants import FORMULA_FOLDER, SUBPROCESS_TIMEOUT
-from homebrew_releaser.readme_updater import update_readme
+from .constants import FORMULA_FOLDER, SUBPROCESS_TIMEOUT
+from .readme_updater import update_readme
 
 GITHUB_BASE_URL = 'https://api.github.com'
 GITHUB_HEADERS = {
