@@ -212,7 +212,8 @@ def setup_git(commit_owner, commit_email, homebrew_owner, homebrew_tap):
     try:
         output = subprocess.check_output(
             (
-                f'git config user.name "{commit_owner}"'
+                f'cd {homebrew_tap}'
+                f' && git config user.name "{commit_owner}"'
                 f' && git config user.email {commit_email}'
                 f' && git clone --depth=2 https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git'
             ),
