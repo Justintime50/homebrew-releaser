@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.6.0 (2021-05-31)
+
+* Pins dependencies
+
 ## v0.5.6 (2021-04-27)
 
 * I'm ashamed to need to release 7 versions in a single night...
