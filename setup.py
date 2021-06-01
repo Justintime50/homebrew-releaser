@@ -4,8 +4,8 @@ with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 REQUIREMENTS = [
-    'requests == 1.*',
     'pretty_tables == 1.*',
+    'requests == 2.*',
 ]
 
 DEV_REQUIREMENTS = [
