@@ -1,5 +1,3 @@
-import mock
-import pytest
 from homebrew_releaser.readme_updater import ReadmeUpdater
 
 

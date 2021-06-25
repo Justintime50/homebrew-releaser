@@ -1,10 +1,9 @@
-import logging
+# import logging
 import os
 
 # from homebrew_releaser.checksum import get_checksum
 # from homebrew_releaser.commit import commit_formula
-from homebrew_releaser.constants import (FORMULA_FOLDER, GITHUB_TOKEN,
-                                         TAR_ARCHIVE)
+from homebrew_releaser.constants import TAR_ARCHIVE
 # from homebrew_releaser.readme_updater import update_readme
 from homebrew_releaser.utils import Utils
 
