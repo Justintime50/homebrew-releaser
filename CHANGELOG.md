@@ -2,7 +2,7 @@
 
 ## NEXT RELEASE
 
-* We now use the latest tag instead of release as releases can often be named instead of sticking to strict version numbers (closes #6, closes #7)
+* We now use the latest tag instead of release as releases can often be named instead of sticking to strict version numbers (closes #4, closes #7)
 * Adds `an` to the list of articles to strip out of formula descriptions
 * Changed `Installation` header in README updater to `Install`
 * Added better error handling surrounding the README updater
