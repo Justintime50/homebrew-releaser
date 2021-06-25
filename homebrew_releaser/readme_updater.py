@@ -1,148 +1,162 @@
 import logging
 import os
 import re
-import subprocess
 
 from pretty_tables import PrettyTables
 
-from homebrew_releaser.constants import FORMULA_FOLDER, SUBPROCESS_TIMEOUT
+from homebrew_releaser.constants import FORMULA_FOLDER
+from homebrew_releaser.git import Git
 
 
-def update_readme(homebrew_tap):
-    """Updates the homebrew tap README by replacing the old table string
-    with the updated table string
-    """
-    formulas = format_formula_data(homebrew_tap)
-    new_table = generate_table(formulas)
-    old_table = retrieve_old_table(homebrew_tap)
-    readme_content = read_current_readme(homebrew_tap)
-    replace_table_contents(readme_content, old_table, new_table, homebrew_tap)
+class ReadmeUpdater():
+    @staticmethod
+    def update_readme(homebrew_tap):
+        """Updates the homebrew tap README by replacing the old table string
+        with the updated table string
+        """
+        formulas = ReadmeUpdater.format_formula_data(homebrew_tap)
+        new_table = ReadmeUpdater.generate_table(formulas)
+        old_table = ReadmeUpdater.retrieve_old_table(homebrew_tap)
+        readme_content = ReadmeUpdater.read_current_readme(homebrew_tap)
+        ReadmeUpdater.replace_table_contents(readme_content, old_table, new_table, homebrew_tap)
 
+    @staticmethod
+    def format_formula_data(homebrew_tap):
+        """Retrieve the name, description, and homepage from each
+        Ruby formula file in the homebrew tap repo
+        """
+        homebrew_tap_path = os.path.join(homebrew_tap, FORMULA_FOLDER)
+        files = os.listdir(homebrew_tap_path)
+        if len(files) == 0:
+            raise SystemExit('No files found in the "formula_folder" provided.')
+        formulas = []
 
-def format_formula_data(homebrew_tap):
-    """Retrieve the name, description, and homepage from each
-    Ruby formula file in the homebrew tap repo
-    """
-    homebrew_tap_path = os.path.join(homebrew_tap, FORMULA_FOLDER)
-    files = os.listdir(homebrew_tap_path)
-    formulas = []
-    for filename in sorted(files):
-        with open(os.path.join(homebrew_tap_path, filename), 'r') as formula:
-            # TODO: Add error handling here when we retrieve bad info or no formula
-            for i, line in enumerate(formula):
-                if line.strip().startswith('class'):
-                    name_line = line.split()
-                    name_pieces = []
-                    name_pieces = re.findall('[A-Z][^A-Z]*', name_line[1])
-                    formatted_name = ''
+        try:
+            for filename in sorted(files):
+                with open(os.path.join(homebrew_tap_path, filename), 'r') as formula:
+                    for i, line in enumerate(formula):
+                        if line.strip().startswith('class'):
+                            name_line = line.split()
+                            name_pieces = []
+                            name_pieces = re.findall('[A-Z][^A-Z]*', name_line[1])
+                            formatted_name = ''
 
-                    for piece in name_pieces:
-                        if piece != name_pieces[-1]:
-                            formatted_name += f'{piece}-'
-                        else:
-                            formatted_name += f'{piece}'
-                        final_name = formatted_name.lower()
-                if line.strip().startswith('desc'):
-                    final_desc = line.strip().replace('desc ', '').replace('"', '')
-                if line.strip().startswith('homepage'):
-                    final_homepage = line.strip().replace('homepage ', '').replace('"', '')
-            formula_data = {
-                'name': final_name,
-                'desc': final_desc,
-                'homepage': final_homepage,
-            }
-            formulas.append(formula_data)
-    return formulas
+                            for piece in name_pieces:
+                                if piece != name_pieces[-1]:
+                                    formatted_name += f'{piece}-'
+                                else:
+                                    formatted_name += f'{piece}'
+                                final_name = formatted_name.lower()
+                        if line.strip().startswith('desc'):
+                            final_desc = line.strip().replace('desc ', '').replace('"', '')
+                        if line.strip().startswith('homepage'):
+                            final_homepage = line.strip().replace('homepage ', '').replace('"', '')
+                    formula_data = {
+                        'name': final_name,
+                        'desc': final_desc,
+                        'homepage': final_homepage,
+                    }
+                    formulas.append(formula_data)
+        except Exception as error:
+            raise SystemExit(f'There was a problem opening or reading the formula data: {error}')
 
+        return formulas
 
-def generate_table(formulas):
-    """Generates a pretty table which will be used in the README file
-    """
-    headers = ['Project', 'Description', 'Installation']
-    rows = []
-    for formula in formulas:
-        rows.append(
-            [
-                f'[{formula["name"]}]({formula.get("homepage")})',
-                formula.get('desc'),
-                f'`brew install {formula["name"]}`',
-            ]
+    @staticmethod
+    def generate_table(formulas):
+        """Generates a pretty table which will be used in the README file
+        """
+        headers = ['Project', 'Description', 'Install']
+        rows = []
+        for formula in formulas:
+            rows.append(
+                [
+                    f'[{formula["name"]}]({formula.get("homepage")})',
+                    formula.get('desc'),
+                    f'`brew install {formula["name"]}`',
+                ]
+            )
+
+        table = PrettyTables.generate_table(
+            headers=headers,
+            rows=rows,
+            empty_cell_placeholder='NA',
         )
 
-    table = PrettyTables.generate_table(
-        headers=headers,
-        rows=rows,
-        empty_cell_placeholder='NA',
-    )
+        return table
 
-    return table
-
-
-def retrieve_old_table(homebrew_tap):
-    """Retrives all content between the start/end tags in the README file
-    """
-    # TODO: Allow opening of non-uppercased README file here
-    with open(os.path.join(homebrew_tap, 'README.md'), 'r') as readme:
-        copy = False
+    @staticmethod
+    def retrieve_old_table(homebrew_tap):
+        """Retrives all content between the start/end tags in the README file
+        """
+        readme = ReadmeUpdater.determine_readme()
         old_table = ''
-        for line in readme:
-            if line.strip() == '<!-- project_table_start -->':
-                copy = True
-                continue
-            elif line.strip() == '<!-- project_table_end -->':
-                copy = False
-                continue
-            elif copy:
-                old_table += line
 
-        # If we start copying but never find a closing tag or can't copy the old table content, raise an error
-        if copy is True or old_table == '':
-            # TODO: Do we want to exit here or simply log a warning?
-            raise SystemExit('Could not find start/end tags for project table in README.')
+        if readme:
+            with open(readme, 'r') as readme:
+                copy = False
+                for line in readme:
+                    if line.strip() == '<!-- project_table_start -->':
+                        copy = True
+                        continue
+                    elif line.strip() == '<!-- project_table_end -->':
+                        copy = False
+                        continue
+                    elif copy:
+                        old_table += line
+
+                # If we start copying but never find a closing tag or can't copy the old table content, warn the user
+                # Note that this will not fail the release workflow as this would be a bad experience
+                if copy is True or old_table == '':
+                    logging.error('Could not find start/end tags for project table in README.')
 
         return old_table
 
+    @staticmethod
+    def read_current_readme(homebrew_tap):
+        """Reads the current README content
+        """
+        readme = ReadmeUpdater.determine_readme(homebrew_tap)
+        file_content = None
 
-def read_current_readme(homebrew_tap):
-    """Reads the current README content
-    """
-    try:
-        # TODO: Allow opening of non-uppercased README file here
-        with open(os.path.join(homebrew_tap, 'README.md'), 'r') as readme:
-            file_content = readme.read()
-            return file_content
-        logging.debug(f'{readme} read successfully.')
-    except Exception as error:
-        raise SystemExit(error)
+        if readme:
+            with open(readme, 'r') as readme_contents:
+                file_content = readme_contents.read()
+            logging.debug(f'{readme} read successfully.')
 
+        return file_content
 
-def replace_table_contents(file_content, old_table, new_table, homebrew_tap):
-    """Replaces the old README project table string with the new
-    project table string
-    """
-    try:
-        # TODO: Allow opening of non-uppercased README file here
-        with open(os.path.join(homebrew_tap, 'README.md'), 'w') as readme:
-            readme.write(file_content.replace(old_table, new_table + '\n'))
-        logging.debug(f'{readme} written successfully.')
-    except Exception as error:
-        raise SystemExit(error)
+    @staticmethod
+    def replace_table_contents(file_content, old_table, new_table, homebrew_tap):
+        """Replaces the old README project table string with the new
+        project table string
+        """
+        readme = ReadmeUpdater.determine_readme(homebrew_tap)
 
-    # TODO: Move this into its own function and rework how all git operations work
-    try:
-        output = subprocess.check_output(
-            (
-                f'cd {homebrew_tap}'
-                f' && git add README.md'
-            ),
-            stdin=None,
-            stderr=None,
-            shell=True,
-            timeout=SUBPROCESS_TIMEOUT
-        )
-        logging.debug('README added successfully.')
-    except subprocess.TimeoutExpired as error:
-        raise SystemExit(error)
-    except subprocess.CalledProcessError as error:
-        raise SystemExit(error)
-    return output
+        if readme:
+            with open(readme, 'w') as readme_contents:
+                readme_contents.write(file_content.replace(old_table, new_table + '\n'))
+            logging.debug(f'{readme} written successfully.')
+
+            Git.add(homebrew_tap)
+
+    @staticmethod
+    def determine_readme(homebrew_tap):
+        """Determines the README file to open. The README file must either be:
+
+        1. completely uppercase or completely lowercase
+        2. have the file extension of `.md`
+        3. reside in the root of a project
+        """
+        readme_to_open = None
+        uppercase_readme = os.path.join(homebrew_tap, 'README.md')
+        lowercase_readme = os.path.join(homebrew_tap, 'readme.md')
+
+        if os.path.isfile(uppercase_readme):
+            readme_to_open = uppercase_readme
+        elif os.path.isfile(lowercase_readme):
+            readme_to_open = lowercase_readme
+        else:
+            logging.error('Could not find a valid README in this project to update.')
+
+        return readme_to_open

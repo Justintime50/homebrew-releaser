@@ -18,7 +18,7 @@ Homebrew Releaser allows you to release scripts, binaries, and executables direc
 
 **Notes:** 
 * Shell scripts distributed via Homebrew Releaser must be executable and contain a proper shebang to work.
-* Homebrew Releaser will always use the latest release of a GitHub project.
+* Homebrew Releaser will always use the latest tag of a GitHub project. Git tags must follow semantic versioning for Homebrew to properly infer the installation instructions (eg: `v1.2.0` or 0.3.0`, etc).
 * The Homebrew formula filename will match the github repo name.
 
 ### GitHub Actions YML
@@ -74,7 +74,7 @@ jobs:
           # Update your homebrew tap's README with a table of all projects in the tap.
           # This is done by pulling the information from all your formula.rb files - eg:
           #
-          # | Project                                    | Description  | Installation             |
+          # | Project                                    | Description  | Install                  |
           # | ------------------------------------------ | ------------ | ------------------------ |
           # | [formula_1](https://github.com/user/repo1) | helpful text | `brew install formula_1` |
           # | [formula_1](https://github.com/user/repo2) | helpful text | `brew install formula_2` |
