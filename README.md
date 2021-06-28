@@ -19,7 +19,7 @@ Homebrew Releaser allows you to release scripts, binaries, and executables direc
 
 **Notes:** 
 * Shell scripts distributed via Homebrew Releaser must be executable and contain a proper shebang to work.
-* Homebrew Releaser will always use the latest tag of a GitHub project. Git tags must follow semantic versioning for Homebrew to properly infer the installation instructions (eg: `v1.2.0` or 0.3.0`, etc).
+* Homebrew Releaser will always use the latest tag of a GitHub project. Git tags must follow semantic versioning for Homebrew to properly infer the installation instructions (eg: `v1.2.0` or `0.3.0`, etc).
 * The Homebrew formula filename will match the github repo name.
 
 ### GitHub Actions YML
