@@ -1,11 +1,17 @@
 # CHANGELOG
 
-## NEXT RELEASE
+## v0.7.0 (2021-06-27)
 
+* Refactored app completely by splitting up all logic into separate modules
 * We now use the latest tag instead of release as releases can often be named instead of sticking to strict version numbers (closes #4, closes #7)
 * Adds `an` to the list of articles to strip out of formula descriptions
 * Changed `Installation` header in README updater to `Install`
 * Added better error handling surrounding the README updater
+* Exposed `DEBUG` logging to the user via the `debug: true` flag to assist in troubleshooting the GitHub Action if necessary
+* Made all functions static methods
+* Added better test coverage
+* Split up git `add`, `commit`, and `push` functionality for better flexibilty
+* Additional info and debugging statements for each step were added
 * Various small improvements and bug fixes
 
 ## v0.6.0 (2021-05-31)

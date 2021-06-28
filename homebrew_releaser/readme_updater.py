@@ -89,13 +89,13 @@ class ReadmeUpdater():
     def retrieve_old_table(homebrew_tap):
         """Retrives all content between the start/end tags in the README file
         """
-        readme = ReadmeUpdater.determine_readme()
+        readme = ReadmeUpdater.determine_readme(homebrew_tap)
         old_table = ''
 
         if readme:
-            with open(readme, 'r') as readme:
+            with open(readme, 'r') as readme_contents:
                 copy = False
-                for line in readme:
+                for line in readme_contents:
                     if line.strip() == '<!-- project_table_start -->':
                         copy = True
                         continue

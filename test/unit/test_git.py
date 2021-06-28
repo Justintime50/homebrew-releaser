@@ -6,6 +6,7 @@ from homebrew_releaser.constants import SUBPROCESS_TIMEOUT
 from homebrew_releaser.git import Git
 
 
+@mock.patch('homebrew_releaser.git.GITHUB_TOKEN', '123')
 @mock.patch('subprocess.check_output')
 def test_setup(mock_subprocess):
     # TODO: Mock the subprocess better to ensure it does what it's supposed to
@@ -16,8 +17,7 @@ def test_setup(mock_subprocess):
 
     mock_subprocess.assert_called_once_with(
         (
-            # TODO: replace `None` with a mocked GITHUB_TOKEN
-            f'git clone --depth=2 https://None@github.com/{homebrew_owner}/{homebrew_tap}.git'
+            f'git clone --depth=2 https://123@github.com/{homebrew_owner}/{homebrew_tap}.git'
             f' && cd {homebrew_tap}'
             f' && git config user.name "{homebrew_owner}"'
             f' && git config user.email {commit_email}'
@@ -121,6 +121,7 @@ def test_commit_process_error(mock_subprocess):
         Git.commit(homebrew_tap, repo_name, version)
 
 
+@mock.patch('homebrew_releaser.git.GITHUB_TOKEN', '123')
 @mock.patch('subprocess.check_output')
 def test_push(mock_subprocess):
     # TODO: Mock the subprocess better to ensure it does what it's supposed to
@@ -131,8 +132,7 @@ def test_push(mock_subprocess):
     mock_subprocess.assert_called_once_with(
         (
             f'cd {homebrew_tap}'
-            # TODO: replace `None` with a mocked GITHUB_TOKEN
-            f' && git push https://None@github.com/{homebrew_owner}/{homebrew_tap}.git'
+            f' && git push https://123@github.com/{homebrew_owner}/{homebrew_tap}.git'
         ),
         stdin=None,
         stderr=None,

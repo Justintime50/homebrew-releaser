@@ -88,6 +88,10 @@ jobs:
           # Finally, mark `update_readme_table` as `true` in your GitHub Action config and we'll do the work of building a custom table for you.
           # Default is `false`.
           update_readme_table: true
+
+          # Logs debugging info to console.
+          # Default is shown.
+          debug: false
 ```
 
 ## Development

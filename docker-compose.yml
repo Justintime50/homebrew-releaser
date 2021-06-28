@@ -14,3 +14,4 @@ services:
       - INPUT_TEST='assert_match("my script output", shell_output("my-script-command"))'
       - INPUT_UPDATE_README_TABLE=true
       - GITHUB_REPOSITORY=username/repo
+      - INPUT_DEBUG=true
