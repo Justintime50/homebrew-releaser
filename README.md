@@ -6,6 +6,7 @@ Release scripts, binaries, and executables directly to Homebrew via GitHub Actio
 
 [![Build](https://github.com/Justintime50/homebrew-releaser/workflows/build/badge.svg)](https://github.com/Justintime50/homebrew-releaser/actions)
 [![Coverage Status](https://coveralls.io/repos/github/Justintime50/homebrew-releaser/badge.svg?branch=main)](https://coveralls.io/github/Justintime50/homebrew-releaser?branch=main)
+[![Version](https://img.shields.io/github/v/tag/justintime50/homebrew-releaser)](https://github.com/justintime50/homebrew-releaser/releases)
 [![Licence](https://img.shields.io/github/license/Justintime50/homebrew-releaser)](LICENSE)
 
 <img src="assets/showcase.png" alt="Showcase">
