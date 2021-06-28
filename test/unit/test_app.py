@@ -17,19 +17,19 @@ from homebrew_releaser.app import App
 @mock.patch('homebrew_releaser.app.App.check_required_env_variables')
 def test_run_github_action_skip_commit(mock_check_env_variables, mock_make_get_request,
                                        mock_download_latest_tar_archive, mock_get_checksum,
-                                       mock_generate_formula, mock_write_file, mock_setup_git,
-                                       mock_push_formula, mock_commit_formula, mock_add_formula,
+                                       mock_generate_formula, mock_write_file, mock_push_formula,
+                                       mock_commit_formula, mock_add_formula, mock_setup_git,
                                        mock_logger):
     # TODO: Assert these `called_with` eventually
     App.run_github_action()
-    assert mock_logger.call_count == 5
+    assert mock_logger.call_count == 7
     mock_check_env_variables.assert_called_once()
     assert mock_make_get_request.call_count == 2
     mock_download_latest_tar_archive.assert_called_once()
     mock_get_checksum.assert_called_once()
     mock_generate_formula.assert_called_once()
     mock_write_file.assert_called_once()
-    mock_setup_git.assert_not_called()
+    mock_setup_git.assert_called_once()
     mock_add_formula.assert_not_called()
     mock_commit_formula.assert_not_called()
     mock_push_formula.assert_not_called()
@@ -47,11 +47,11 @@ def test_run_github_action_skip_commit(mock_check_env_variables, mock_make_get_r
 @mock.patch('homebrew_releaser.utils.Utils.make_get_request')
 @mock.patch('homebrew_releaser.app.App.check_required_env_variables')
 def test_run_github_action(mock_check_env_variables, mock_make_get_request, mock_download_latest_tar_archive,
-                           mock_get_checksum, mock_generate_formula, mock_write_file, mock_setup_git,
-                           mock_push_formula, mock_commit_formula, mock_add_formula, mock_logger):
+                           mock_get_checksum, mock_generate_formula, mock_write_file, mock_push_formula,
+                           mock_commit_formula, mock_add_formula, mock_setup_git, mock_logger):
     # TODO: Assert these `called_with` eventually
     App.run_github_action()
-    assert mock_logger.call_count == 7
+    assert mock_logger.call_count == 8
     mock_check_env_variables.assert_called_once()
     assert mock_make_get_request.call_count == 2
     mock_download_latest_tar_archive.assert_called_once()
