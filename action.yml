@@ -37,6 +37,9 @@ inputs:
   update_readme_table:
     description: "Update your homebrew tap's README with a table of all projects in the tap."
     required: false
+  debug:
+    description: "Logs debugging info to console."
+    required: false
 runs:
   using: "docker"
   image: "Dockerfile"
@@ -51,3 +54,4 @@ runs:
     - ${{ inputs.test }}
     - ${{ inputs.skip_commit }}
     - ${{ inputs.update_readme_table }}
+    - ${{ inputs.debug }}

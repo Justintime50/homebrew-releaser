@@ -13,4 +13,8 @@ class HomebrewReleaser < Formula
   def install
     bin.install "src/secure-browser-kiosk.sh" => "secure-browser-kiosk"
   end
+
+  test do
+    assert_match("my script output", shell_output("my-script-command"))
+  end
 end
