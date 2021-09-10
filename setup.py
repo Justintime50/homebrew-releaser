@@ -11,14 +11,13 @@ REQUIREMENTS = [
 DEV_REQUIREMENTS = [
     'coveralls == 3.*',
     'flake8',
-    'mock == 4.*',
     'pytest == 6.*',
     'pytest-cov == 2.*',
 ]
 
 setuptools.setup(
     name='homebrew-releaser',
-    version='0.7.0',
+    version='0.7.1',
     description='Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -33,12 +32,12 @@ setuptools.setup(
     ],
     install_requires=REQUIREMENTS,
     extras_require={
-        'dev': DEV_REQUIREMENTS
+        'dev': DEV_REQUIREMENTS,
     },
     entry_points={
         'console_scripts': [
-            'homebrew-releaser=homebrew_releaser.releaser:main'
+            'homebrew-releaser=homebrew_releaser.releaser:main',
         ]
     },
-    python_requires='>=3.6',
+    python_requires='>=3.7',
 )

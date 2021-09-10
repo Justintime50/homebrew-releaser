@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.8.0 (2021-09-10)
+
+* Rebuild with the corrected `pretty-tables` library which re-adds the horizontal break between headers and row data
+* Removes the `mock` library in favor of the builtin `unittest.mock` library
+* Bumps the minimum Python version to 3.7
+
 ## v0.7.0 (2021-06-27)
 
 * Refactored app completely by splitting up all logic into separate modules

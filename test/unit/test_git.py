@@ -1,13 +1,13 @@
 import subprocess
+from unittest.mock import patch
 
-import mock
 import pytest
 from homebrew_releaser.constants import SUBPROCESS_TIMEOUT
 from homebrew_releaser.git import Git
 
 
-@mock.patch('homebrew_releaser.git.GITHUB_TOKEN', '123')
-@mock.patch('subprocess.check_output')
+@patch('homebrew_releaser.git.GITHUB_TOKEN', '123')
+@patch('subprocess.check_output')
 def test_setup(mock_subprocess):
     # TODO: Mock the subprocess better to ensure it does what it's supposed to
     homebrew_owner = 'Justintime50'
@@ -15,21 +15,22 @@ def test_setup(mock_subprocess):
     commit_email = 'user@example.com'
     Git.setup(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
 
+    mock_command = (
+        f'git clone --depth=2 https://123@github.com/{homebrew_owner}/{homebrew_tap}.git'
+        f' && cd {homebrew_tap}'
+        f' && git config user.name "{homebrew_owner}"'
+        f' && git config user.email {commit_email}'
+    )
     mock_subprocess.assert_called_once_with(
-        (
-            f'git clone --depth=2 https://123@github.com/{homebrew_owner}/{homebrew_tap}.git'
-            f' && cd {homebrew_tap}'
-            f' && git config user.name "{homebrew_owner}"'
-            f' && git config user.email {commit_email}'
-        ),
+        mock_command,
         stdin=None,
         stderr=None,
         shell=True,
-        timeout=SUBPROCESS_TIMEOUT
+        timeout=SUBPROCESS_TIMEOUT,
     )
 
 
-@mock.patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))  # noqa
+@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))
 def test_setup_subprocess_timeout(mock_subprocess):
     homebrew_owner = 'Justintime50'
     homebrew_tap = 'homebrew-formulas'
@@ -38,7 +39,7 @@ def test_setup_subprocess_timeout(mock_subprocess):
         Git.setup(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
 
 
-@mock.patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))  # noqa
+@patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))
 def test_setup_process_error(mock_subprocess):
     homebrew_owner = 'Justintime50'
     homebrew_tap = 'homebrew-formulas'
@@ -47,25 +48,22 @@ def test_setup_process_error(mock_subprocess):
         Git.setup(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
 
 
-@mock.patch('subprocess.check_output')
+@patch('subprocess.check_output')
 def test_add(mock_subprocess):
     # TODO: Mock the subprocess better to ensure it does what it's supposed to
     homebrew_tap = 'homebrew-formulas'
 
     Git.add(homebrew_tap)
     mock_subprocess.assert_called_once_with(
-        (
-            f'cd {homebrew_tap}'
-            f' && git add .'
-        ),
+        f'cd {homebrew_tap} && git add .',
         stdin=None,
         stderr=None,
         shell=True,
-        timeout=SUBPROCESS_TIMEOUT
+        timeout=SUBPROCESS_TIMEOUT,
     )
 
 
-@mock.patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))  # noqa
+@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))
 def test_add_subprocess_timeout(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
 
@@ -73,7 +71,7 @@ def test_add_subprocess_timeout(mock_subprocess):
         Git.add(homebrew_tap)
 
 
-@mock.patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))  # noqa
+@patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))
 def test_add_process_error(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
 
@@ -81,7 +79,7 @@ def test_add_process_error(mock_subprocess):
         Git.add(homebrew_tap)
 
 
-@mock.patch('subprocess.check_output')
+@patch('subprocess.check_output')
 def test_commit(mock_subprocess):
     # TODO: Mock the subprocess better to ensure it does what it's supposed to
     homebrew_tap = 'homebrew-formulas'
@@ -90,18 +88,15 @@ def test_commit(mock_subprocess):
 
     Git.commit(homebrew_tap, repo_name, version)
     mock_subprocess.assert_called_once_with(
-        (
-            f'cd {homebrew_tap}'
-            f' && git commit -m "Brew formula update for {repo_name} version {version}"'
-        ),
+        f'cd {homebrew_tap} && git commit -m "Brew formula update for {repo_name} version {version}"',
         stdin=None,
         stderr=None,
         shell=True,
-        timeout=SUBPROCESS_TIMEOUT
+        timeout=SUBPROCESS_TIMEOUT,
     )
 
 
-@mock.patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))  # noqa
+@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))
 def test_commit_subprocess_timeout(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
     repo_name = 'mock-repo'
@@ -111,7 +106,7 @@ def test_commit_subprocess_timeout(mock_subprocess):
         Git.commit(homebrew_tap, repo_name, version)
 
 
-@mock.patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))  # noqa
+@patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))
 def test_commit_process_error(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
     repo_name = 'mock-repo'
@@ -121,8 +116,8 @@ def test_commit_process_error(mock_subprocess):
         Git.commit(homebrew_tap, repo_name, version)
 
 
-@mock.patch('homebrew_releaser.git.GITHUB_TOKEN', '123')
-@mock.patch('subprocess.check_output')
+@patch('homebrew_releaser.git.GITHUB_TOKEN', '123')
+@patch('subprocess.check_output')
 def test_push(mock_subprocess):
     # TODO: Mock the subprocess better to ensure it does what it's supposed to
     homebrew_tap = 'homebrew-formulas'
@@ -130,18 +125,15 @@ def test_push(mock_subprocess):
 
     Git.push(homebrew_tap, homebrew_owner)
     mock_subprocess.assert_called_once_with(
-        (
-            f'cd {homebrew_tap}'
-            f' && git push https://123@github.com/{homebrew_owner}/{homebrew_tap}.git'
-        ),
+        f'cd {homebrew_tap} && git push https://123@github.com/{homebrew_owner}/{homebrew_tap}.git',
         stdin=None,
         stderr=None,
         shell=True,
-        timeout=SUBPROCESS_TIMEOUT
+        timeout=SUBPROCESS_TIMEOUT,
     )
 
 
-@mock.patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))  # noqa
+@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))
 def test_push_subprocess_timeout(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
     homebrew_owner = 'Justintime50'
@@ -150,7 +142,7 @@ def test_push_subprocess_timeout(mock_subprocess):
         Git.push(homebrew_tap, homebrew_owner)
 
 
-@mock.patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))  # noqa
+@patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))
 def test_push_process_error(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
     homebrew_owner = 'Justintime50'
