@@ -1,15 +1,21 @@
-import mock
+from unittest.mock import mock_open, patch
+
 import pytest
 from homebrew_releaser.readme_updater import ReadmeUpdater
 
 
-@mock.patch('homebrew_releaser.readme_updater.ReadmeUpdater.format_formula_data')
-@mock.patch('homebrew_releaser.readme_updater.ReadmeUpdater.generate_table')
-@mock.patch('homebrew_releaser.readme_updater.ReadmeUpdater.retrieve_old_table')
-@mock.patch('homebrew_releaser.readme_updater.ReadmeUpdater.read_current_readme')
-@mock.patch('homebrew_releaser.readme_updater.ReadmeUpdater.replace_table_contents')
-def test_update_readme(mock_replace_table_contents, mock_read_current_readme,
-                       mock_retrieve_old_table, mock_generate_table, mock_format_formula_data):
+@patch('homebrew_releaser.readme_updater.ReadmeUpdater.format_formula_data')
+@patch('homebrew_releaser.readme_updater.ReadmeUpdater.generate_table')
+@patch('homebrew_releaser.readme_updater.ReadmeUpdater.retrieve_old_table')
+@patch('homebrew_releaser.readme_updater.ReadmeUpdater.read_current_readme')
+@patch('homebrew_releaser.readme_updater.ReadmeUpdater.replace_table_contents')
+def test_update_readme(
+    mock_replace_table_contents,
+    mock_read_current_readme,
+    mock_retrieve_old_table,
+    mock_generate_table,
+    mock_format_formula_data,
+):
     ReadmeUpdater.update_readme('./')
 
     mock_format_formula_data.assert_called_once()
@@ -27,8 +33,22 @@ def test_format_formula_data_not_found():
 
 def test_generate_table():
     # TODO: Format data here first
-    # ReadmeUpdater.generate_table()
-    pass
+    formulas = [
+        {
+            'name': 'mock-formula',
+            'homepage': 'https://github.com/justintime50/mock-formula',
+            'desc': 'mock description',
+        },
+    ]
+    table = ReadmeUpdater.generate_table(formulas)
+
+    # fmt: off
+    assert table == (
+        '| Project                                                      | Description      | Install                     |\n' # noqa
+        '| ------------------------------------------------------------ | ---------------- | --------------------------- |\n' # noqa
+        '| [mock-formula](https://github.com/justintime50/mock-formula) | mock description | `brew install mock-formula` |' # noqa
+    )
+    # fmt: on
 
 
 # TODO: Add another test with a table in the README
@@ -50,15 +70,10 @@ def test_read_current_readme_does_not_exist():
     assert '# Homebrew Releaser' in readme
 
 
-@mock.patch('homebrew_releaser.git.Git.add')
+@patch('homebrew_releaser.git.Git.add')
 def test_replace_table_contents(mock_git_add):
-    with mock.patch('builtins.open', mock.mock_open()):
-        ReadmeUpdater.replace_table_contents(
-            'mock file contents',
-            'old table contents',
-            'new table contents',
-            './'
-        )
+    with patch('builtins.open', mock_open()):
+        ReadmeUpdater.replace_table_contents('mock file contents', 'old table contents', 'new table contents', './')
 
     mock_git_add.assert_called_once()
 
