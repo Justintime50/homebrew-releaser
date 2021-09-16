@@ -9,7 +9,7 @@ Release scripts, binaries, and executables directly to Homebrew via GitHub Actio
 [![Version](https://img.shields.io/github/v/tag/justintime50/homebrew-releaser)](https://github.com/justintime50/homebrew-releaser/releases)
 [![Licence](https://img.shields.io/github/license/Justintime50/homebrew-releaser)](LICENSE)
 
-<img src="assets/showcase.png" alt="Showcase">
+<img src="https://raw.githubusercontent.com/justintime50/assets/main/src/homebrew-releaser/showcase.png" alt="Showcase">
 
 </div>
 
@@ -123,7 +123,3 @@ Homebrew Releaser does not clean up artifacts after completing since the tempora
 ```bash
 docker-compose up -d --build
 ```
-
-## Attribution
-
-* Icons made by <a href="https://www.flaticon.com/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
