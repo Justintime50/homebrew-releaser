@@ -2,7 +2,7 @@ import logging
 import re
 
 
-class Formula():
+class Formula:
     @staticmethod
     def generate_formula_data(owner, repo_name, repository, checksum, install, tar_url, test):
         """Generates the formula data for Homebrew
@@ -32,11 +32,15 @@ class Formula():
             description = first_word_of_desc[1].strip().capitalize()
 
         # RUBY TEMPLATE DATA TO REMAIN DOUBLE SPACED
-        test = f"""
+        test = (
+            f"""
   test do
     {test.strip()}
   end
-end""" if test else 'end'
+end"""
+            if test
+            else 'end'
+        )
 
         template = f"""# typed: false
 # frozen_string_literal: true

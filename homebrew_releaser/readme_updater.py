@@ -8,7 +8,7 @@ from homebrew_releaser.constants import FORMULA_FOLDER
 from homebrew_releaser.git import Git
 
 
-class ReadmeUpdater():
+class ReadmeUpdater:
     @staticmethod
     def update_readme(homebrew_tap):
         """Updates the homebrew tap README by replacing the old table string
@@ -64,8 +64,7 @@ class ReadmeUpdater():
 
     @staticmethod
     def generate_table(formulas):
-        """Generates a pretty table which will be used in the README file
-        """
+        """Generates a pretty table which will be used in the README file"""
         headers = ['Project', 'Description', 'Install']
         rows = []
         for formula in formulas:
@@ -87,8 +86,7 @@ class ReadmeUpdater():
 
     @staticmethod
     def retrieve_old_table(homebrew_tap):
-        """Retrives all content between the start/end tags in the README file
-        """
+        """Retrives all content between the start/end tags in the README file"""
         readme = ReadmeUpdater.determine_readme(homebrew_tap)
         old_table = ''
 
@@ -114,8 +112,7 @@ class ReadmeUpdater():
 
     @staticmethod
     def read_current_readme(homebrew_tap):
-        """Reads the current README content
-        """
+        """Reads the current README content"""
         readme = ReadmeUpdater.determine_readme(homebrew_tap)
         file_content = None
 

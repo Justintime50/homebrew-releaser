@@ -4,8 +4,7 @@ from homebrew_releaser.formula import Formula
 
 
 def record_cassette(cassette_path, cassette_name, cassette_data):
-    """Read from existing file or create new file if it's not present
-    """
+    """Read from existing file or create new file if it's not present"""
     full_cassette_filename = cassette_path + '/' + cassette_name
 
     if os.path.isfile(full_cassette_filename):
@@ -27,9 +26,7 @@ def test_generate_formula():
     repository = {
         # We use a badly written description string here on purpose to test our formatting code
         'description': 'A tool to release... scripts, binaries, and executables to GitHub. ',
-        'license': {
-            'spdx_id': 'MIT'
-        }
+        'license': {'spdx_id': 'MIT'},
     }
     checksum = '1234567890123456789012345678901234567890'
     install = 'bin.install "src/secure-browser-kiosk.sh" => "secure-browser-kiosk"'

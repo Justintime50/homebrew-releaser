@@ -2,6 +2,7 @@ import subprocess
 from unittest.mock import patch
 
 import pytest
+
 from homebrew_releaser.constants import SUBPROCESS_TIMEOUT
 from homebrew_releaser.git import Git
 

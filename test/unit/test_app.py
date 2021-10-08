@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 import pytest
+
 from homebrew_releaser.app import App
 
 

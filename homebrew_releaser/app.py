@@ -2,8 +2,7 @@ import logging
 import os
 
 from homebrew_releaser.checksum import Checksum
-from homebrew_releaser.constants import (FORMULA_FOLDER, GITHUB_TOKEN,
-                                         TAR_ARCHIVE)
+from homebrew_releaser.constants import FORMULA_FOLDER, GITHUB_TOKEN, TAR_ARCHIVE
 from homebrew_releaser.formula import Formula
 from homebrew_releaser.git import Git
 from homebrew_releaser.readme_updater import ReadmeUpdater
@@ -30,7 +29,7 @@ UPDATE_README_TABLE = os.getenv('INPUT_UPDATE_README_TABLE')
 DEBUG = os.getenv('INPUT_DEBUG', False)
 
 
-class App():
+class App:
     @staticmethod
     def run_github_action():
         """Runs the complete GitHub Action workflow
@@ -50,7 +49,7 @@ class App():
 
         logging.basicConfig(
             level=logging_level,
-            format='%(asctime)s - %(levelname)s - %(message)s'
+            format='%(asctime)s - %(levelname)s - %(message)s',
         )
         logging.info('Starting Homebrew Releaser...')
         App.check_required_env_variables()
@@ -59,14 +58,8 @@ class App():
         Git.setup(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER, HOMEBREW_TAP)
 
         logging.info(f'Collecting data about {GITHUB_REPO}...')
-        repository = Utils.make_get_request(
-            f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}',
-            False
-        ).json()
-        tags = Utils.make_get_request(
-            f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/tags',
-            False
-        ).json()
+        repository = Utils.make_get_request(f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}', False).json()
+        tags = Utils.make_get_request(f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/tags', False).json()
         version = tags[0]['name']
         logging.info(f'Latest release of {version} successfully identified...')
         tar_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'
@@ -106,8 +99,7 @@ class App():
 
     @staticmethod
     def check_required_env_variables():
-        """Checks that all required env variables are set
-        """
+        """Checks that all required env variables are set"""
         required_env_variables = [
             GITHUB_TOKEN,
             HOMEBREW_OWNER,
@@ -123,8 +115,7 @@ class App():
 
     @staticmethod
     def download_latest_tar_archive(url):
-        """Download the latest tar archive from GitHub
-        """
+        """Download the latest tar archive from GitHub"""
         response = Utils.make_get_request(url, True)
         Utils.write_file(TAR_ARCHIVE, response.content, 'wb')
 

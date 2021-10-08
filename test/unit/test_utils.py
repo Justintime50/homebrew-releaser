@@ -2,6 +2,7 @@ from unittest.mock import mock_open, patch
 
 import pytest
 import requests
+
 from homebrew_releaser.constants import GITHUB_HEADERS
 from homebrew_releaser.utils import Utils
 

@@ -8,6 +8,6 @@ GITHUB_TOKEN = os.getenv('INPUT_GITHUB_TOKEN')
 SUBPROCESS_TIMEOUT = 30
 GITHUB_HEADERS = {
     'accept': 'application/vnd.github.v3+json',
-    'agent': 'Homebrew Releaser'
+    'agent': 'Homebrew Releaser',
 }
 TAR_ARCHIVE = 'tar_archive.tar.gz'

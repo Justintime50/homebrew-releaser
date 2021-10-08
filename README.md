@@ -98,19 +98,7 @@ jobs:
 ## Development
 
 ```bash
-# Install locally
-make install
-
-# Lint the project
-make lint
-
-# Run tests
-make test
-
-# Run test coverage
-make coverage
-
-# Get Makefile help
+# Get a comprehensive list of development tools
 make help
 ```
 
