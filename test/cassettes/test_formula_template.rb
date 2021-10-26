@@ -8,7 +8,6 @@ class HomebrewReleaser < Formula
   url "https://github.com/Justintime50/homebrew-releaser/archive/v0.1.0.tar.gz"
   sha256 "1234567890123456789012345678901234567890"
   license "MIT"
-  bottle :unneeded
 
   def install
     bin.install "src/secure-browser-kiosk.sh" => "secure-browser-kiosk"

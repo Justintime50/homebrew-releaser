@@ -52,7 +52,6 @@ class {class_name} < Formula
   url "{tar_url}"
   sha256 "{checksum}"
   license "{license_type}"
-  bottle :unneeded
 
   def install
     {install.strip()}

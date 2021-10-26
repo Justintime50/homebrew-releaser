@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.8.1 (2021-10-25)
+
+* Removes the `bottle :unneeded` from formula generation as it's been deprecated
+
 ## v0.8.0 (2021-09-10)
 
 * Rebuild with the corrected `pretty-tables` library which re-adds the horizontal break between headers and row data
