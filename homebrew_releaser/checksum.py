@@ -10,11 +10,11 @@ class Checksum:
         """Gets the checksum of a file"""
         # TODO: Create and upload a `checksums.txt` file to the release for the zip and tar archives
         try:
+            command = ['shasum', '-a', '256', tar_file]
             output = subprocess.check_output(
-                f'shasum -a 256 {tar_file}',
+                command,
                 stdin=None,
                 stderr=None,
-                shell=True,
                 timeout=SUBPROCESS_TIMEOUT,
             )
             checksum = output.decode().split()[0]

@@ -11,24 +11,14 @@ from homebrew_releaser.git import Git
 @patch('subprocess.check_output')
 def test_setup(mock_subprocess):
     # TODO: Mock the subprocess better to ensure it does what it's supposed to
+    # TODO: Find a way to mock "called_with" when it's called three times in a
+    # for loop as it is here
     homebrew_owner = 'Justintime50'
     homebrew_tap = 'homebrew-formulas'
     commit_email = 'user@example.com'
     Git.setup(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
 
-    mock_command = (
-        f'git clone --depth=2 https://123@github.com/{homebrew_owner}/{homebrew_tap}.git'
-        f' && cd {homebrew_tap}'
-        f' && git config user.name "{homebrew_owner}"'
-        f' && git config user.email {commit_email}'
-    )
-    mock_subprocess.assert_called_once_with(
-        mock_command,
-        stdin=None,
-        stderr=None,
-        shell=True,
-        timeout=SUBPROCESS_TIMEOUT,
-    )
+    assert mock_subprocess.call_count == 3
 
 
 @patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))
@@ -56,10 +46,9 @@ def test_add(mock_subprocess):
 
     Git.add(homebrew_tap)
     mock_subprocess.assert_called_once_with(
-        f'cd {homebrew_tap} && git add .',
+        ['git', '-C', homebrew_tap, 'add', '.'],
         stdin=None,
         stderr=None,
-        shell=True,
         timeout=SUBPROCESS_TIMEOUT,
     )
 
@@ -89,10 +78,9 @@ def test_commit(mock_subprocess):
 
     Git.commit(homebrew_tap, repo_name, version)
     mock_subprocess.assert_called_once_with(
-        f'cd {homebrew_tap} && git commit -m "Brew formula update for {repo_name} version {version}"',
+        ['git', '-C', homebrew_tap, 'commit', '-m', f'"Brew formula update for {repo_name} version {version}"'],
         stdin=None,
         stderr=None,
-        shell=True,
         timeout=SUBPROCESS_TIMEOUT,
     )
 
@@ -126,10 +114,9 @@ def test_push(mock_subprocess):
 
     Git.push(homebrew_tap, homebrew_owner)
     mock_subprocess.assert_called_once_with(
-        f'cd {homebrew_tap} && git push https://123@github.com/{homebrew_owner}/{homebrew_tap}.git',
+        ['git', '-C', homebrew_tap, 'push', f'https://123@github.com/{homebrew_owner}/{homebrew_tap}.git'],
         stdin=None,
         stderr=None,
-        shell=True,
         timeout=SUBPROCESS_TIMEOUT,
     )
 

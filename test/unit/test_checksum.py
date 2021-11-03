@@ -13,10 +13,9 @@ def test_get_checksum(mock_subprocess, mock_tar_filename):
     Checksum.get_checksum(mock_tar_filename)
 
     mock_subprocess.assert_called_once_with(
-        f'shasum -a 256 {mock_tar_filename}',
+        ['shasum', '-a', '256', mock_tar_filename],
         stdin=None,
         stderr=None,
-        shell=True,
         timeout=SUBPROCESS_TIMEOUT,
     )
 
