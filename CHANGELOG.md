@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.8.3 (2021-11-03)
+
+* Fixes a bug that setup the git environment incorrectly after the shell refactor from the last release
+
 ## v0.8.2 (2021-11-02)
 
 * Refactors shell operations to no longer invoke a shell when using the subprocess module. No longer change directories but instead call git operations directly from the destination path

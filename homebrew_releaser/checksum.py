@@ -19,7 +19,7 @@ class Checksum:
             )
             checksum = output.decode().split()[0]
             checksum_file = output.decode().split()[1]  # TODO: Use this to craft the `checksums.txt` file  # noqa
-            logging.debug(f'{checksum} generated successfully.')
+            logging.debug(f'Checksum generated successfully: {checksum}')
         except subprocess.TimeoutExpired as error:
             raise SystemExit(error)
         except subprocess.CalledProcessError as error:

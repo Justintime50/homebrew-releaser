@@ -17,8 +17,8 @@ class Git:
         try:
             commands = [
                 ['git', 'clone', '--depth=1', f'https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git'],
-                ['git', 'config', 'user.name', f'"{commit_owner}"'],
-                ['git', 'config', 'user.email', commit_email],
+                ['git', '-C', homebrew_tap, 'config', 'user.name', f'"{commit_owner}"'],
+                ['git', '-C', homebrew_tap, 'config', 'user.email', commit_email],
             ]
 
             for command in commands:
