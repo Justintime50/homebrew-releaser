@@ -5,7 +5,7 @@ from homebrew_releaser.formula import Formula
 
 def record_cassette(cassette_path, cassette_name, cassette_data):
     """Read from existing file or create new file if it's not present"""
-    full_cassette_filename = cassette_path + '/' + cassette_name
+    full_cassette_filename = os.path.join(cassette_path, cassette_name)
 
     if os.path.isfile(full_cassette_filename):
         with open(full_cassette_filename, 'r') as cassette_file:
