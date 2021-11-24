@@ -11,6 +11,7 @@ from homebrew_releaser.utils import Utils
 def test_make_get_request(mock_request):
     url = 'https://api.github.com/repos/Justintime50/homebrew-releaser'
     Utils.make_get_request(url, False)
+
     mock_request.assert_called_once_with(url, headers=GITHUB_HEADERS, stream=False)
 
 

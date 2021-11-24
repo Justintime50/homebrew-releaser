@@ -1,18 +1,20 @@
-import logging
 import os
 import re
+from typing import List
 
-from pretty_tables import PrettyTables
+import _io
+import pretty_tables
+import woodchips
 
-from homebrew_releaser.constants import FORMULA_FOLDER
+from homebrew_releaser.constants import FORMULA_FOLDER, LOGGER_NAME
 from homebrew_releaser.git import Git
 
 
 class ReadmeUpdater:
     @staticmethod
-    def update_readme(homebrew_tap):
+    def update_readme(homebrew_tap: str):
         """Updates the homebrew tap README by replacing the old table string
-        with the updated table string
+        with the updated table string.
         """
         formulas = ReadmeUpdater.format_formula_data(homebrew_tap)
         new_table = ReadmeUpdater.generate_table(formulas)
@@ -21,9 +23,9 @@ class ReadmeUpdater:
         ReadmeUpdater.replace_table_contents(readme_content, old_table, new_table, homebrew_tap)
 
     @staticmethod
-    def format_formula_data(homebrew_tap):
+    def format_formula_data(homebrew_tap: str) -> List:
         """Retrieve the name, description, and homepage from each
-        Ruby formula file in the homebrew tap repo
+        Ruby formula file in the homebrew tap repo.
         """
         homebrew_tap_path = os.path.join(homebrew_tap, FORMULA_FOLDER)
         files = os.listdir(homebrew_tap_path)
@@ -63,10 +65,11 @@ class ReadmeUpdater:
         return formulas
 
     @staticmethod
-    def generate_table(formulas):
-        """Generates a pretty table which will be used in the README file"""
+    def generate_table(formulas: List) -> str:
+        """Generates a pretty table which will be used in the README file."""
         headers = ['Project', 'Description', 'Install']
         rows = []
+
         for formula in formulas:
             rows.append(
                 [
@@ -76,7 +79,7 @@ class ReadmeUpdater:
                 ]
             )
 
-        table = PrettyTables.generate_table(
+        table = pretty_tables.create(
             headers=headers,
             rows=rows,
             empty_cell_placeholder='NA',
@@ -85,8 +88,10 @@ class ReadmeUpdater:
         return table
 
     @staticmethod
-    def retrieve_old_table(homebrew_tap):
-        """Retrives all content between the start/end tags in the README file"""
+    def retrieve_old_table(homebrew_tap: str) -> str:
+        """Retrives all content between the start/end tags in the README file."""
+        logger = woodchips.get(LOGGER_NAME)
+
         readme = ReadmeUpdater.determine_readme(homebrew_tap)
         old_table = ''
 
@@ -106,45 +111,51 @@ class ReadmeUpdater:
                 # If we start copying but never find a closing tag or can't copy the old table content, warn the user
                 # Note that this will not fail the release workflow as this would be a bad experience
                 if copy is True or old_table == '':
-                    logging.error('Could not find start/end tags for project table in README.')
+                    logger.error('Could not find start/end tags for project table in README.')
 
         return old_table
 
     @staticmethod
-    def read_current_readme(homebrew_tap):
-        """Reads the current README content"""
+    def read_current_readme(homebrew_tap: str) -> _io.TextIOWrapper:
+        """Reads the current README content."""
+        logger = woodchips.get(LOGGER_NAME)
+
         readme = ReadmeUpdater.determine_readme(homebrew_tap)
         file_content = None
 
         if readme:
             with open(readme, 'r') as readme_contents:
                 file_content = readme_contents.read()
-            logging.debug(f'{readme} read successfully.')
+            logger.debug(f'{readme} read successfully.')
 
         return file_content
 
     @staticmethod
-    def replace_table_contents(file_content, old_table, new_table, homebrew_tap):
+    def replace_table_contents(file_content: _io.TextIOWrapper, old_table: str, new_table: str, homebrew_tap: str):
         """Replaces the old README project table string with the new
-        project table string
+        project table string.
         """
+        logger = woodchips.get(LOGGER_NAME)
+
         readme = ReadmeUpdater.determine_readme(homebrew_tap)
 
         if readme:
             with open(readme, 'w') as readme_contents:
                 readme_contents.write(file_content.replace(old_table, new_table + '\n'))
-            logging.debug(f'{readme} written successfully.')
+            logger.debug(f'{readme} written successfully.')
 
             Git.add(homebrew_tap)
 
     @staticmethod
-    def determine_readme(homebrew_tap):
+    def determine_readme(homebrew_tap: str) -> str:
         """Determines the README file to open. The README file must either be:
 
         1. completely uppercase or completely lowercase
         2. have the file extension of `.md`
         3. reside in the root of a project
         """
+        logger = woodchips.get(LOGGER_NAME)
+
         readme_to_open = None
         uppercase_readme = os.path.join(homebrew_tap, 'README.md')
         lowercase_readme = os.path.join(homebrew_tap, 'readme.md')
@@ -154,6 +165,6 @@ class ReadmeUpdater:
         elif os.path.isfile(lowercase_readme):
             readme_to_open = lowercase_readme
         else:
-            logging.error('Could not find a valid README in this project to update.')
+            logger.error('Could not find a valid README in this project to update.')
 
         return readme_to_open

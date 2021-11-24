@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v0.9.0 (2021-11-24)
+
+* Uses `woodchips` for logging
+* Bumps `pretty_tables` to v2
+* Bump Python version used from 3.9 to 3.10
+* Adds Python type hinting
+
 ## v0.8.3 (2021-11-03)
 
 * Fixes a bug that setup the git environment incorrectly after the shell refactor from the last release

@@ -3,7 +3,7 @@ import os
 from homebrew_releaser.formula import Formula
 
 
-def record_cassette(cassette_path, cassette_name, cassette_data):
+def _record_cassette(cassette_path: str, cassette_name: str, cassette_data: str):
     """Read from existing file or create new file if it's not present"""
     full_cassette_filename = os.path.join(cassette_path, cassette_name)
 
@@ -37,4 +37,4 @@ def test_generate_formula():
     cassette_filename = 'test_formula_template.rb'
     cassette_path = 'test/cassettes'
 
-    record_cassette(cassette_path, cassette_filename, formula)
+    _record_cassette(cassette_path, cassette_filename, formula)
