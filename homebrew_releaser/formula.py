@@ -1,11 +1,23 @@
-import logging
 import re
+from typing import Optional
+
+import woodchips
+
+from homebrew_releaser.constants import LOGGER_NAME
 
 
 class Formula:
     @staticmethod
-    def generate_formula_data(owner, repo_name, repository, checksum, install, tar_url, test):
-        """Generates the formula data for Homebrew
+    def generate_formula_data(
+        owner: str,
+        repo_name: str,
+        repository: str,
+        checksum: str,
+        install: str,
+        tar_url: str,
+        test: Optional[str] = None,
+    ) -> str:
+        """Generates the formula data for Homebrew.
 
         We attempt to ensure generated formula will pass `brew audit --strict --online` if given correct inputs:
         - Proper class name
@@ -17,6 +29,8 @@ class Formula:
         - Test is included
         - No version attribute if Homebrew can reliably infer the version from the tar URL (GitHub tag)
         """
+        logger = woodchips.get(LOGGER_NAME)
+
         repo_name_length = len(repo_name)
         max_desc_field_length = 80
         max_desc_field_buffer = 2
@@ -32,7 +46,7 @@ class Formula:
             description = first_word_of_desc[1].strip().capitalize()
 
         # RUBY TEMPLATE DATA TO REMAIN DOUBLE SPACED
-        test = (
+        test_content = (
             f"""
   test do
     {test.strip()}
@@ -56,7 +70,8 @@ class {class_name} < Formula
   def install
     {install.strip()}
   end
-{test}
+{test_content}
 """
-        logging.debug('Homebrew formula generated successfully.')
+        logger.debug('Homebrew formula generated successfully.')
+
         return template
