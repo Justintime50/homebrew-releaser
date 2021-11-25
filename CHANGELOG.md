@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.9.1 (2021-11-24)
+
+* Restores previous logger formatting for console output
+
 ## v0.9.0 (2021-11-24)
 
 * Uses `woodchips` for logging

@@ -105,7 +105,7 @@ class App:
             name=LOGGER_NAME,
             level=logging_level,
         )
-        logger.log_to_console()
+        logger.log_to_console(formatter='%(asctime)s - %(levelname)s - %(message)s')
 
     @staticmethod
     def check_required_env_variables():
