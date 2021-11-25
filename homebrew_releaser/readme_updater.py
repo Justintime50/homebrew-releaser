@@ -28,10 +28,11 @@ class ReadmeUpdater:
         Ruby formula file in the homebrew tap repo.
         """
         homebrew_tap_path = os.path.join(homebrew_tap, FORMULA_FOLDER)
+        formulas = []
         files = os.listdir(homebrew_tap_path)
+
         if len(files) == 0:
             raise SystemExit('No files found in the "formula_folder" provided.')
-        formulas = []
 
         try:
             for filename in sorted(files):
@@ -109,7 +110,7 @@ class ReadmeUpdater:
                         old_table += line
 
                 # If we start copying but never find a closing tag or can't copy the old table content, warn the user
-                # Note that this will not fail the release workflow as this would be a bad experience
+                # NOTE: This will not fail the release workflow as this would be a bad experience for the user
                 if copy is True or old_table == '':
                     logger.error('Could not find start/end tags for project table in README.')
 

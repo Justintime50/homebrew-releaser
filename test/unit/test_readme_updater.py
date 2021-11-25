@@ -26,14 +26,13 @@ def test_update_readme(
     mock_read_current_readme.assert_called_once
 
 
-# TODO: Add a test that formats the data
+# TODO: Add a test that formats the data, this is difficult because we need a mock git repo
 def test_format_formula_data_not_found():
     with pytest.raises(FileNotFoundError):
         ReadmeUpdater.format_formula_data('./')
 
 
 def test_generate_table():
-    # TODO: Format data here first
     formulas = [
         {
             'name': 'mock-formula',

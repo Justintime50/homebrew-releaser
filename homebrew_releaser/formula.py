@@ -1,4 +1,5 @@
 import re
+from typing import Optional
 
 import woodchips
 
@@ -8,7 +9,13 @@ from homebrew_releaser.constants import LOGGER_NAME
 class Formula:
     @staticmethod
     def generate_formula_data(
-        owner: str, repo_name: str, repository: str, checksum: str, install: str, tar_url: str, test: str
+        owner: str,
+        repo_name: str,
+        repository: str,
+        checksum: str,
+        install: str,
+        tar_url: str,
+        test: Optional[str] = None,
     ) -> str:
         """Generates the formula data for Homebrew.
 
@@ -39,7 +46,7 @@ class Formula:
             description = first_word_of_desc[1].strip().capitalize()
 
         # RUBY TEMPLATE DATA TO REMAIN DOUBLE SPACED
-        test = (
+        test_content = (
             f"""
   test do
     {test.strip()}
@@ -63,7 +70,7 @@ class {class_name} < Formula
   def install
     {install.strip()}
   end
-{test}
+{test_content}
 """
         logger.debug('Homebrew formula generated successfully.')
 
