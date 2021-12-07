@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Optional
 
 import requests
 import woodchips
@@ -8,7 +8,7 @@ from homebrew_releaser.constants import GITHUB_HEADERS, LOGGER_NAME
 
 class Utils:
     @staticmethod
-    def make_get_request(url: str, stream: Optional[bool] = False) -> Dict:
+    def make_get_request(url: str, stream: Optional[bool] = False) -> requests.Response:
         """Make an HTTP GET request."""
         logger = woodchips.get(LOGGER_NAME)
 
@@ -25,7 +25,7 @@ class Utils:
         return response
 
     @staticmethod
-    def write_file(filename: str, content: str, mode: Optional[str] = 'w'):
+    def write_file(filename: str, content: bytes, mode: str = 'w'):
         """Writes content to a file."""
         logger = woodchips.get(LOGGER_NAME)
 

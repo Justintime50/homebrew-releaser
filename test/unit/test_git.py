@@ -21,7 +21,7 @@ def test_setup(mock_subprocess):
     assert mock_subprocess.call_count == 3
 
 
-@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))
+@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd='subprocess.check_output', timeout=0.1))
 def test_setup_subprocess_timeout(mock_subprocess):
     homebrew_owner = 'Justintime50'
     homebrew_tap = 'homebrew-formulas'
@@ -30,7 +30,9 @@ def test_setup_subprocess_timeout(mock_subprocess):
         Git.setup(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
 
 
-@patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))
+@patch(
+    'subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd='subprocess.check_output')
+)
 def test_setup_process_error(mock_subprocess):
     homebrew_owner = 'Justintime50'
     homebrew_tap = 'homebrew-formulas'
@@ -53,7 +55,7 @@ def test_add(mock_subprocess):
     )
 
 
-@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))
+@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd='subprocess.check_output', timeout=0.1))
 def test_add_subprocess_timeout(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
 
@@ -61,7 +63,9 @@ def test_add_subprocess_timeout(mock_subprocess):
         Git.add(homebrew_tap)
 
 
-@patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))
+@patch(
+    'subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd='subprocess.check_output')
+)
 def test_add_process_error(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
 
@@ -85,7 +89,7 @@ def test_commit(mock_subprocess):
     )
 
 
-@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))
+@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd='subprocess.check_output', timeout=0.1))
 def test_commit_subprocess_timeout(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
     repo_name = 'mock-repo'
@@ -95,7 +99,9 @@ def test_commit_subprocess_timeout(mock_subprocess):
         Git.commit(homebrew_tap, repo_name, version)
 
 
-@patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))
+@patch(
+    'subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd='subprocess.check_output')
+)
 def test_commit_process_error(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
     repo_name = 'mock-repo'
@@ -122,7 +128,7 @@ def test_push(mock_subprocess):
     )
 
 
-@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))
+@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd='subprocess.check_output', timeout=0.1))
 def test_push_subprocess_timeout(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
     homebrew_owner = 'Justintime50'
@@ -131,7 +137,9 @@ def test_push_subprocess_timeout(mock_subprocess):
         Git.push(homebrew_tap, homebrew_owner)
 
 
-@patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))
+@patch(
+    'subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd='subprocess.check_output')
+)
 def test_push_process_error(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
     homebrew_owner = 'Justintime50'

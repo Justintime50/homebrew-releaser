@@ -1,8 +1,8 @@
 import os
 import re
-from typing import List
+from typing import List, Optional
 
-import _io
+import _io  # type: ignore
 import pretty_tables
 import woodchips
 
@@ -148,7 +148,7 @@ class ReadmeUpdater:
             Git.add(homebrew_tap)
 
     @staticmethod
-    def determine_readme(homebrew_tap: str) -> str:
+    def determine_readme(homebrew_tap: str) -> Optional[str]:
         """Determines the README file to open. The README file must either be:
 
         1. completely uppercase or completely lowercase

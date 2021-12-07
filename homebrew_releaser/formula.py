@@ -1,5 +1,5 @@
 import re
-from typing import Optional
+from typing import Any, Dict, Optional
 
 import woodchips
 
@@ -11,7 +11,7 @@ class Formula:
     def generate_formula_data(
         owner: str,
         repo_name: str,
-        repository: str,
+        repository: Dict[str, Any],
         checksum: str,
         install: str,
         tar_url: str,

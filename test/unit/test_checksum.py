@@ -20,13 +20,15 @@ def test_get_checksum(mock_subprocess, mock_tar_filename):
     )
 
 
-@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd=subprocess.check_output, timeout=0.1))
+@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd='subprocess.check_output', timeout=0.1))
 def test_get_checksum_subprocess_timeout(mock_subprocess, mock_tar_filename):
     with pytest.raises(SystemExit):
         Checksum.get_checksum(mock_tar_filename)
 
 
-@patch('subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd=subprocess.check_output))
+@patch(
+    'subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd='subprocess.check_output')
+)
 def test_get_checksum_process_error(mock_subprocess, mock_tar_filename):
     with pytest.raises(SystemExit):
         Checksum.get_checksum(mock_tar_filename)

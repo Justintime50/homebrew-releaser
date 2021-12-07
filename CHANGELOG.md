@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.9.2 (2021-12-07)
+
+* Adds `mypy` type checking
+
 ## v0.9.1 (2021-11-24)
 
 * Restores previous logger formatting for console output

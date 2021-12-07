@@ -14,13 +14,15 @@ DEV_REQUIREMENTS = [
     'coveralls == 3.*',
     'flake8',
     'isort',
+    'mypy',
     'pytest == 6.*',
     'pytest-cov == 2.*',
+    'types-requests',
 ]
 
 setuptools.setup(
     name='homebrew-releaser',
-    version='0.9.1',
+    version='0.9.2',
     description='Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -28,6 +30,7 @@ setuptools.setup(
     author='Justintime50',
     license='MIT',
     packages=setuptools.find_packages(),
+    package_data={'homebrew_releaser': ['py.typed']},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
