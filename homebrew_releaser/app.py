@@ -5,8 +5,12 @@ import woodchips
 from homebrew_releaser.checksum import Checksum
 from homebrew_releaser.constants import (
     FORMULA_FOLDER,
+    GITHUB_OWNER,
+    GITHUB_REPO,
     GITHUB_TOKEN,
+    HOMEBREW_TAP,
     LOGGER_NAME,
+    SKIP_COMMIT,
     TAR_ARCHIVE,
 )
 from homebrew_releaser.formula import Formula
@@ -16,22 +20,15 @@ from homebrew_releaser.utils import Utils
 
 GITHUB_BASE_URL = 'https://api.github.com'
 
-# GitHub Action env variables set by GitHub
-GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY', 'user/repo').split('/')
-GITHUB_OWNER = GITHUB_REPOSITORY[0]
-GITHUB_REPO = GITHUB_REPOSITORY[1]
-
 # Required GitHub Action env variables from user
 INSTALL = os.getenv('INPUT_INSTALL')
 HOMEBREW_OWNER = os.getenv('INPUT_HOMEBREW_OWNER')
-HOMEBREW_TAP = os.getenv('INPUT_HOMEBREW_TAP')
 
 # Optional GitHub Action env variables from user
 COMMIT_OWNER = os.getenv('INPUT_COMMIT_OWNER', 'homebrew-releaser')
 COMMIT_EMAIL = os.getenv('INPUT_COMMIT_EMAIL', 'homebrew-releaser@example.com')
 TEST = os.getenv('INPUT_TEST')
-SKIP_COMMIT = os.getenv('INPUT_SKIP_COMMIT', False)
-UPDATE_README_TABLE = os.getenv('INPUT_UPDATE_README_TABLE')
+UPDATE_README_TABLE = os.getenv('INPUT_UPDATE_README_TABLE', False)
 DEBUG = os.getenv('INPUT_DEBUG', False)
 
 
@@ -42,7 +39,7 @@ class App:
 
         1. Setup logging
         2. Grab the details about the tap
-        3. Download the latest tar archive
+        3. Download the tar archive(s)
         4. Generate a checksum
         5. Generate the new formula
         6. Update README table (optional)
@@ -62,11 +59,15 @@ class App:
         tags = Utils.make_get_request(f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/tags', False).json()
         version = tags[0]['name']
         logger.info(f'Latest release of {version} successfully identified...')
-        tar_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'
 
-        logger.info('Generating tar archive checksum...')
-        App.download_latest_tar_archive(tar_url)
-        checksum = Checksum.get_checksum(TAR_ARCHIVE)
+        logger.info('Generating tar archive checksum(s)...')
+        auto_generated_release_tar = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'
+        # When introducing multiple tar URLs, iterate them here and download/checksum each below. Conditionally
+        # use the default auto_generated release ^. Ref: https://github.com/Justintime50/homebrew-releaser/issues/9
+        App.download_tar_archive(auto_generated_release_tar)
+        checksum, checksum_file = Checksum.get_checksum(TAR_ARCHIVE)
+        archive_checksum_entry = f'{checksum} {checksum_file}'
+        Utils.write_file('checksum.txt', archive_checksum_entry, 'a')
 
         logger.info(f'Generating Homebrew formula for {GITHUB_REPO}...')
         template = Formula.generate_formula_data(
@@ -75,11 +76,11 @@ class App:
             repository,
             checksum,
             INSTALL,
-            tar_url,
+            auto_generated_release_tar,
             TEST,
         )
 
-        Utils.write_file(f'{HOMEBREW_TAP}/{FORMULA_FOLDER}/{repository["name"]}.rb', template, 'w')
+        Utils.write_file(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER, repository["name"] + '.rb'), template, 'w')
 
         if UPDATE_README_TABLE:
             logger.info('Attempting to update the README\'s project table...')
@@ -88,8 +89,12 @@ class App:
             logger.debug('Skipping update to project README.')
 
         if SKIP_COMMIT:
+            logger.info(f'Skipping upload of checksum.txt to {HOMEBREW_TAP}.')
             logger.info(f'Skipping commit to {HOMEBREW_TAP}.')
         else:
+            logger.info(f'Attempting to upload checksum.txt to the latest release of {GITHUB_REPO}...')
+            Checksum.upload_checksum_file()
+
             logger.info(f'Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...')
             Git.add(HOMEBREW_TAP)
             Git.commit(HOMEBREW_TAP, GITHUB_REPO, version)
@@ -126,8 +131,8 @@ class App:
         logger.debug('All required environment variables are present.')
 
     @staticmethod
-    def download_latest_tar_archive(url: str):
-        """Download the latest tar archive from GitHub."""
+    def download_tar_archive(url: str):
+        """Gets a tar archive from GitHub and saves it locally."""
         response = Utils.make_get_request(url, True)
         Utils.write_file(TAR_ARCHIVE, response.content, 'wb')
 

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.10.0 (TODO)
+
+* Adds a `checksum.txt` file to the latest release of your repo containing the checksums of all "released" assets (binaries, scripts, etc)
+
 ## v0.9.2 (2021-12-07)
 
 * Adds `mypy` type checking

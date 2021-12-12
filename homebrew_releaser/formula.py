@@ -41,8 +41,13 @@ class Formula:
         description = re.sub(r'[.!]+', '', repository['description'][:description_length]).strip().capitalize()
 
         # If the first word of the desc is an article, we cut it out per `brew audit`
+        articles = {
+            'a',
+            'an',
+            'the',
+        }
         first_word_of_desc = description.split(' ', 1)
-        if first_word_of_desc[0].lower() in ['a', 'an', 'the']:
+        if first_word_of_desc[0].lower() in articles:
             description = first_word_of_desc[1].strip().capitalize()
 
         # RUBY TEMPLATE DATA TO REMAIN DOUBLE SPACED
