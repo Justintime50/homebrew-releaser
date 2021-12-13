@@ -22,7 +22,7 @@ DEV_REQUIREMENTS = [
 
 setuptools.setup(
     name='homebrew-releaser',
-    version='0.9.2',
+    version='0.10.0',
     description='Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -45,5 +45,5 @@ setuptools.setup(
             'homebrew-releaser=homebrew_releaser.releaser:main',
         ]
     },
-    python_requires='>=3.7, <4',
+    python_requires='>=3.9, <4',
 )

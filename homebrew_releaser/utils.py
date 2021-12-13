@@ -25,13 +25,13 @@ class Utils:
         return response
 
     @staticmethod
-    def write_file(filename: str, content: bytes, mode: str = 'w'):
+    def write_file(file_path: str, content: bytes, mode: str = 'w'):
         """Writes content to a file."""
         logger = woodchips.get(LOGGER_NAME)
 
         try:
-            with open(filename, mode) as f:
+            with open(file_path, mode) as f:
                 f.write(content)
-            logger.debug(f'{filename} written successfully.')
+            logger.debug(f'{file_path} written successfully.')
         except Exception as error:
             raise SystemExit(error)

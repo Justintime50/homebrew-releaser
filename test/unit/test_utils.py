@@ -18,8 +18,10 @@ def test_make_get_request(mock_request):
 @patch('requests.get', side_effect=requests.exceptions.RequestException('mock-error'))
 def test_make_get_request_exception(mock_request):
     url = 'https://api.github.com/repos/Justintime50/homebrew-releaser'
-    with pytest.raises(SystemExit):
+    with pytest.raises(SystemExit) as error:
         Utils.make_get_request(url, False)
+
+        assert 'mock-error' == str(error.value)
 
 
 def test_write_file():

@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.10.0 (2021-12-12)
+
+* Adds a `checksum.txt` file to the latest release of your repo containing the checksums of all "released" assets (binaries, scripts, etc)
+* Bumps minimum version of Python from 3.7 to 3.9
+
 ## v0.9.2 (2021-12-07)
 
 * Adds `mypy` type checking
