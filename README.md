@@ -13,7 +13,9 @@ Release scripts, binaries, and executables directly to Homebrew via GitHub Actio
 
 </div>
 
-Homebrew Releaser allows you to release scripts, binaries, and executables directly to a personal Homebrew tap via a GitHub Action. I love what the team at [GoReleaser](https://github.com/goreleaser/goreleaser) did and wanted to replicate that on a smaller scale for simple items like shell scripts or other binaries I wanted to distribute. 
+Homebrew Releaser allows you to release scripts, binaries, and executables directly to a personal Homebrew tap via a GitHub Action. I love what the team at [GoReleaser](https://github.com/goreleaser/goreleaser) did and wanted to replicate that on a smaller and simpler scale for items like shell scripts or other binaries I wanted to distribute.
+
+When you cut a new release when using this GitHub Action, it will clone your repo and clone your homebrew tap on CI, build the new formula Ruby file, create a `checksum.txt` file and upload it to your release containing the checksum(s) of your scripts/binaries, and then push the new formula to your Homebrew Tap.
 
 ## Usage
 
@@ -24,7 +26,7 @@ Homebrew Releaser allows you to release scripts, binaries, and executables direc
 
 ### GitHub Actions YML
 
-After releasing to GitHub, Homebrew Releaser can publish that release to a personal Homebrew tap by updating the project description, version, tar archive url, license, checksum, installation and testing command, and any other required info so you don't have to. You can check the [Homebrew documentation](https://docs.brew.sh/) and the [formula cookbook](https://docs.brew.sh/Formula-Cookbook) for more details on setting up a Homebrew formula or tap.
+After releasing to GitHub, Homebrew Releaser can publish that release to a personal Homebrew tap by updating the project description, version, tar archive url, license, checksum, installation and testing command, and any other required info so you don't have to. You can check the [Homebrew documentation](https://docs.brew.sh/) and the [formula cookbook](https://docs.brew.sh/Formula-Cookbook) for more details on setting up a Homebrew formula or tap.
 
 ```yml
 # .github/workflows/release.yml
