@@ -32,7 +32,6 @@ def test_run_github_action_skip_commit(
     mock_logger,
 ):
     App.run_github_action()
-    mock_make_get_request.return_value = {'name': 'mock-repo'}
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
@@ -76,7 +75,6 @@ def test_run_github_action(
     mock_upload_checksum_file,
 ):
     App.run_github_action()
-    mock_make_get_request.return_value = {'name': 'mock-repo'}
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
@@ -123,7 +121,6 @@ def test_run_github_action_update_readme(
     mock_update_readme,
 ):
     App.run_github_action()
-    mock_make_get_request.return_value = {'name': 'mock-repo'}
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
