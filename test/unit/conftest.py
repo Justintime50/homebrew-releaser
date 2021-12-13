@@ -1,5 +1,3 @@
-from unittest.mock import MagicMock
-
 import pytest
 
 
@@ -10,8 +8,9 @@ def mock_tar_filename():
 
 @pytest.fixture
 def mock_git_repo():
-    mock_git_repo = MagicMock()
-    mock_git_repo.id = '123'
-    mock_git_repo.name = 'mock-repo-name'
+    mock_git_repo = {
+        'id': '123',
+        'name': 'mock-repo-name',
+    }
 
     return mock_git_repo
