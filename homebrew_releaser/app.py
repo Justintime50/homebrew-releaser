@@ -58,7 +58,7 @@ class App:
         repository = Utils.make_get_request(f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}', False).json()
         tags = Utils.make_get_request(f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/tags', False).json()
         version = tags[0]['name']
-        logger.info(f'Latest release of {version} successfully identified...')
+        logger.info(f'Latest release ({version}) successfully identified...')
 
         logger.info('Generating tar archive checksum(s)...')
         auto_generated_release_tar = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'

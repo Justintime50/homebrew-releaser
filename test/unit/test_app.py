@@ -6,6 +6,7 @@ from homebrew_releaser.app import App
 
 
 @patch('homebrew_releaser.app.SKIP_COMMIT', True)
+@patch('homebrew_releaser.app.HOMEBREW_TAP', '123')
 @patch('woodchips.get')
 @patch('homebrew_releaser.git.Git.setup')
 @patch('homebrew_releaser.git.Git.add')
@@ -13,7 +14,7 @@ from homebrew_releaser.app import App
 @patch('homebrew_releaser.git.Git.push')
 @patch('homebrew_releaser.utils.Utils.write_file')
 @patch('homebrew_releaser.formula.Formula.generate_formula_data')
-@patch('homebrew_releaser.checksum.Checksum.get_checksum')
+@patch('homebrew_releaser.checksum.Checksum.get_checksum', return_value=('123', 'mock-repo'))
 @patch('homebrew_releaser.app.App.download_tar_archive')
 @patch('homebrew_releaser.utils.Utils.make_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
@@ -39,13 +40,15 @@ def test_run_github_action_skip_commit(
     mock_download_tar_archive.assert_called_once()
     mock_get_checksum.assert_called_once()
     mock_generate_formula.assert_called_once()
-    mock_write_file.assert_called_once()
+    mock_write_file.call_count == 2
     mock_setup_git.assert_called_once()
     mock_add_formula.assert_not_called()
     mock_commit_formula.assert_not_called()
     mock_push_formula.assert_not_called()
 
 
+@patch('homebrew_releaser.app.HOMEBREW_TAP', '123')
+@patch('homebrew_releaser.checksum.Checksum.upload_checksum_file')
 @patch('woodchips.get')
 @patch('homebrew_releaser.git.Git.setup')
 @patch('homebrew_releaser.git.Git.add')
@@ -53,7 +56,7 @@ def test_run_github_action_skip_commit(
 @patch('homebrew_releaser.git.Git.push')
 @patch('homebrew_releaser.utils.Utils.write_file')
 @patch('homebrew_releaser.formula.Formula.generate_formula_data')
-@patch('homebrew_releaser.checksum.Checksum.get_checksum', return_value=('123', 'filename'))
+@patch('homebrew_releaser.checksum.Checksum.get_checksum', return_value=('123', 'mock-repo'))
 @patch('homebrew_releaser.app.App.download_tar_archive')
 @patch('homebrew_releaser.utils.Utils.make_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
@@ -69,6 +72,7 @@ def test_run_github_action(
     mock_add_formula,
     mock_setup_git,
     mock_logger,
+    mock_upload_checksum_file,
 ):
     App.run_github_action()
 
@@ -79,15 +83,17 @@ def test_run_github_action(
     mock_download_tar_archive.assert_called_once()
     mock_get_checksum.assert_called_once()
     mock_generate_formula.assert_called_once()
-    mock_write_file.assert_called_once()
+    mock_write_file.call_count == 2
     mock_setup_git.assert_called_once()
     mock_add_formula.assert_called_once()
     mock_commit_formula.assert_called_once()
     mock_push_formula.assert_called_once()
 
 
+@patch('homebrew_releaser.app.HOMEBREW_TAP', '123')
 @patch('homebrew_releaser.app.UPDATE_README_TABLE', True)
 @patch('homebrew_releaser.readme_updater.ReadmeUpdater.update_readme')
+@patch('homebrew_releaser.checksum.Checksum.upload_checksum_file')
 @patch('woodchips.get')
 @patch('homebrew_releaser.git.Git.setup')
 @patch('homebrew_releaser.git.Git.add')
@@ -95,7 +101,7 @@ def test_run_github_action(
 @patch('homebrew_releaser.git.Git.push')
 @patch('homebrew_releaser.utils.Utils.write_file')
 @patch('homebrew_releaser.formula.Formula.generate_formula_data')
-@patch('homebrew_releaser.checksum.Checksum.get_checksum')
+@patch('homebrew_releaser.checksum.Checksum.get_checksum', return_value=('123', 'mock-repo'))
 @patch('homebrew_releaser.app.App.download_tar_archive')
 @patch('homebrew_releaser.utils.Utils.make_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
@@ -111,6 +117,7 @@ def test_run_github_action_update_readme(
     mock_add_formula,
     mock_setup_git,
     mock_logger,
+    mock_upload_checksum_file,
     mock_update_readme,
 ):
     App.run_github_action()
@@ -122,7 +129,7 @@ def test_run_github_action_update_readme(
     mock_download_tar_archive.assert_called_once()
     mock_get_checksum.assert_called_once()
     mock_generate_formula.assert_called_once()
-    mock_write_file.assert_called_once()
+    mock_write_file.call_count == 2
     mock_setup_git.assert_called_once()
     mock_add_formula.assert_called_once()
     mock_commit_formula.assert_called_once()

@@ -41,6 +41,8 @@ class Checksum:
     @staticmethod
     def upload_checksum_file():
         """Uploads a `checksum.txt` file to the latest release of the repo."""
+        logger = woodchips.get(LOGGER_NAME)
+
         checksum_file = 'checksum.txt'  # This file was created elsewhere
 
         latest_release_url = f'https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/latest'
@@ -63,5 +65,6 @@ class Checksum:
                 headers=headers,
                 data=checksum_binary,
             )
+            logger.info(f'checksum.txt uploaded successfully to {GITHUB_REPO}.')
         except requests.exceptions.RequestException as error:
             raise SystemExit(error)
