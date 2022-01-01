@@ -10,6 +10,7 @@ services:
       - INPUT_GITHUB_TOKEN=123...
       - INPUT_COMMIT_OWNER=username
       - INPUT_COMMIT_EMAIL=userid+username@users.noreply.github.com
+      - INPUT_DEPENDS_ON='"bash" => :build'
       - INPUT_INSTALL='bin.install "src/my-script.sh" => "my-script"'
       - INPUT_TEST='assert_match("my script output", shell_output("my-script-command"))'
       - INPUT_UPDATE_README_TABLE=true

@@ -15,6 +15,7 @@ class Formula:
         checksum: str,
         install: str,
         tar_url: str,
+        depends_on: Optional[str] = None,
         test: Optional[str] = None,
     ) -> str:
         """Generates the formula data for Homebrew.
@@ -50,6 +51,15 @@ class Formula:
         if first_word_of_desc[0].lower() in articles:
             description = first_word_of_desc[1].strip().capitalize()
 
+        depends_on_content = ''
+
+        if depends_on:
+            dependencies = [dependency.strip() for dependency in depends_on.split('\n') if dependency]
+
+            for dependency in dependencies:
+                depends_on_content += f'  depends_on {dependency}\n'
+            depends_on_content = f'\n{depends_on_content}'
+
         # RUBY TEMPLATE DATA TO REMAIN DOUBLE SPACED
         test_content = (
             f"""
@@ -71,7 +81,7 @@ class {class_name} < Formula
   url "{tar_url}"
   sha256 "{checksum}"
   license "{license_type}"
-
+{depends_on_content}
   def install
     {install.strip()}
   end

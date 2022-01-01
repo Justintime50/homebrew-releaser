@@ -62,6 +62,12 @@ jobs:
           commit_owner: homebrew-releaser
           commit_email: homebrew-releaser@example.com
 
+          # Custom dependencies in case other formulas are needed to build the current one.
+          # Optional.
+          depends_on: |
+            "jpeg"
+            "go" => :build
+
           # Custom install command for your formula.
           # Required.
           install: 'bin.install "src/my-script.sh" => "my-script"'
