@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.11.0 (2022-01-08)
+
+* Added the `depends_on` key to formulas allowing users to specify dependencies for their formulas
+* Reworked formula generation logic and tests to be more accurate and explicit for better formula generation (we now audit the test formula on CI)
+
 ## v0.10.0 (2021-12-12)
 
 * Adds a `checksum.txt` file to the latest release of your repo containing the checksums of all "released" assets (binaries, scripts, etc)

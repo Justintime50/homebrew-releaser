@@ -65,8 +65,8 @@ jobs:
           # Custom dependencies in case other formulas are needed to build the current one.
           # Optional.
           depends_on: |
-            "jpeg"
-            "go" => :build
+            "bash" => :build
+            "gcc"
 
           # Custom install command for your formula.
           # Required.
