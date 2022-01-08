@@ -25,6 +25,9 @@ inputs:
     description: "Git author info used to commit to the homebrew tap."
     required: false
     default: "homebrew-releaser@example.com"
+  depends_on:
+    description: "Custom dependencies in case other formulas are needed to build the current one (can be multiline)."
+    required: false
   install:
     description: "Custom install command for your formula."
     required: true
