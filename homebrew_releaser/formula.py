@@ -32,14 +32,11 @@ class Formula:
         """
         logger = woodchips.get(LOGGER_NAME)
 
-        repo_name_length = len(repo_name)
-        max_desc_field_length = 80
-        max_desc_field_buffer = 2
-        description_length = max_desc_field_length - repo_name_length + max_desc_field_buffer
+        max_desc_field_length = 80  # `brew audit` wants no more than 80 characters in the desc field
 
         class_name = re.sub(r'[-_. ]+', '', repo_name.title())
         license_type = repository['license']['spdx_id']
-        description = re.sub(r'[.!]+', '', repository['description'][:description_length]).strip().capitalize()
+        description = re.sub(r'[.!]+', '', repository['description'][:max_desc_field_length]).strip().capitalize()
 
         # If the first word of the desc is an article, we cut it out per `brew audit`
         articles = {
@@ -56,7 +53,8 @@ class Formula:
         if depends_on:
             dependencies = [dependency.strip() for dependency in depends_on.split('\n') if dependency]
 
-            for dependency in dependencies:
+            # `brew audit` wants dependencies sorted
+            for dependency in sorted(dependencies):
                 depends_on_content += f'  depends_on {dependency}\n'
             depends_on_content = f'\n{depends_on_content}'
 
