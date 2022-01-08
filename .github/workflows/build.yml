@@ -51,7 +51,5 @@ jobs:
         uses: actions/checkout@v2
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@master
-      - name: Brew Tap
-        run: brew tap test/cassettes
       - name: Run brew audit on generated test formula
-        run: brew audit --formula test/cassettes/*.rb
+        run: brew audit --formula /home/runner/homebrew-releaser/test/cassettes/*.rb
