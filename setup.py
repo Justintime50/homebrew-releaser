@@ -10,13 +10,15 @@ REQUIREMENTS = [
 ]
 
 DEV_REQUIREMENTS = [
-    'black',
+    'black == 22.*',
+    'build == 0.7.*',
     'coveralls == 3.*',
-    'flake8',
-    'isort',
-    'mypy',
-    'pytest == 6.*',
-    'pytest-cov == 2.*',
+    'flake8 == 4.*',
+    'isort == 5.*',
+    'mypy == 0.942',
+    'pytest == 7.*',
+    'pytest-cov == 3.*',
+    'twine == 4.*',
     'types-requests',
 ]
 
