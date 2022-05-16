@@ -31,8 +31,17 @@ setuptools.setup(
     url='http://github.com/Justintime50/homebrew-releaser',
     author='Justintime50',
     license='MIT',
-    packages=setuptools.find_packages(),
-    package_data={'homebrew_releaser': ['py.typed']},
+    packages=setuptools.find_packages(
+        exclude=[
+            'examples',
+            'test',
+        ]
+    ),
+    package_data={
+        'homebrew_releaser': [
+            'py.typed',
+        ]
+    },
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
