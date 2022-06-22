@@ -56,5 +56,5 @@ setuptools.setup(
             'homebrew-releaser=homebrew_releaser.releaser:main',
         ]
     },
-    python_requires='>=3.9, <4',
+    python_requires='>=3.10, <4',
 )
