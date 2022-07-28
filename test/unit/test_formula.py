@@ -2,7 +2,7 @@ import os
 
 from homebrew_releaser.formula import Formula
 
-CASSETTE_PATH = 'test/cassettes'
+formula_path = 'test/formulas'
 
 USERNAME = 'Justintime50'
 CHECKSUM = '0' * 64  # `brew audit` wants a 64 character number here, this would be true with real data
@@ -14,32 +14,31 @@ DEPENDS_ON = """
 TEST = 'assert_match("my script output", shell_output("my-script-command"))'
 
 
-def _record_cassette(cassette_path: str, cassette_name: str, cassette_data: str):
-    """Read from existing file or create new file if it's not present (file = 'cassette').
+def _record_formula(formula_path: str, formula_name: str, formula_data: str):
+    """Read from existing file or create new file if it's not present (file = 'formula').
 
-    Tests using this function will generate a formula into a "cassette" file (similar to how
-    vcrpy works for HTTP requests and responses: https://github.com/kevin1024/vcrpy) if it
+    Tests using this function will generate a formula into a file (similar to how
+    `vcrpy` works for HTTP requests and responses: https://github.com/kevin1024/vcrpy) if it
     does not exist already.
 
     To regenerate the file (when changes are made to how formula are generated), simply
-    delete the file (cassette for the associated test) and run tests again. Ensure that the
-    output of the file is correct.
+    delete the file and run tests again. Ensure that the output of the file is correct.
     """
-    full_cassette_filename = os.path.join(cassette_path, cassette_name)
+    full_cassette_filename = os.path.join(formula_path, formula_name)
 
     if os.path.isfile(full_cassette_filename):
         with open(full_cassette_filename, 'r') as cassette_file:
-            assert cassette_data == cassette_file.read()
+            assert formula_data == cassette_file.read()
     else:
-        os.makedirs(cassette_path, exist_ok=True)
+        os.makedirs(formula_path, exist_ok=True)
         with open(full_cassette_filename, 'w') as cassette_file:
-            cassette_file.write(cassette_data)
+            cassette_file.write(formula_data)
 
 
 def test_generate_formula():
     """Tests that we generate the formula content correctly when all parameters are passed.
 
-    NOTE: See docstring in `_record_cassette` for more details on how recording cassettes works.
+    NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
     """
     cassette_filename = 'test_formula_template.rb'
     mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
@@ -66,14 +65,14 @@ def test_generate_formula():
         TEST,
     )
 
-    _record_cassette(CASSETTE_PATH, cassette_filename, formula)
+    _record_formula(formula_path, cassette_filename, formula)
 
 
 def test_generate_formula_no_article_description():
     """Tests that we generate the formula content correctly (when there is no article
     that starts the description field).
 
-    NOTE: See docstring in `_record_cassette` for more details on how recording cassettes works.
+    NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
     """
     cassette_filename = 'test_formula_template_no_article_description.rb'
     mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
@@ -96,13 +95,13 @@ def test_generate_formula_no_article_description():
         None,
     )
 
-    _record_cassette(CASSETTE_PATH, cassette_filename, formula)
+    _record_formula(formula_path, cassette_filename, formula)
 
 
 def test_generate_formula_no_depends_on():
     """Tests that we generate the formula content correctly (when no depends_on given).
 
-    NOTE: See docstring in `_record_cassette` for more details on how recording cassettes works.
+    NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
     """
     cassette_filename = 'test_formula_template_no_depends_on.rb'
     mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
@@ -124,13 +123,13 @@ def test_generate_formula_no_depends_on():
         TEST,
     )
 
-    _record_cassette(CASSETTE_PATH, cassette_filename, formula)
+    _record_formula(formula_path, cassette_filename, formula)
 
 
 def test_generate_formula_no_test():
     """Tests that we generate the formula content correctly (when there is no test).
 
-    NOTE: See docstring in `_record_cassette` for more details on how recording cassettes works.
+    NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
     """
     cassette_filename = 'test_formula_template_no_test.rb'
     mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
@@ -152,4 +151,4 @@ def test_generate_formula_no_test():
         None,
     )
 
-    _record_cassette(CASSETTE_PATH, cassette_filename, formula)
+    _record_formula(formula_path, cassette_filename, formula)
