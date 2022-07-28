@@ -32,7 +32,7 @@ DEPENDS_ON = os.getenv('INPUT_DEPENDS_ON')
 TEST = os.getenv('INPUT_TEST')
 UPDATE_README_TABLE = os.getenv('INPUT_UPDATE_README_TABLE', False)
 DEBUG = os.getenv('INPUT_DEBUG', False)
-MATRIX = os.getenv('MATRIX', {})
+MATRIX = os.getenv('INPUT_MATRIX', {})
 
 
 class App:
@@ -73,14 +73,17 @@ class App:
         logger.info('Generating tar archive checksum(s)...')
         archive_urls = []
 
-        # The first item is the tar archive, needed for later in the stack
-        auto_generated_release_tar = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'
-        archive_urls.append(auto_generated_release_tar)
+        if not MATRIX:
+            auto_generated_release_tar = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'
+            archive_urls.append(auto_generated_release_tar)
 
-        auto_generated_release_zip = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.zip'
-        archive_urls.append(auto_generated_release_zip)
-
-        # release_url_pattern = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version}-{operating_system}-{architecture}.tar.gz'  # noqa
+            auto_generated_release_zip = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.zip'
+            archive_urls.append(auto_generated_release_zip)
+        else:
+            for operating_system in MATRIX:
+                for architecture in operating_system:
+                    release_url_pattern = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version}-{operating_system}-{architecture}.tar.gz'  # noqa
+                    archive_urls.append(release_url_pattern)
 
         # TODO: When introducing multiple tar URLs, iterate them here and download/checksum each below. Conditionally
         # use the default auto_generated release ^. Ref: https://github.com/Justintime50/homebrew-releaser/issues/9
@@ -89,7 +92,14 @@ class App:
             App.download_tar_archive(archive_url)
             checksum, checksum_filename = Checksum.get_checksum(TAR_ARCHIVE)
             archive_checksum_entry = f'{checksum} {checksum_filename}'
-            checksums.append({checksum_filename: checksum})
+            checksums.append(
+                {
+                    checksum_filename: {  # TODO: The checksum_filename need to be looked into as it doesn't appear to be matching expectations
+                        'checksum': checksum,
+                        'url': archive_url,
+                    }
+                },
+            )
             Utils.write_file(CHECKSUM_FILE, archive_checksum_entry, 'a')
 
         # TODO ============ Should be its own function ^^
@@ -99,6 +109,7 @@ class App:
             GITHUB_OWNER,
             GITHUB_REPO,
             repository,
+            version,  # TODO: We may not need to pass this after all
             checksums,
             INSTALL,
             auto_generated_release_tar,

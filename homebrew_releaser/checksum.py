@@ -30,14 +30,14 @@ class Checksum:
                 timeout=SUBPROCESS_TIMEOUT,
             )
             checksum = output.decode().split()[0]
-            checksum_file = output.decode().split()[1]
-            logger.debug(f'Checksum generated successfully: {checksum}')
+            checksum_filename = output.decode().split()[1]
+            logger.debug(f'Checksum for {checksum_filename} generated successfully: {checksum}')
         except subprocess.TimeoutExpired as error:
             raise SystemExit(error)
         except subprocess.CalledProcessError as error:
             raise SystemExit(error)
 
-        return checksum, checksum_file
+        return checksum, checksum_filename
 
     @staticmethod
     def upload_checksum_file():

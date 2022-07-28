@@ -108,7 +108,7 @@ jobs:
           # https://github.com/{GITHUB_OWNER}/{REPO_NAME}/releases/download/{VERSION}/{REPO_NAME}-{VERSION}-{OPERATING_SYSTEM}-{ARCHITECTURE}.tar.gz'
           # eg: https://github.com/justintime50/myrepo/releases/download/v1.2.0/myrepo-1.2.0-darwin-amd64.tar.gz
           matrix:
-            macos:
+            darwin:
               amd64: true
               arm64: true
             linux:
