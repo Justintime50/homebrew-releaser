@@ -4,6 +4,7 @@ import woodchips
 
 from homebrew_releaser.checksum import Checksum
 from homebrew_releaser.constants import (
+    CHECKSUM_FILE,
     FORMULA_FOLDER,
     GITHUB_OWNER,
     GITHUB_REPO,
@@ -31,6 +32,7 @@ DEPENDS_ON = os.getenv('INPUT_DEPENDS_ON')
 TEST = os.getenv('INPUT_TEST')
 UPDATE_README_TABLE = os.getenv('INPUT_UPDATE_README_TABLE', False)
 DEBUG = os.getenv('INPUT_DEBUG', False)
+MATRIX = os.getenv('MATRIX', {})
 
 
 class App:
@@ -41,10 +43,10 @@ class App:
         1. Setup logging
         2. Grab the details about the tap
         3. Download the tar archive(s)
-        4. Generate a checksum
+        4. Generate checksum(s)
         5. Generate the new formula
         6. Update README table (optional)
-        7. Add, commit, and push to GitHub
+        7. Add, commit, and push updated formula to GitHub
         """
         App.setup_logger()
         logger = woodchips.get(LOGGER_NAME)
@@ -56,30 +58,53 @@ class App:
         Git.setup(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER, HOMEBREW_TAP)
 
         logger.info(f'Collecting data about {GITHUB_REPO}...')
-        repository = Utils.make_get_request(f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}', False).json()
-        tags = Utils.make_get_request(f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/tags', False).json()
+        repository = Utils.make_get_request(
+            url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}',
+            stream=False,
+        ).json()
+        tags = Utils.make_get_request(
+            url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/tags',
+            stream=False,
+        ).json()
         version = tags[0]['name']
         logger.info(f'Latest release ({version}) successfully identified...')
 
+        # TODO ============ Should be its own function
         logger.info('Generating tar archive checksum(s)...')
+        archive_urls = []
+
+        # The first item is the tar archive, needed for later in the stack
         auto_generated_release_tar = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'
-        # When introducing multiple tar URLs, iterate them here and download/checksum each below. Conditionally
+        archive_urls.append(auto_generated_release_tar)
+
+        auto_generated_release_zip = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.zip'
+        archive_urls.append(auto_generated_release_zip)
+
+        # release_url_pattern = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version}-{operating_system}-{architecture}.tar.gz'  # noqa
+
+        # TODO: When introducing multiple tar URLs, iterate them here and download/checksum each below. Conditionally
         # use the default auto_generated release ^. Ref: https://github.com/Justintime50/homebrew-releaser/issues/9
-        App.download_tar_archive(auto_generated_release_tar)
-        checksum, checksum_file = Checksum.get_checksum(TAR_ARCHIVE)
-        archive_checksum_entry = f'{checksum} {checksum_file}'
-        Utils.write_file('checksum.txt', archive_checksum_entry, 'a')
+        checksums = []
+        for archive_url in archive_urls:
+            App.download_tar_archive(archive_url)
+            checksum, checksum_filename = Checksum.get_checksum(TAR_ARCHIVE)
+            archive_checksum_entry = f'{checksum} {checksum_filename}'
+            checksums.append({checksum_filename: checksum})
+            Utils.write_file(CHECKSUM_FILE, archive_checksum_entry, 'a')
+
+        # TODO ============ Should be its own function ^^
 
         logger.info(f'Generating Homebrew formula for {GITHUB_REPO}...')
         template = Formula.generate_formula_data(
             GITHUB_OWNER,
             GITHUB_REPO,
             repository,
-            checksum,
+            checksums,
             INSTALL,
             auto_generated_release_tar,
             DEPENDS_ON,
             TEST,
+            MATRIX,
         )
 
         Utils.write_file(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER, f'{repository["name"]}.rb'), template, 'w')

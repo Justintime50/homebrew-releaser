@@ -1,5 +1,5 @@
 import re
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 import woodchips
 
@@ -12,11 +12,12 @@ class Formula:
         owner: str,
         repo_name: str,
         repository: Dict[str, Any],
-        checksum: str,
+        checksums: List[Dict[str, str]],
         install: str,
         tar_url: str,
         depends_on: Optional[str] = None,
         test: Optional[str] = None,
+        matrix: Optional[Dict[str, Any]] = {},
     ) -> str:
         """Generates the formula data for Homebrew.
 
@@ -59,6 +60,10 @@ class Formula:
             depends_on_content = f'\n{depends_on_content}'
 
         # RUBY TEMPLATE DATA TO REMAIN DOUBLE SPACED
+        autogenerate_tar_checksum = checksums[0][repository['name']]
+        auto_generate_archive_installer = f"""  url "{tar_url}"
+  sha256 "{autogenerate_tar_checksum}\""""
+
         test_content = (
             f"""
   test do
@@ -76,9 +81,8 @@ end"""
 class {class_name} < Formula
   desc "{description}"
   homepage "https://github.com/{owner}/{repo_name}"
-  url "{tar_url}"
-  sha256 "{checksum}"
   license "{license_type}"
+{auto_generate_archive_installer}
 {depends_on_content}
   def install
     {install.strip()}

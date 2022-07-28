@@ -37,8 +37,8 @@ def test_run_github_action_skip_commit(
     mock_logger.assert_called()
     mock_check_env_variables.assert_called_once()
     assert mock_make_get_request.call_count == 2
-    mock_download_tar_archive.assert_called_once()
-    mock_get_checksum.assert_called_once()
+    mock_download_tar_archive.call_count == 2
+    mock_get_checksum.call_count == 2
     mock_generate_formula.assert_called_once()
     mock_write_file.call_count == 2
     mock_setup_git.assert_called_once()
@@ -80,8 +80,8 @@ def test_run_github_action(
     mock_logger.assert_called()
     mock_check_env_variables.assert_called_once()
     assert mock_make_get_request.call_count == 2
-    mock_download_tar_archive.assert_called_once()
-    mock_get_checksum.assert_called_once()
+    mock_download_tar_archive.call_count == 2
+    mock_get_checksum.call_count == 2
     mock_generate_formula.assert_called_once()
     mock_write_file.call_count == 2
     mock_setup_git.assert_called_once()
@@ -126,8 +126,8 @@ def test_run_github_action_update_readme(
     mock_logger.assert_called()
     mock_check_env_variables.assert_called_once()
     assert mock_make_get_request.call_count == 2
-    mock_download_tar_archive.assert_called_once()
-    mock_get_checksum.assert_called_once()
+    mock_download_tar_archive.call_count == 2
+    mock_get_checksum.call_count == 2
     mock_generate_formula.assert_called_once()
     mock_write_file.call_count == 2
     mock_setup_git.assert_called_once()

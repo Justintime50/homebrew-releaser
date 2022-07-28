@@ -102,6 +102,17 @@ jobs:
           # Logs debugging info to console.
           # Default is shown.
           debug: false
+
+          # Matrix breaks down what OS and architecture your project will be installable under and assumes 
+          # a tar archive exists following this URL pattern:
+          # https://github.com/{GITHUB_OWNER}/{REPO_NAME}/releases/download/{VERSION}/{REPO_NAME}-{VERSION}-{OPERATING_SYSTEM}-{ARCHITECTURE}.tar.gz'
+          # eg: https://github.com/justintime50/myrepo/releases/download/v1.2.0/myrepo-1.2.0-darwin-amd64.tar.gz
+          matrix:
+            macos:
+              amd64: true
+              arm64: true
+            linux:
+              amd64: true
 ```
 
 ## Development

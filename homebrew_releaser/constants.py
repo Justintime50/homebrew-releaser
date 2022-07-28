@@ -14,6 +14,7 @@ GITHUB_HEADERS = {
     'agent': 'Homebrew Releaser',
 }
 TAR_ARCHIVE = 'tar_archive.tar.gz'
+CHECKSUM_FILE = 'checksum.txt'
 
 # GitHub Action env variables set by GitHub
 GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY', 'user/repo').split('/')

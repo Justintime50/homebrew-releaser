@@ -50,6 +50,7 @@ def test_generate_formula():
         # - punctuation
         # - trailing whitespace
         # - extra capitilization
+        'name': mock_repo_name,
         'description': 'A tool to release... scripts, binaries, and executables to GitHub. ',
         'license': {'spdx_id': 'MIT'},
     }
@@ -58,7 +59,7 @@ def test_generate_formula():
         USERNAME,
         mock_repo_name,
         repository,
-        CHECKSUM,
+        [{mock_repo_name: CHECKSUM}],
         INSTALL,
         mock_tar_url,
         DEPENDS_ON,
@@ -80,6 +81,7 @@ def test_generate_formula_no_article_description():
 
     repository = {
         # Here we don't start the description off with an article
+        'name': mock_repo_name,
         'description': 'Release scripts, binaries, and executables to GitHub',
         'license': {'spdx_id': 'MIT'},
     }
@@ -88,7 +90,7 @@ def test_generate_formula_no_article_description():
         USERNAME,
         mock_repo_name,
         repository,
-        CHECKSUM,
+        [{mock_repo_name: CHECKSUM}],
         INSTALL,
         mock_tar_url,
         None,
@@ -108,6 +110,7 @@ def test_generate_formula_no_depends_on():
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
     repository = {
+        'name': mock_repo_name,
         'description': 'Release scripts, binaries, and executables to GitHub',
         'license': {'spdx_id': 'MIT'},
     }
@@ -116,7 +119,7 @@ def test_generate_formula_no_depends_on():
         USERNAME,
         mock_repo_name,
         repository,
-        CHECKSUM,
+        [{mock_repo_name: CHECKSUM}],
         INSTALL,
         mock_tar_url,
         None,
@@ -136,6 +139,7 @@ def test_generate_formula_no_test():
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
     repository = {
+        'name': mock_repo_name,
         'description': 'Release scripts, binaries, and executables to GitHub',
         'license': {'spdx_id': 'MIT'},
     }
@@ -144,7 +148,7 @@ def test_generate_formula_no_test():
         USERNAME,
         mock_repo_name,
         repository,
-        CHECKSUM,
+        [{mock_repo_name: CHECKSUM}],
         INSTALL,
         mock_tar_url,
         DEPENDS_ON,
