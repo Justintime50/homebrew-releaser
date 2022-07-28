@@ -82,7 +82,7 @@ class App:
             TEST,
         )
 
-        Utils.write_file(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER, repository["name"] + '.rb'), template, 'w')
+        Utils.write_file(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER, f'{repository["name"]}.rb'), template, 'w')
 
         if UPDATE_README_TABLE:
             logger.info('Attempting to update the README\'s project table...')

@@ -58,4 +58,5 @@ def test_upload_checksum_file_error_on_upload(mock_make_get_request, mock_post_r
 
             mock_make_get_request.assert_called_once()
             mock_post_request.assert_called_once()
-            assert 'mock-error' == str(error.value)
+
+    assert 'mock-error' == str(error.value)

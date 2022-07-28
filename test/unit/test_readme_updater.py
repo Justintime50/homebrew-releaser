@@ -23,7 +23,7 @@ def test_update_readme(
     mock_generate_table.assert_called_once()
     mock_retrieve_old_table.assert_called_once()
     mock_read_current_readme.assert_called_once()
-    mock_read_current_readme.assert_called_once
+    mock_read_current_readme.assert_called_once()
 
 
 # TODO: Add a test that formats the data, this is difficult because we need a mock git repo

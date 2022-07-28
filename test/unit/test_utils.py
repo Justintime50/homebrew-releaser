@@ -21,7 +21,7 @@ def test_make_get_request_exception(mock_request):
     with pytest.raises(SystemExit) as error:
         Utils.make_get_request(url, False)
 
-        assert 'mock-error' == str(error.value)
+    assert 'mock-error' == str(error.value)
 
 
 def test_write_file():
