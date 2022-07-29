@@ -67,13 +67,14 @@ class App:
             stream=False,
         ).json()
         version = tags[0]['name']
-        logger.info(f'Latest release ({version}) successfully identified...')
+        logger.info(f'Latest release ({version}) successfully identified!')
 
         # TODO ============ Should be its own function
         logger.info('Generating tar archive checksum(s)...')
         archive_urls = []
 
         if not MATRIX:
+            # Auto-generated tar URL must come first for later use
             auto_generated_release_tar = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'
             archive_urls.append(auto_generated_release_tar)
 
@@ -94,7 +95,8 @@ class App:
             archive_checksum_entry = f'{checksum} {checksum_filename}'
             checksums.append(
                 {
-                    checksum_filename: {  # TODO: The checksum_filename need to be looked into as it doesn't appear to be matching expectations
+                    # TODO: The checksum_filename needs to be verified as idk where we'll get it from
+                    checksum_filename: {
                         'checksum': checksum,
                         'url': archive_url,
                     }
@@ -109,7 +111,6 @@ class App:
             GITHUB_OWNER,
             GITHUB_REPO,
             repository,
-            version,  # TODO: We may not need to pass this after all
             checksums,
             INSTALL,
             auto_generated_release_tar,

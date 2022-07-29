@@ -6,6 +6,7 @@ class TestFormulaTemplate < Formula
   desc "Tool to release scripts, binaries, and executables to github"
   homepage "https://github.com/Justintime50/test-formula-template"
   license "MIT"
+
   url "https://github.com/Justintime50/test-formula-template/archive/v0.1.0.tar.gz"
   sha256 "0000000000000000000000000000000000000000000000000000000000000000"
 

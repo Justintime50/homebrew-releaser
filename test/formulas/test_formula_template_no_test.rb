@@ -6,6 +6,7 @@ class TestFormulaTemplateNoTest < Formula
   desc "Release scripts, binaries, and executables to github"
   homepage "https://github.com/Justintime50/test-formula-template-no-test"
   license "MIT"
+
   url "https://github.com/Justintime50/test-formula-template-no-test/archive/v0.1.0.tar.gz"
   sha256 "0000000000000000000000000000000000000000000000000000000000000000"
 

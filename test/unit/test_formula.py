@@ -16,7 +16,7 @@ TEST = 'assert_match("my script output", shell_output("my-script-command"))'
 
 
 def _record_formula(formula_path: str, formula_name: str, formula_data: str):
-    """Read from existing file or create new file if it's not present (file = 'formula').
+    """Read from existing formula file or create new formula file if it's not present.
 
     Tests using this function will generate a formula into a file (similar to how
     `vcrpy` works for HTTP requests and responses: https://github.com/kevin1024/vcrpy) if it
@@ -36,144 +36,168 @@ def _record_formula(formula_path: str, formula_name: str, formula_data: str):
             cassette_file.write(formula_data)
 
 
-# def test_generate_formula():
-#     """Tests that we generate the formula content correctly when all parameters are passed.
-
-#     NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
-#     """
-#     cassette_filename = 'test_formula_template.rb'
-#     mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
-#     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
-
-#     repository = {
-#         # We use a badly written description string here on purpose to test our formatting code, this includes:
-#         # - starting with an article
-#         # - punctuation
-#         # - trailing whitespace
-#         # - extra capitilization
-#         'name': mock_repo_name,
-#         'description': 'A tool to release... scripts, binaries, and executables to GitHub. ',
-#         'license': {'spdx_id': 'MIT'},
-#     }
-
-#     formula = Formula.generate_formula_data(
-#         USERNAME,
-#         mock_repo_name,
-#         repository,
-#         VERSION,
-#         [{mock_repo_name: CHECKSUM}],
-#         INSTALL,
-#         mock_tar_url,
-#         DEPENDS_ON,
-#         TEST,
-#     )
-
-#     _record_formula(formula_path, cassette_filename, formula)
-
-
-# def test_generate_formula_no_article_description():
-#     """Tests that we generate the formula content correctly (when there is no article
-#     that starts the description field).
-
-#     NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
-#     """
-#     cassette_filename = 'test_formula_template_no_article_description.rb'
-#     mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
-#     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
-
-#     repository = {
-#         # Here we don't start the description off with an article
-#         'name': mock_repo_name,
-#         'description': 'Release scripts, binaries, and executables to GitHub',
-#         'license': {'spdx_id': 'MIT'},
-#     }
-
-#     formula = Formula.generate_formula_data(
-#         USERNAME,
-#         mock_repo_name,
-#         repository,
-#         VERSION,
-#         [{mock_repo_name: CHECKSUM}],
-#         INSTALL,
-#         mock_tar_url,
-#         None,
-#         None,
-#     )
-
-#     _record_formula(formula_path, cassette_filename, formula)
-
-
-# def test_generate_formula_no_depends_on():
-#     """Tests that we generate the formula content correctly (when no depends_on given).
-
-#     NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
-#     """
-#     cassette_filename = 'test_formula_template_no_depends_on.rb'
-#     mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
-#     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
-
-#     repository = {
-#         'name': mock_repo_name,
-#         'description': 'Release scripts, binaries, and executables to GitHub',
-#         'license': {'spdx_id': 'MIT'},
-#     }
-
-#     formula = Formula.generate_formula_data(
-#         USERNAME,
-#         mock_repo_name,
-#         repository,
-#         VERSION,
-#         [{mock_repo_name: CHECKSUM}],
-#         INSTALL,
-#         mock_tar_url,
-#         None,
-#         TEST,
-#     )
-
-#     _record_formula(formula_path, cassette_filename, formula)
-
-
-# def test_generate_formula_no_test():
-#     """Tests that we generate the formula content correctly (when there is no test).
-
-#     NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
-#     """
-#     cassette_filename = 'test_formula_template_no_test.rb'
-#     mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
-#     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
-
-#     repository = {
-#         'name': mock_repo_name,
-#         'description': 'Release scripts, binaries, and executables to GitHub',
-#         'license': {'spdx_id': 'MIT'},
-#     }
-
-#     formula = Formula.generate_formula_data(
-#         USERNAME,
-#         mock_repo_name,
-#         repository,
-#         VERSION,
-#         [{mock_repo_name: CHECKSUM}],
-#         INSTALL,
-#         mock_tar_url,
-#         DEPENDS_ON,
-#         None,
-#     )
-
-#     _record_formula(formula_path, cassette_filename, formula)
-
-
-def test_generate_formula_matrix():
-    """Tests that we generate the formula content correctly when we provide an OS matrix.
+def test_generate_formula():
+    """Tests that we generate the formula content correctly when all parameters are passed
+    (except a matrix so that we can test the auto-generate URL/checksum from GitHub).
 
     NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
     """
-    cassette_filename = 'test_formula_template_matrix.rb'
+    cassette_filename = 'test_formula_template.rb'
     mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
     repository = {
-        'name': mock_repo_name,
+        # We use a badly written description string here on purpose to test our formatting code, this includes:
+        # - starting with an article
+        # - punctuation
+        # - trailing whitespace
+        # - extra capitilization
+        'description': 'A tool to release... scripts, binaries, and executables to GitHub. ',
+        'license': {'spdx_id': 'MIT'},
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                },
+            }
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=DEPENDS_ON,
+        test=TEST,
+        matrix=None,
+    )
+
+    _record_formula(formula_path, cassette_filename, formula)
+
+
+def test_generate_formula_no_article_description():
+    """Tests that we generate the formula content correctly (when there is no article
+    that starts the description field).
+
+    NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
+    """
+    cassette_filename = 'test_formula_template_no_article_description.rb'
+    mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
+
+    repository = {
+        # Here we don't start the description off with an article
+        'description': 'Release scripts, binaries, and executables to GitHub',
+        'license': {'spdx_id': 'MIT'},
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                },
+            }
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=None,
+        test=None,
+        matrix=None,
+    )
+
+    _record_formula(formula_path, cassette_filename, formula)
+
+
+def test_generate_formula_no_depends_on():
+    """Tests that we generate the formula content correctly (when no depends_on given).
+
+    NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
+    """
+    cassette_filename = 'test_formula_template_no_depends_on.rb'
+    mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
+
+    repository = {
+        'description': 'Release scripts, binaries, and executables to GitHub',
+        'license': {'spdx_id': 'MIT'},
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                },
+            }
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=None,
+        test=TEST,
+        matrix=None,
+    )
+
+    _record_formula(formula_path, cassette_filename, formula)
+
+
+def test_generate_formula_no_test():
+    """Tests that we generate the formula content correctly (when there is no test).
+
+    NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
+    """
+    cassette_filename = 'test_formula_template_no_test.rb'
+    mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
+
+    repository = {
+        'description': 'Release scripts, binaries, and executables to GitHub',
+        'license': {'spdx_id': 'MIT'},
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                },
+            }
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=DEPENDS_ON,
+        test=None,
+        matrix=None,
+    )
+
+    _record_formula(formula_path, cassette_filename, formula)
+
+
+def test_generate_formula_complete_matrix():
+    """Tests that we generate the formula content correctly when we provide a complete OS matrix.
+
+    NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
+    """
+    cassette_filename = 'test_formula_template_complete_matrix.rb'
+    mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
+
+    repository = {
         'description': 'Release scripts, binaries, and executables to GitHub',
         'license': {'spdx_id': 'MIT'},
     }
@@ -190,11 +214,10 @@ def test_generate_formula_matrix():
     }
 
     formula = Formula.generate_formula_data(
-        USERNAME,
-        mock_repo_name,
-        repository,
-        VERSION,
-        [
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
             {
                 'test-formula-0.1.0-darwin-amd64.tar.gz': {
                     'checksum': CHECKSUM,
@@ -220,11 +243,109 @@ def test_generate_formula_matrix():
                 },
             },
         ],
-        INSTALL,
-        mock_tar_url,
-        None,
-        None,
-        matrix,
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=DEPENDS_ON,
+        test=TEST,
+        matrix=matrix,
+    )
+
+    _record_formula(formula_path, cassette_filename, formula)
+
+
+def test_generate_formula_darwin_matrix():
+    """Tests that we generate the formula content correctly when we provide a Darwin matrix.
+
+    NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
+    """
+    cassette_filename = 'test_formula_template_darwin_matrix.rb'
+    mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
+
+    repository = {
+        'description': 'Release scripts, binaries, and executables to GitHub',
+        'license': {'spdx_id': 'MIT'},
+    }
+
+    matrix = {
+        'darwin': {
+            'amd64': True,
+            'arm64': True,
+        },
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                'test-formula-0.1.0-darwin-amd64.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz',  # noqa
+                },
+            },
+            {
+                'test-formula-0.1.0-darwin-arm64.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz',  # noqa
+                },
+            },
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=None,
+        test=None,
+        matrix=matrix,
+    )
+
+    _record_formula(formula_path, cassette_filename, formula)
+
+
+def test_generate_formula_linux_matrix():
+    """Tests that we generate the formula content correctly when we provide a Linux matrix.
+
+    NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
+    """
+    cassette_filename = 'test_formula_template_linux_matrix.rb'
+    mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
+
+    repository = {
+        'description': 'Release scripts, binaries, and executables to GitHub',
+        'license': {'spdx_id': 'MIT'},
+    }
+
+    matrix = {
+        'linux': {
+            'amd64': True,
+            'arm64': True,
+        },
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                'test-formula-0.1.0-linux-amd64.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz',  # noqa
+                },
+            },
+            {
+                'test-formula-0.1.0-linux-arm64.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-arm64.tar.gz',  # noqa
+                },
+            },
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=None,
+        test=None,
+        matrix=matrix,
     )
 
     _record_formula(formula_path, cassette_filename, formula)
