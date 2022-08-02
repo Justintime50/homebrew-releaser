@@ -37,7 +37,7 @@ class Checksum:
         except subprocess.CalledProcessError as error:
             raise SystemExit(error)
 
-        return checksum, checksum_filename
+        return checksum
 
     @staticmethod
     def upload_checksum_file():

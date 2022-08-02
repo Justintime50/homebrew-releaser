@@ -5,7 +5,6 @@
 class TestFormulaTemplateDarwinMatrix < Formula
   desc "Release scripts, binaries, and executables to github"
   homepage "https://github.com/Justintime50/test-formula-template-darwin-matrix"
-  license "MIT"
 
   if OS.mac? && Hardware::CPU.intel?
     url "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz"
@@ -15,6 +14,8 @@ class TestFormulaTemplateDarwinMatrix < Formula
     url "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz"
     sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   end
+
+  license "MIT"
 
   def install
     bin.install "src/secure-browser-kiosk.sh" => "secure-browser-kiosk"

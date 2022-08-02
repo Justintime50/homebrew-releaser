@@ -12,7 +12,6 @@ from homebrew_releaser.constants import (
     HOMEBREW_TAP,
     LOGGER_NAME,
     SKIP_COMMIT,
-    TAR_ARCHIVE,
 )
 from homebrew_releaser.formula import Formula
 from homebrew_releaser.git import Git
@@ -69,42 +68,36 @@ class App:
         version = tags[0]['name']
         logger.info(f'Latest release ({version}) successfully identified!')
 
-        # TODO ============ Should be its own function
         logger.info('Generating tar archive checksum(s)...')
         archive_urls = []
 
-        if not MATRIX:
-            # Auto-generated tar URL must come first for later use
-            auto_generated_release_tar = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'
-            archive_urls.append(auto_generated_release_tar)
+        # Auto-generated tar URL must come first for later use
+        auto_generated_release_tar = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'
+        archive_urls.append(auto_generated_release_tar)
 
-            auto_generated_release_zip = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.zip'
-            archive_urls.append(auto_generated_release_zip)
-        else:
+        auto_generated_release_zip = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.zip'
+        archive_urls.append(auto_generated_release_zip)
+
+        if MATRIX:
             for operating_system in MATRIX:
                 for architecture in operating_system:
                     release_url_pattern = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version}-{operating_system}-{architecture}.tar.gz'  # noqa
                     archive_urls.append(release_url_pattern)
 
-        # TODO: When introducing multiple tar URLs, iterate them here and download/checksum each below. Conditionally
-        # use the default auto_generated release ^. Ref: https://github.com/Justintime50/homebrew-releaser/issues/9
         checksums = []
         for archive_url in archive_urls:
-            App.download_tar_archive(archive_url)
-            checksum, checksum_filename = Checksum.get_checksum(TAR_ARCHIVE)
-            archive_checksum_entry = f'{checksum} {checksum_filename}'
+            tar_filename = App.download_tar_archive(archive_url)
+            checksum = Checksum.get_checksum(tar_filename)
+            archive_checksum_entry = f'{checksum} {tar_filename}'
             checksums.append(
                 {
-                    # TODO: The checksum_filename needs to be verified as idk where we'll get it from
-                    checksum_filename: {
+                    tar_filename: {
                         'checksum': checksum,
                         'url': archive_url,
                     }
                 },
             )
             Utils.write_file(CHECKSUM_FILE, archive_checksum_entry, 'a')
-
-        # TODO ============ Should be its own function ^^
 
         logger.info(f'Generating Homebrew formula for {GITHUB_REPO}...')
         template = Formula.generate_formula_data(
@@ -170,10 +163,13 @@ class App:
         logger.debug('All required environment variables are present.')
 
     @staticmethod
-    def download_tar_archive(url: str):
+    def download_tar_archive(url: str) -> str:
         """Gets a tar archive from GitHub and saves it locally."""
         response = Utils.make_get_request(url, True)
-        Utils.write_file(TAR_ARCHIVE, response.content, 'wb')
+        filename = url.rsplit('/', 1)
+        Utils.write_file(filename, response.content, 'wb')
+
+        return filename
 
 
 def main():

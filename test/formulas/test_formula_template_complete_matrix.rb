@@ -5,7 +5,6 @@
 class TestFormulaTemplateCompleteMatrix < Formula
   desc "Release scripts, binaries, and executables to github"
   homepage "https://github.com/Justintime50/test-formula-template-complete-matrix"
-  license "MIT"
 
   if OS.mac? && Hardware::CPU.intel?
     url "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz"
@@ -23,6 +22,8 @@ class TestFormulaTemplateCompleteMatrix < Formula
     url "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-arm64.tar.gz"
     sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   end
+
+  license "MIT"
 
   depends_on "bash" => :build
   depends_on "gcc"

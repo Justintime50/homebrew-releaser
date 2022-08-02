@@ -13,7 +13,6 @@ GITHUB_HEADERS = {
     'accept': 'application/vnd.github.v3+json',
     'agent': 'Homebrew Releaser',
 }
-TAR_ARCHIVE = 'tar_archive.tar.gz'
 CHECKSUM_FILE = 'checksum.txt'
 
 # GitHub Action env variables set by GitHub
