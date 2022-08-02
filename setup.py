@@ -4,6 +4,7 @@ with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 REQUIREMENTS = [
+    'chevron == 0.14.*',
     'pretty_tables == 2.*',
     'requests == 2.*',
     'woodchips == 0.2.*',

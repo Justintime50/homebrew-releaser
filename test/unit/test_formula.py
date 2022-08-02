@@ -219,6 +219,12 @@ def test_generate_formula_complete_matrix():
         repository=repository,
         checksums=[
             {
+                'test-formula-template-complete-matrix.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-template-complete-matrix',  # noqa
+                },
+            },
+            {
                 'test-formula-0.1.0-darwin-amd64.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz',  # noqa
@@ -280,6 +286,12 @@ def test_generate_formula_darwin_matrix():
         repository=repository,
         checksums=[
             {
+                'test-formula-template-darwin-matrix.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-template-darwin-matrix.tar.gz',  # noqa
+                },
+            },
+            {
                 'test-formula-0.1.0-darwin-amd64.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz',  # noqa
@@ -328,6 +340,12 @@ def test_generate_formula_linux_matrix():
         repo_name=mock_repo_name,
         repository=repository,
         checksums=[
+            {
+                'test-formula-template-linux-matrix.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-template-linux-matrix.tar.gz',  # noqa
+                },
+            },
             {
                 'test-formula-0.1.0-linux-amd64.tar.gz': {
                     'checksum': CHECKSUM,
