@@ -50,17 +50,17 @@ class Formula:
         if first_word_of_desc[0].lower() in articles:
             description = first_word_of_desc[1].strip().capitalize()
 
-        # TODO: Change this from a string to using a list inside of the chevron template
-        depends_on_content = ''
+        dependencies_object = {
+            'dependencies': [],
+        }
+        dependencies_list = dependencies_object['dependencies']
         if depends_on:
             dependencies = [dependency.strip() for dependency in depends_on.split('\n') if dependency]
 
             # `brew audit` wants dependencies sorted
             for dependency in sorted(dependencies):
-                depends_on_content += f'  depends_on {dependency}\n'
-            depends_on_content = f'\n{depends_on_content}'
+                dependencies_list.append({'dependency': dependency})
 
-        # TODO: ===========================
         darwin_amd64_url = None
         darwin_amd64_checksum = None
         darwin_arm64_url = None
@@ -104,58 +104,58 @@ class {{class_name}} < Formula
   {{^matrix}}
   url "{{tar_url}}"
   sha256 "{{autogenerate_tar_checksum}}"
-  {{/matrix}}
+  {{/ matrix}}
   license "{{license_type}}"
-  {{#linux}}
+  {{# linux}}
 
   on_linux do
-    {{#linux_amd64_url}}
+    {{# linux_amd64_url}}
     on_intel do
       url "{{linux_amd64_url}}"
       sha256 "{{linux_amd64_checksum}}"
     end
-    {{/linux_amd64_url}}
-    {{#linux_arm64_url}}
+    {{/ linux_amd64_url}}
+    {{# linux_arm64_url}}
 
     on_arm do
       url "{{linux_arm64_url}}"
       sha256 "{{linux_arm64_checksum}}"
     end
-    {{/linux_arm64_url}}
+    {{/ linux_arm64_url}}
   end
-  {{/linux}}
-  {{#darwin}}
+  {{/ linux}}
+  {{# darwin}}
 
   on_macos do
-    {{#darwin_amd64_url}}
+    {{# darwin_amd64_url}}
     on_intel do
       url "{{darwin_amd64_url}}"
       sha256 "{{darwin_amd64_checksum}}"
     end
-    {{/darwin_amd64_url}}
-    {{#darwin_arm64_url}}
+    {{/ darwin_amd64_url}}
+    {{# darwin_arm64_url}}
 
     on_arm do
       url "{{darwin_arm64_url}}"
       sha256 "{{darwin_arm64_checksum}}"
     end
-    {{/darwin_arm64_url}}
+    {{/ darwin_arm64_url}}
   end
-  {{/darwin}}
-  {{#depends_on}}
+  {{/ darwin}}
 
-  {{depends_on}}
-  {{/depends_on}}
+  {{# dependencies}}
+  depends_on {{{dependency}}}
+  {{/ dependencies}}
 
   def install
     {{{install_instructions}}}
   end
-  {{#test_instructions}}
+  {{# test_instructions}}
 
   test do
     {{{test_instructions}}}
   end
-  {{/test_instructions}}
+  {{/ test_instructions}}
 end
 """
 
@@ -173,9 +173,7 @@ end
                 'autogenerate_tar_checksum': autogenerate_tar_checksum,
                 'license_type': license_type,
                 'final_matrix_output': final_matrix_output if final_matrix_output else None,
-                'depends_on_content': depends_on_content
-                if depends_on_content
-                else None,  # TODO: This isn't getting populated
+                'dependencies': dependencies_list,
                 'install_instructions': install.strip(),
                 'test_instructions': test.strip() if test else None,
                 'darwin_amd64_url': darwin_amd64_url,
@@ -192,7 +190,10 @@ end
             },
         }
 
-        rendered_template = chevron.render(**template_data)
+        # TODO: We replace the multiple newlines here if there is a `depends_on` in the template as I've yet to find
+        # a way to only include a single line break there in the chevron template above due to iterating the
+        # dependencies collection.
+        rendered_template = chevron.render(**template_data).replace('\n\n\n  def install', '\n\n  def install')
 
         logger.debug('Homebrew formula generated successfully.')
 

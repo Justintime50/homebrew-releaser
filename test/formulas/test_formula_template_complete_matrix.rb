@@ -31,6 +31,9 @@ class TestFormulaTemplateCompleteMatrix < Formula
     end
   end
 
+  depends_on "bash" => :build
+  depends_on "gcc"
+
   def install
     bin.install "src/secure-browser-kiosk.sh" => "secure-browser-kiosk"
   end

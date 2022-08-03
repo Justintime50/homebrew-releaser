@@ -9,6 +9,9 @@ class TestFormulaTemplate < Formula
   sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   license "MIT"
 
+  depends_on "bash" => :build
+  depends_on "gcc"
+
   def install
     bin.install "src/secure-browser-kiosk.sh" => "secure-browser-kiosk"
   end

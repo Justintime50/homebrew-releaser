@@ -8,6 +8,7 @@ USERNAME = 'Justintime50'
 VERSION = '0.1.0'
 CHECKSUM = '0' * 64  # `brew audit` wants a 64 character number here, this would be true with real data
 INSTALL = 'bin.install "src/secure-browser-kiosk.sh" => "secure-browser-kiosk"'
+# Dependencies are purposefully out of order so we can test that they get ordered properly for `brew audit`
 DEPENDS_ON = """
 "gcc"
 "bash" => :build
