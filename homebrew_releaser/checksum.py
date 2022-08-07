@@ -1,5 +1,4 @@
 import subprocess
-from typing import Tuple
 
 import requests
 import woodchips
@@ -17,7 +16,7 @@ from homebrew_releaser.utils import Utils
 
 class Checksum:
     @staticmethod
-    def get_checksum(tar_filepath: str) -> Tuple[str, str]:
+    def get_checksum(tar_filepath: str) -> str:
         """Gets the checksum of a file."""
         logger = woodchips.get(LOGGER_NAME)
 

@@ -18,8 +18,9 @@ class Utils:
                 headers=GITHUB_HEADERS,
                 stream=stream,
             )
+            response.raise_for_status()
             logger.debug(f'HTTP GET request made successfully to {url}.')
-        except requests.exceptions.RequestException as error:
+        except Exception as error:
             raise SystemExit(error)
 
         return response

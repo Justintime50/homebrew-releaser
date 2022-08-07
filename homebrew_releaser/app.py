@@ -1,4 +1,5 @@
 import os
+from typing import Dict
 
 import woodchips
 
@@ -31,7 +32,7 @@ DEPENDS_ON = os.getenv('INPUT_DEPENDS_ON')
 TEST = os.getenv('INPUT_TEST')
 UPDATE_README_TABLE = os.getenv('INPUT_UPDATE_README_TABLE', False)
 DEBUG = os.getenv('INPUT_DEBUG', False)
-MATRIX = os.getenv('INPUT_MATRIX', {})
+MATRIX: Dict[str, str] = os.getenv('INPUT_MATRIX', {})
 
 
 class App:
@@ -166,7 +167,7 @@ class App:
     def download_tar_archive(url: str) -> str:
         """Gets a tar archive from GitHub and saves it locally."""
         response = Utils.make_get_request(url, True)
-        filename = url.rsplit('/', 1)
+        filename = url.rsplit('/', 1)[1]
         Utils.write_file(filename, response.content, 'wb')
 
         return filename

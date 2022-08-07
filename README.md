@@ -113,6 +113,7 @@ jobs:
               arm64: true
             linux:
               amd64: true
+              arm64: true
 ```
 
 ## Development
