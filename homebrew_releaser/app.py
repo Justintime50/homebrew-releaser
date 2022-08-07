@@ -1,5 +1,4 @@
 import os
-from typing import Dict
 
 import woodchips
 
@@ -13,6 +12,10 @@ from homebrew_releaser.constants import (
     HOMEBREW_TAP,
     LOGGER_NAME,
     SKIP_COMMIT,
+    TARGET_DARWIN_AMD64,
+    TARGET_DARWIN_ARM64,
+    TARGET_LINUX_AMD64,
+    TARGET_LINUX_ARM64,
 )
 from homebrew_releaser.formula import Formula
 from homebrew_releaser.git import Git
@@ -32,7 +35,6 @@ DEPENDS_ON = os.getenv('INPUT_DEPENDS_ON')
 TEST = os.getenv('INPUT_TEST')
 UPDATE_README_TABLE = os.getenv('INPUT_UPDATE_README_TABLE', False)
 DEBUG = os.getenv('INPUT_DEBUG', False)
-MATRIX: Dict[str, str] = os.getenv('INPUT_MATRIX', {})
 
 
 class App:
@@ -67,6 +69,7 @@ class App:
             stream=False,
         ).json()
         version = tags[0]['name']
+        version_no_v = version.replace('v', '')
         logger.info(f'Latest release ({version}) successfully identified!')
 
         logger.info('Generating tar archive checksum(s)...')
@@ -79,11 +82,22 @@ class App:
         auto_generated_release_zip = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.zip'
         archive_urls.append(auto_generated_release_zip)
 
-        if MATRIX:
-            for operating_system in MATRIX:
-                for architecture in operating_system:
-                    release_url_pattern = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version}-{operating_system}-{architecture}.tar.gz'  # noqa
-                    archive_urls.append(release_url_pattern)
+        if TARGET_DARWIN_AMD64:
+            archive_urls.append(
+                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-amd64.tar.gz'  # noqa
+            )
+        if TARGET_DARWIN_ARM64:
+            archive_urls.append(
+                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-arm64.tar.gz'  # noqa
+            )
+        if TARGET_LINUX_AMD64:
+            archive_urls.append(
+                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-amd64.tar.gz'  # noqa
+            )
+        if TARGET_LINUX_ARM64:
+            archive_urls.append(
+                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-arm64.tar.gz'  # noqa
+            )
 
         checksums = []
         for archive_url in archive_urls:
@@ -110,7 +124,6 @@ class App:
             auto_generated_release_tar,
             DEPENDS_ON,
             TEST,
-            MATRIX,
         )
 
         Utils.write_file(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER, f'{repository["name"]}.rb'), template, 'w')

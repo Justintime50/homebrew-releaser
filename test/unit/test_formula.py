@@ -1,4 +1,5 @@
 import os
+from unittest.mock import patch
 
 from homebrew_releaser.formula import Formula
 
@@ -73,7 +74,6 @@ def test_generate_formula():
         tar_url=mock_tar_url,
         depends_on=DEPENDS_ON,
         test=TEST,
-        matrix=None,
     )
 
     _record_formula(formula_path, cassette_filename, formula)
@@ -111,7 +111,6 @@ def test_generate_formula_no_article_description():
         tar_url=mock_tar_url,
         depends_on=None,
         test=None,
-        matrix=None,
     )
 
     _record_formula(formula_path, cassette_filename, formula)
@@ -147,7 +146,6 @@ def test_generate_formula_no_depends_on():
         tar_url=mock_tar_url,
         depends_on=None,
         test=TEST,
-        matrix=None,
     )
 
     _record_formula(formula_path, cassette_filename, formula)
@@ -183,12 +181,15 @@ def test_generate_formula_no_test():
         tar_url=mock_tar_url,
         depends_on=DEPENDS_ON,
         test=None,
-        matrix=None,
     )
 
     _record_formula(formula_path, cassette_filename, formula)
 
 
+@patch('homebrew_releaser.formula.TARGET_DARWIN_AMD64', True)
+@patch('homebrew_releaser.formula.TARGET_DARWIN_ARM64', True)
+@patch('homebrew_releaser.formula.TARGET_LINUX_AMD64', True)
+@patch('homebrew_releaser.formula.TARGET_LINUX_ARM64', True)
 def test_generate_formula_complete_matrix():
     """Tests that we generate the formula content correctly when we provide a complete OS matrix.
 
@@ -201,17 +202,6 @@ def test_generate_formula_complete_matrix():
     repository = {
         'description': 'Release scripts, binaries, and executables to GitHub',
         'license': {'spdx_id': 'MIT'},
-    }
-
-    matrix = {
-        'darwin': {
-            'amd64': True,
-            'arm64': True,
-        },
-        'linux': {
-            'amd64': True,
-            'arm64': True,
-        },
     }
 
     formula = Formula.generate_formula_data(
@@ -254,12 +244,13 @@ def test_generate_formula_complete_matrix():
         tar_url=mock_tar_url,
         depends_on=DEPENDS_ON,
         test=TEST,
-        matrix=matrix,
     )
 
     _record_formula(formula_path, cassette_filename, formula)
 
 
+@patch('homebrew_releaser.formula.TARGET_DARWIN_AMD64', True)
+@patch('homebrew_releaser.formula.TARGET_DARWIN_ARM64', True)
 def test_generate_formula_darwin_matrix():
     """Tests that we generate the formula content correctly when we provide a Darwin matrix.
 
@@ -272,13 +263,6 @@ def test_generate_formula_darwin_matrix():
     repository = {
         'description': 'Release scripts, binaries, and executables to GitHub',
         'license': {'spdx_id': 'MIT'},
-    }
-
-    matrix = {
-        'darwin': {
-            'amd64': True,
-            'arm64': True,
-        },
     }
 
     formula = Formula.generate_formula_data(
@@ -309,12 +293,13 @@ def test_generate_formula_darwin_matrix():
         tar_url=mock_tar_url,
         depends_on=None,
         test=None,
-        matrix=matrix,
     )
 
     _record_formula(formula_path, cassette_filename, formula)
 
 
+@patch('homebrew_releaser.formula.TARGET_LINUX_AMD64', True)
+@patch('homebrew_releaser.formula.TARGET_LINUX_ARM64', True)
 def test_generate_formula_linux_matrix():
     """Tests that we generate the formula content correctly when we provide a Linux matrix.
 
@@ -327,13 +312,6 @@ def test_generate_formula_linux_matrix():
     repository = {
         'description': 'Release scripts, binaries, and executables to GitHub',
         'license': {'spdx_id': 'MIT'},
-    }
-
-    matrix = {
-        'linux': {
-            'amd64': True,
-            'arm64': True,
-        },
     }
 
     formula = Formula.generate_formula_data(
@@ -364,7 +342,6 @@ def test_generate_formula_linux_matrix():
         tar_url=mock_tar_url,
         depends_on=None,
         test=None,
-        matrix=matrix,
     )
 
     _record_formula(formula_path, cassette_filename, formula)

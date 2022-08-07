@@ -40,6 +40,18 @@ inputs:
   update_readme_table:
     description: "Update your homebrew tap's README with a table of all projects in the tap."
     required: false
+  target_darwin_amd64:
+    description: "Add a custom URL/checksum target for AMD64 Darwin builds."
+    required: false
+  target_darwin_arm64:
+    description: "Add a custom URL/checksum target for ARM64 Darwin builds."
+    required: false
+  target_linux_amd64:
+    description: "Add a custom URL/checksum target for AMD64 Linux builds."
+    required: false
+  target_linux_arm64:
+    description: "Add a custom URL/checksum target for ARM64 Linux builds."
+    required: false
   debug:
     description: "Logs debugging info to console."
     required: false
@@ -57,4 +69,8 @@ runs:
     - ${{ inputs.test }}
     - ${{ inputs.skip_commit }}
     - ${{ inputs.update_readme_table }}
+    - ${{ inputs.target_darwin_amd64 }}
+    - ${{ inputs.target_darwin_arm64 }}
+    - ${{ inputs.target_linux_amd64 }}
+    - ${{ inputs.target_linux_arm64 }}
     - ${{ inputs.debug }}
