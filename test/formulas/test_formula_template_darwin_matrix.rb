@@ -5,6 +5,8 @@
 class TestFormulaTemplateDarwinMatrix < Formula
   desc "Release scripts, binaries, and executables to github"
   homepage "https://github.com/Justintime50/test-formula-template-darwin-matrix"
+  url "https://github.com/Justintime50/test-formula-template-darwin-matrix/archive/v0.1.0.tar.gz"
+  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   license "MIT"
 
   on_macos do

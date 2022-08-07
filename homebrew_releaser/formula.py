@@ -101,29 +101,13 @@ class Formula:
 class {{class_name}} < Formula
   desc "{{description}}"
   homepage "https://github.com/{{owner}}/{{repo_name}}"
-  {{^matrix}}
   url "{{tar_url}}"
   sha256 "{{autogenerate_tar_checksum}}"
-  {{/ matrix}}
   license "{{license_type}}"
-  {{# linux}}
 
-  on_linux do
-    {{# linux_amd64_url}}
-    on_intel do
-      url "{{linux_amd64_url}}"
-      sha256 "{{linux_amd64_checksum}}"
-    end
-    {{/ linux_amd64_url}}
-    {{# linux_arm64_url}}
-
-    on_arm do
-      url "{{linux_arm64_url}}"
-      sha256 "{{linux_arm64_checksum}}"
-    end
-    {{/ linux_arm64_url}}
-  end
-  {{/ linux}}
+  {{# dependencies}}
+  depends_on {{{dependency}}}
+  {{/ dependencies}}
   {{# darwin}}
 
   on_macos do
@@ -142,10 +126,24 @@ class {{class_name}} < Formula
     {{/ darwin_arm64_url}}
   end
   {{/ darwin}}
+  {{# linux}}
 
-  {{# dependencies}}
-  depends_on {{{dependency}}}
-  {{/ dependencies}}
+  on_linux do
+    {{# linux_amd64_url}}
+    on_intel do
+      url "{{linux_amd64_url}}"
+      sha256 "{{linux_amd64_checksum}}"
+    end
+    {{/ linux_amd64_url}}
+    {{# linux_arm64_url}}
+
+    on_arm do
+      url "{{linux_arm64_url}}"
+      sha256 "{{linux_arm64_checksum}}"
+    end
+    {{/ linux_arm64_url}}
+  end
+  {{/ linux}}
 
   def install
     {{{install_instructions}}}
@@ -190,10 +188,14 @@ end
             },
         }
 
-        # TODO: We replace the multiple newlines here if there is a `depends_on` in the template as I've yet to find
-        # a way to only include a single line break there in the chevron template above due to iterating the
-        # dependencies collection.
-        rendered_template = chevron.render(**template_data).replace('\n\n\n  def install', '\n\n  def install')
+        # TODO: We replace the multiple newlines here for shortcomings in the chevron template above so that
+        # `brew audit` passes correctly.
+        rendered_template = (
+            chevron.render(**template_data)
+            .replace('\n\n\n  def install', '\n\n  def install')
+            .replace('\n\n\n  on_macos', '\n\n  on_macos')
+            .replace('\n\n\n  on_linux', '\n\n  on_linux')
+        )
 
         logger.debug('Homebrew formula generated successfully.')
 
