@@ -1,8 +1,11 @@
 # CHANGELOG
 
-## NEXT RELEASE
+## v0.12.0 (2022-08-12)
 
+- Adds support for OS/arch targets such as Linux and Darwin, AMD64 and ARM64 (closes #9 & #14)
 - Generates a checksum for the auto-generate `.zip` release archive in addition the auto-generated `.tar.gz` archive
+- Adds better error handling for HTTP errors
+- Completely overhauls the formula templating engine allowing for easy future additions if necessary
 
 ## v0.11.0 (2022-01-08)
 
