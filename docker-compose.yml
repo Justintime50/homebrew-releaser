@@ -3,6 +3,7 @@ services:
     container_name: homebrew-releaser
     build: .
     environment:
+      # Env vars that should be `false` should be left empty
       - INPUT_SKIP_COMMIT=true
       - INPUT_HOMEBREW_OWNER=username
       - INPUT_HOMEBREW_TAP=homebrew-formulas
@@ -13,6 +14,10 @@ services:
       - INPUT_DEPENDS_ON='"bash" => :build'
       - INPUT_INSTALL='bin.install "src/my-script.sh" => "my-script"'
       - INPUT_TEST='assert_match("my script output", shell_output("my-script-command"))'
+      - INPUT_TARGET_DARWIN_AMD64=
+      - INPUT_TARGET_DARWIN_ARM64=
+      - INPUT_TARGET_LINUX_AMD64=
+      - INPUT_TARGET_LINUX_ARM64=
       - INPUT_UPDATE_README_TABLE=true
-      - GITHUB_REPOSITORY=username/repo
       - INPUT_DEBUG=true
+      - GITHUB_REPOSITORY=username/repo
