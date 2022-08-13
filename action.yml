@@ -34,12 +34,6 @@ inputs:
   test:
     description: "Custom test command for your formula so you can run `brew test`."
     required: false
-  skip_commit:
-    description: "Skips committing the generated formula to a homebrew tap (useful for local testing)."
-    required: false
-  update_readme_table:
-    description: "Update your homebrew tap's README with a table of all projects in the tap."
-    required: false
   target_darwin_amd64:
     description: "Add a custom URL/checksum target for AMD64 Darwin builds."
     required: false
@@ -51,6 +45,12 @@ inputs:
     required: false
   target_linux_arm64:
     description: "Add a custom URL/checksum target for ARM64 Linux builds."
+    required: false
+  update_readme_table:
+    description: "Update your homebrew tap's README with a table of all projects in the tap."
+    required: false
+  skip_commit:
+    description: "Skips committing the generated formula to a homebrew tap (useful for local testing)."
     required: false
   debug:
     description: "Logs debugging info to console."
@@ -67,10 +67,10 @@ runs:
     - ${{ inputs.commit_email }}
     - ${{ inputs.install }}
     - ${{ inputs.test }}
-    - ${{ inputs.skip_commit }}
-    - ${{ inputs.update_readme_table }}
     - ${{ inputs.target_darwin_amd64 }}
     - ${{ inputs.target_darwin_arm64 }}
     - ${{ inputs.target_linux_amd64 }}
     - ${{ inputs.target_linux_arm64 }}
+    - ${{ inputs.update_readme_table }}
+    - ${{ inputs.skip_commit }}
     - ${{ inputs.debug }}

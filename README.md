@@ -24,6 +24,7 @@ When you cut a new release when using this GitHub Action, it will clone your rep
 * Shell scripts distributed via Homebrew Releaser must be executable and contain a proper shebang to work.
 * Homebrew Releaser will always use the latest tag of a GitHub project. Git tags must follow semantic versioning for Homebrew to properly infer the installation instructions (eg: `v1.2.0` or `0.3.0`, etc).
 * The Homebrew formula filename will match the github repo name.
+* It is **highly** recommended to enable debug mode and skip the commit on the first run through to ensure you have configured your workflow correctly and that the generated formula looks the way you want.
 
 ### GitHub Actions YML
 
@@ -77,9 +78,16 @@ jobs:
           # Optional.
           test: 'assert_match("my script output", shell_output("my-script-command"))'
 
-          # Skips committing the generated formula to a homebrew tap (useful for local testing).
-          # Default is shown.
-          skip_commit: false
+          # Adds URL and checksum targets for different OS and architecture pairs. This assumes 
+          # a tar archive exists on your GitHub repo with the following URL pattern:
+          # https://github.com/{GITHUB_OWNER}/{REPO_NAME}/releases/download/{TAG}/{REPO_NAME}-{VERSION}-{OPERATING_SYSTEM}-{ARCHITECTURE}.tar.gz'
+          # Darwin AMD: https://github.com/justintime50/myrepo/releases/download/v1.2.0/myrepo-1.2.0-darwin-amd64.tar.gz
+          # Linux ARM: https://github.com/justintime50/myrepo/releases/download/v1.2.0/myrepo-1.2.0-linux-arm64.tar.gz
+          # Optional.
+          target_darwin_amd64: true
+          target_darwin_arm64: true
+          target_linux_amd64: true
+          target_linux_arm64: true
 
           # Update your homebrew tap's README with a table of all projects in the tap.
           # This is done by pulling the information from all your formula.rb files - eg:
@@ -99,20 +107,13 @@ jobs:
           # Default is `false`.
           update_readme_table: true
 
+          # Skips committing the generated formula to a homebrew tap (useful for local testing).
+          # Default is shown.
+          skip_commit: false
+
           # Logs debugging info to console.
           # Default is shown.
           debug: false
-
-          # Adds URL and checksum targets for different OS and architecture pairs. This assumes 
-          # a tar archive exists on your GitHub repo with the following URL pattern:
-          # https://github.com/{GITHUB_OWNER}/{REPO_NAME}/releases/download/{TAG}/{REPO_NAME}-{VERSION}-{OPERATING_SYSTEM}-{ARCHITECTURE}.tar.gz'
-          # Darwin AMD: https://github.com/justintime50/myrepo/releases/download/v1.2.0/myrepo-1.2.0-darwin-amd64.tar.gz
-          # Linux ARM: https://github.com/justintime50/myrepo/releases/download/v1.2.0/myrepo-1.2.0-linux-arm64.tar.gz
-          # Optional.
-          target_darwin_amd64: true
-          target_darwin_arm64: true
-          target_linux_amd64: true
-          target_linux_arm64: true
 ```
 
 ## Development

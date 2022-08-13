@@ -112,6 +112,9 @@ class App:
                     }
                 },
             )
+
+            logger.debug(f'Checksum entry: {archive_checksum_entry}')
+
             Utils.write_file(CHECKSUM_FILE, archive_checksum_entry, 'a')
 
         logger.info(f'Generating Homebrew formula for {GITHUB_REPO}...')

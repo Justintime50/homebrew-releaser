@@ -4,7 +4,7 @@ import os
 FORMULA_FOLDER = os.getenv('INPUT_FORMULA_FOLDER', 'formula')
 GITHUB_TOKEN = os.getenv('INPUT_GITHUB_TOKEN')
 HOMEBREW_TAP = os.getenv('INPUT_HOMEBREW_TAP')
-SKIP_COMMIT = os.getenv('INPUT_SKIP_COMMIT', False)
+SKIP_COMMIT = os.getenv('INPUT_SKIP_COMMIT')
 
 # App Constants
 LOGGER_NAME = 'homebrew-releaser'
