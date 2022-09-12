@@ -130,5 +130,5 @@ Homebrew Releaser does not clean up artifacts after completing since the tempora
 **Note:** All environment variables from above must be prepended with `INPUT_` for the local Docker image (eg: `INPUT_SKIP_COMMIT=true`).
 
 ```bash
-docker-compose up -d --build
+docker compose up -d --build
 ```
