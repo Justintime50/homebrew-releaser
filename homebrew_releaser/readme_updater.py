@@ -1,6 +1,6 @@
 import os
 import re
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import _io  # type: ignore
 import pretty_tables
@@ -14,13 +14,16 @@ class ReadmeUpdater:
     @staticmethod
     def update_readme(homebrew_tap: str):
         """Updates the homebrew tap README by replacing the old table string
-        with the updated table string.
+        with the updated table string if it can be found.
         """
-        formulas = ReadmeUpdater.format_formula_data(homebrew_tap)
-        new_table = ReadmeUpdater.generate_table(formulas)
-        old_table = ReadmeUpdater.retrieve_old_table(homebrew_tap)
-        readme_content = ReadmeUpdater.read_current_readme(homebrew_tap)
-        ReadmeUpdater.replace_table_contents(readme_content, old_table, new_table, homebrew_tap)
+        old_table, found_old_table = ReadmeUpdater.retrieve_old_table(homebrew_tap)
+
+        if found_old_table:
+            formulas = ReadmeUpdater.format_formula_data(homebrew_tap)
+            new_table = ReadmeUpdater.generate_table(formulas)
+
+            readme_content = ReadmeUpdater.read_current_readme(homebrew_tap)
+            ReadmeUpdater.replace_table_contents(readme_content, old_table, new_table, homebrew_tap)
 
     @staticmethod
     def format_formula_data(homebrew_tap: str) -> List:
@@ -73,6 +76,8 @@ class ReadmeUpdater:
     @staticmethod
     def generate_table(formulas: List) -> str:
         """Generates a pretty table which will be used in the README file."""
+        logger = woodchips.get(LOGGER_NAME)
+
         headers = ['Project', 'Description', 'Install']
         rows = []
 
@@ -91,35 +96,41 @@ class ReadmeUpdater:
             empty_cell_placeholder='NA',
         )
 
+        logger.debug(table)
+
         return table
 
     @staticmethod
-    def retrieve_old_table(homebrew_tap: str) -> str:
+    def retrieve_old_table(homebrew_tap: str) -> Tuple[str, bool]:
         """Retrives all content between the start/end tags in the README file."""
         logger = woodchips.get(LOGGER_NAME)
 
         readme = ReadmeUpdater.determine_readme(homebrew_tap)
+        old_table_found = False
+        table_start_found = False
+        table_end_found = False
         old_table = ''
 
         if readme:
             with open(readme, 'r') as readme_contents:
-                copy = False
                 for line in readme_contents:
-                    if line.strip() == '<!-- project_table_start -->':
-                        copy = True
-                        continue
-                    elif line.strip() == '<!-- project_table_end -->':
-                        copy = False
-                        continue
-                    elif copy:
+                    if table_start_found and table_end_found:
                         old_table += line
+                        old_table_found = True
+                        break
+                    elif line.strip().lower() == '<!-- project_table_start -->':
+                        table_start_found = True
+                    elif line.strip().lower() == '<!-- project_table_end -->':
+                        table_end_found = True
 
                 # If we start copying but never find a closing tag or can't copy the old table content, warn the user
                 # NOTE: This will not fail the release workflow as this would be a bad experience for the user
-                if copy is True or old_table == '':
+                if old_table_found is False or old_table == '':
                     logger.error('Could not find start/end tags for project table in README.')
+        else:
+            logger.error('Could not find a valid README in this project to update.')
 
-        return old_table
+        return old_table, old_table_found
 
     @staticmethod
     def read_current_readme(homebrew_tap: str) -> _io.TextIOWrapper:
@@ -148,7 +159,7 @@ class ReadmeUpdater:
         if readme:
             with open(readme, 'w') as readme_contents:
                 readme_contents.write(file_content.replace(old_table, new_table + '\n'))
-            logger.debug(f'{readme} written successfully.')
+            logger.debug(f'{readme} table updated successfully.')
 
             Git.add(homebrew_tap)
 
@@ -156,12 +167,10 @@ class ReadmeUpdater:
     def determine_readme(homebrew_tap: str) -> Optional[str]:
         """Determines the README file to open. The README file must either be:
 
-        1. completely uppercase or completely lowercase
-        2. have the file extension of `.md`
-        3. reside in the root of a project
+        1. Completely uppercase or completely lowercase
+        2. Have the file extension of `.md`
+        3. Reside in the root of a project
         """
-        logger = woodchips.get(LOGGER_NAME)
-
         readme_to_open = None
         uppercase_readme = os.path.join(homebrew_tap, 'README.md')
         lowercase_readme = os.path.join(homebrew_tap, 'readme.md')
@@ -170,7 +179,5 @@ class ReadmeUpdater:
             readme_to_open = uppercase_readme
         elif os.path.isfile(lowercase_readme):
             readme_to_open = lowercase_readme
-        else:
-            logger.error('Could not find a valid README in this project to update.')
 
         return readme_to_open

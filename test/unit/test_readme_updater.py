@@ -7,7 +7,7 @@ from homebrew_releaser.readme_updater import ReadmeUpdater
 
 @patch('homebrew_releaser.readme_updater.ReadmeUpdater.format_formula_data')
 @patch('homebrew_releaser.readme_updater.ReadmeUpdater.generate_table')
-@patch('homebrew_releaser.readme_updater.ReadmeUpdater.retrieve_old_table')
+@patch('homebrew_releaser.readme_updater.ReadmeUpdater.retrieve_old_table', return_value=['', True])
 @patch('homebrew_releaser.readme_updater.ReadmeUpdater.read_current_readme')
 @patch('homebrew_releaser.readme_updater.ReadmeUpdater.replace_table_contents')
 def test_update_readme(
@@ -17,13 +17,39 @@ def test_update_readme(
     mock_generate_table,
     mock_format_formula_data,
 ):
+    """Tests that we update the README table when we can find the old table correctly."""
     ReadmeUpdater.update_readme('./')
 
     mock_format_formula_data.assert_called_once()
     mock_generate_table.assert_called_once()
     mock_retrieve_old_table.assert_called_once()
     mock_read_current_readme.assert_called_once()
-    mock_read_current_readme.assert_called_once()
+    mock_replace_table_contents.assert_called_once()
+
+
+@patch('homebrew_releaser.readme_updater.ReadmeUpdater.format_formula_data')
+@patch('homebrew_releaser.readme_updater.ReadmeUpdater.generate_table')
+@patch('homebrew_releaser.readme_updater.ReadmeUpdater.retrieve_old_table', return_value=['', False])
+@patch('homebrew_releaser.readme_updater.ReadmeUpdater.read_current_readme')
+@patch('homebrew_releaser.readme_updater.ReadmeUpdater.replace_table_contents')
+def test_update_readme_cannot_find_old_table(
+    mock_replace_table_contents,
+    mock_read_current_readme,
+    mock_retrieve_old_table,
+    mock_generate_table,
+    mock_format_formula_data,
+):
+    """Tests that when we cannot retrieve the old table that we skip updating with new details."""
+    ReadmeUpdater.update_readme('./')
+
+    # We should try to get the old table
+    mock_retrieve_old_table.assert_called_once()
+
+    # We should fail at doing anything with the new table
+    mock_format_formula_data.assert_not_called()
+    mock_generate_table.assert_not_called()
+    mock_read_current_readme.assert_not_called()
+    mock_replace_table_contents.assert_not_called()
 
 
 # TODO: Add a test that formats the data, this is difficult because we need a mock git repo
@@ -53,9 +79,10 @@ def test_generate_table():
 
 # TODO: Add another test with a table in the README
 def test_retrieve_old_table_not_found():
-    old_table = ReadmeUpdater.retrieve_old_table('./')
+    old_table, old_table_found = ReadmeUpdater.retrieve_old_table('./')
 
     assert old_table == ''
+    assert old_table_found is False
 
 
 def test_read_current_readme():

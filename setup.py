@@ -5,18 +5,18 @@ with open('README.md', 'r') as fh:
 
 REQUIREMENTS = [
     'chevron == 0.14.*',
-    'pretty_tables == 2.*',
+    'pretty-tables == 2.*',
     'requests == 2.*',
     'woodchips == 0.2.*',
 ]
 
 DEV_REQUIREMENTS = [
     'black == 22.*',
-    'build == 0.7.*',
+    'build == 0.8.*',
     'coveralls == 3.*',
-    'flake8 == 4.*',
+    'flake8 == 5.*',
     'isort == 5.*',
-    'mypy == 0.942',
+    'mypy == 0.971',
     'pytest == 7.*',
     'pytest-cov == 3.*',
     'twine == 4.*',
@@ -25,7 +25,7 @@ DEV_REQUIREMENTS = [
 
 setuptools.setup(
     name='homebrew-releaser',
-    version='0.13.0',
+    version='0.13.1',
     description='Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.',
     long_description=long_description,
     long_description_content_type="text/markdown",

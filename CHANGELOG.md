@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.13.1 (2022-09-12)
+
+- Fixes a bug that would attempt to generate an updated README table even if it could not find the old table location to replace it (closes #19)
+
 ## v0.13.0 (2022-09-12)
 
 - Fixes a bug where `false` booleans in the GitHub Actions configuration would still pass through truthy. This is because GitHub Actions passes all env vars to the action as a string. We simply check for false strings and coerce them to False bools now (closes #16)
