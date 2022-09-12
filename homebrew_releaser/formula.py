@@ -42,8 +42,10 @@ class Formula:
         max_desc_field_length = 80  # `brew audit` wants no more than 80 characters in the desc field
 
         class_name = re.sub(r'[-_. ]+', '', repo_name.title())
-        license_type = repository['license']['spdx_id']
-        description = re.sub(r'[.!]+', '', repository['description'][:max_desc_field_length]).strip().capitalize()
+        license_type = repository['license'].get('spdx_id', '') if repository.get('license') else ''
+        description = (
+            re.sub(r'[.!]+', '', repository.get('description', '')[:max_desc_field_length]).strip().capitalize()
+        )
 
         # If the first word of the desc is an article, we cut it out per `brew audit`
         articles = {

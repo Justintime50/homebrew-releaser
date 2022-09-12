@@ -18,6 +18,9 @@ TEST = 'assert_match("my script output", shell_output("my-script-command"))'
 DESCRIPTION = 'Release scripts, binaries, and executables to GitHub'
 LICENSE = {'spdx_id': 'MIT'}
 
+# TODO: We should open these files back after recording in-test and assert that certain strings are present
+# instead of simply relying on visual inspection alone.
+
 
 def _record_formula(formula_path: str, formula_name: str, formula_data: str):
     """Read from existing formula file or create new formula file if it's not present.
@@ -382,7 +385,40 @@ def test_generate_formula_string_false_configs():
         ],
         install=INSTALL,
         tar_url=mock_tar_url,
-        depends_on=DEPENDS_ON,
+        depends_on=None,
+        test=None,
+    )
+
+    _record_formula(formula_path, cassette_filename, formula)
+
+
+def test_generate_formula_empty_fields():
+    """Tests that we generate the formula content correctly when there are empty fields
+    such as the `license` or the `description`.
+
+    NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
+    """
+    cassette_filename = 'test_formula_template_empty_fields.rb'
+    mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
+
+    repository = {}  # purposefully empty to test missing fields
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                },
+            }
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=None,
         test=None,
     )
 
