@@ -37,7 +37,12 @@ class ReadmeUpdater:
         try:
             for filename in sorted(files):
                 with open(os.path.join(homebrew_tap_path, filename), 'r') as formula:
-                    for i, line in enumerate(formula):
+                    # Set empty defaults
+                    final_name = ''
+                    final_desc = ''
+                    final_homepage = ''
+
+                    for _, line in enumerate(formula):
                         if line.strip().startswith('class'):
                             name_line = line.split()
                             name_pieces = []

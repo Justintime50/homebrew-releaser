@@ -4,6 +4,7 @@
 
 - Fixes a bug where `false` booleans in the GitHub Actions configuration would still pass through truthy. This is because GitHub Actions passes all env vars to the action as a string. We simply check for false strings and coerce them to False bools now (closes #16)
 - Fixes a bug that would kill the action when no `license` or `description` was set on a repo (closes #17)
+- Fixes an error where a few variables were referenced before assignment due to some nested if statements in README generation
 
 ## v0.12.0 (2022-08-12)
 
