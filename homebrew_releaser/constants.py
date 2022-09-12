@@ -4,7 +4,9 @@ import os
 FORMULA_FOLDER = os.getenv('INPUT_FORMULA_FOLDER', 'formula')
 GITHUB_TOKEN = os.getenv('INPUT_GITHUB_TOKEN')
 HOMEBREW_TAP = os.getenv('INPUT_HOMEBREW_TAP')
-SKIP_COMMIT = os.getenv('INPUT_SKIP_COMMIT')
+SKIP_COMMIT = (
+    os.getenv('INPUT_SKIP_COMMIT', False) if os.getenv('INPUT_SKIP_COMMIT') != 'false' else False
+)  # Must check for string `false` since GitHub Actions passes the bool as a string
 
 # App Constants
 LOGGER_NAME = 'homebrew-releaser'
@@ -21,7 +23,15 @@ GITHUB_OWNER = GITHUB_REPOSITORY[0]
 GITHUB_REPO = GITHUB_REPOSITORY[1]
 
 # Matrix targets to add URL/checksum targets for
-TARGET_DARWIN_AMD64 = os.getenv('INPUT_TARGET_DARWIN_AMD64')
-TARGET_DARWIN_ARM64 = os.getenv('INPUT_TARGET_DARWIN_ARM64')
-TARGET_LINUX_AMD64 = os.getenv('INPUT_TARGET_LINUX_AMD64')
-TARGET_LINUX_ARM64 = os.getenv('INPUT_TARGET_LINUX_ARM64')
+TARGET_DARWIN_AMD64 = (
+    os.getenv('INPUT_TARGET_DARWIN_AMD64', False) if os.getenv('INPUT_TARGET_DARWIN_AMD64') != 'false' else False
+)  # Must check for string `false` since GitHub Actions passes the bool as a string
+TARGET_DARWIN_ARM64 = (
+    os.getenv('INPUT_TARGET_DARWIN_ARM64', False) if os.getenv('INPUT_TARGET_DARWIN_ARM64') != 'false' else False
+)  # Must check for string `false` since GitHub Actions passes the bool as a string
+TARGET_LINUX_AMD64 = (
+    os.getenv('INPUT_TARGET_LINUX_AMD64', False) if os.getenv('INPUT_TARGET_LINUX_AMD64') != 'false' else False
+)  # Must check for string `false` since GitHub Actions passes the bool as a string
+TARGET_LINUX_ARM64 = (
+    os.getenv('INPUT_TARGET_LINUX_ARM64', False) if os.getenv('INPUT_TARGET_LINUX_ARM64') != 'false' else False
+)  # Must check for string `false` since GitHub Actions passes the bool as a string

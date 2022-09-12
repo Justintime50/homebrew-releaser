@@ -15,6 +15,8 @@ DEPENDS_ON = """
 "bash" => :build
 """
 TEST = 'assert_match("my script output", shell_output("my-script-command"))'
+DESCRIPTION = 'Release scripts, binaries, and executables to GitHub'
+LICENSE = {'spdx_id': 'MIT'}
 
 
 def _record_formula(formula_path: str, formula_name: str, formula_data: str):
@@ -55,7 +57,7 @@ def test_generate_formula():
         # - trailing whitespace
         # - extra capitilization
         'description': 'A tool to release... scripts, binaries, and executables to GitHub. ',
-        'license': {'spdx_id': 'MIT'},
+        'license': LICENSE,
     }
 
     formula = Formula.generate_formula_data(
@@ -91,8 +93,8 @@ def test_generate_formula_no_article_description():
 
     repository = {
         # Here we don't start the description off with an article
-        'description': 'Release scripts, binaries, and executables to GitHub',
-        'license': {'spdx_id': 'MIT'},
+        'description': DESCRIPTION,
+        'license': LICENSE,
     }
 
     formula = Formula.generate_formula_data(
@@ -126,8 +128,8 @@ def test_generate_formula_no_depends_on():
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
     repository = {
-        'description': 'Release scripts, binaries, and executables to GitHub',
-        'license': {'spdx_id': 'MIT'},
+        'description': DESCRIPTION,
+        'license': LICENSE,
     }
 
     formula = Formula.generate_formula_data(
@@ -161,8 +163,8 @@ def test_generate_formula_no_test():
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
     repository = {
-        'description': 'Release scripts, binaries, and executables to GitHub',
-        'license': {'spdx_id': 'MIT'},
+        'description': DESCRIPTION,
+        'license': LICENSE,
     }
 
     formula = Formula.generate_formula_data(
@@ -200,8 +202,8 @@ def test_generate_formula_complete_matrix():
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
     repository = {
-        'description': 'Release scripts, binaries, and executables to GitHub',
-        'license': {'spdx_id': 'MIT'},
+        'description': DESCRIPTION,
+        'license': LICENSE,
     }
 
     formula = Formula.generate_formula_data(
@@ -262,7 +264,7 @@ def test_generate_formula_darwin_matrix():
 
     repository = {
         'description': 'Release scripts, binaries, and executables to GitHub',
-        'license': {'spdx_id': 'MIT'},
+        'license': LICENSE,
     }
 
     formula = Formula.generate_formula_data(
@@ -311,7 +313,7 @@ def test_generate_formula_linux_matrix():
 
     repository = {
         'description': 'Release scripts, binaries, and executables to GitHub',
-        'license': {'spdx_id': 'MIT'},
+        'license': LICENSE,
     }
 
     formula = Formula.generate_formula_data(
@@ -341,6 +343,46 @@ def test_generate_formula_linux_matrix():
         install=INSTALL,
         tar_url=mock_tar_url,
         depends_on=None,
+        test=None,
+    )
+
+    _record_formula(formula_path, cassette_filename, formula)
+
+
+@patch.dict(os.environ, {'INPUT_TARGET_DARWIN_AMD64': 'false'})
+@patch.dict(os.environ, {'INPUT_TARGET_DARWIN_ARM64': 'false'})
+@patch.dict(os.environ, {'INPUT_TARGET_LINUX_AMD64': 'false'})
+@patch.dict(os.environ, {'INPUT_TARGET_LINUX_ARM64': 'false'})
+def test_generate_formula_string_false_configs():
+    """Tests that we generate the formula content correctly when the user specifies `false` on
+    boolean flags because GitHub Actions passes them in as strings...
+
+    NOTE: See docstring in `_record_formula` for more details on how recording cassettes works.
+    """
+    cassette_filename = 'test_formula_template_false_string_bools.rb'
+    mock_repo_name = cassette_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
+
+    repository = {
+        'description': DESCRIPTION,
+        'license': LICENSE,
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                },
+            }
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=DEPENDS_ON,
         test=None,
     )
 

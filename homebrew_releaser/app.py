@@ -33,8 +33,12 @@ COMMIT_OWNER = os.getenv('INPUT_COMMIT_OWNER', 'homebrew-releaser')
 COMMIT_EMAIL = os.getenv('INPUT_COMMIT_EMAIL', 'homebrew-releaser@example.com')
 DEPENDS_ON = os.getenv('INPUT_DEPENDS_ON')
 TEST = os.getenv('INPUT_TEST')
-UPDATE_README_TABLE = os.getenv('INPUT_UPDATE_README_TABLE', False)
-DEBUG = os.getenv('INPUT_DEBUG', False)
+UPDATE_README_TABLE = (
+    os.getenv('INPUT_UPDATE_README_TABLE', False) if os.getenv('INPUT_UPDATE_README_TABLE') != 'false' else False
+)  # Must check for string `false` since GitHub Actions passes the bool as a string
+DEBUG = (
+    os.getenv('INPUT_DEBUG', False) if os.getenv('INPUT_DEBUG') != 'false' else False
+)  # Must check for string `false` since GitHub Actions passes the bool as a string
 
 
 class App:
@@ -172,6 +176,7 @@ class App:
             HOMEBREW_TAP,
             INSTALL,
         ]
+
         for env_variable in required_env_variables:
             if not env_variable:
                 raise SystemExit(
