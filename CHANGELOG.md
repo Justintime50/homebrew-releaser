@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.13.2 (2022-09-13)
+
+- Fixes a bug that wouldn't generate the README table correctly even when the start and end tags were found
+- Fixes a bug where the README table could be updated even if there was no end tag, effectively replacing the remaining content after a start tag in your README
+
 ## v0.13.1 (2022-09-12)
 
 - Fixes a bug that would attempt to generate an updated README table even if it could not find the old table location to replace it (closes #19)

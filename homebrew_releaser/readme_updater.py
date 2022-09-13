@@ -18,6 +18,7 @@ class ReadmeUpdater:
         """
         old_table, found_old_table = ReadmeUpdater.retrieve_old_table(homebrew_tap)
 
+        # Only update the README table if both start/end tags were found
         if found_old_table:
             formulas = ReadmeUpdater.format_formula_data(homebrew_tap)
             new_table = ReadmeUpdater.generate_table(formulas)
@@ -45,7 +46,7 @@ class ReadmeUpdater:
                     final_desc = ''
                     final_homepage = ''
 
-                    for _, line in enumerate(formula):
+                    for line in formula:
                         if line.strip().startswith('class'):
                             name_line = line.split()
                             name_pieces = []
@@ -114,19 +115,21 @@ class ReadmeUpdater:
         if readme:
             with open(readme, 'r') as readme_contents:
                 for line in readme_contents:
-                    if table_start_found and table_end_found:
-                        old_table += line
-                        old_table_found = True
-                        break
-                    elif line.strip().lower() == '<!-- project_table_start -->':
+                    if line.strip().lower() == '<!-- project_table_start -->':
                         table_start_found = True
                     elif line.strip().lower() == '<!-- project_table_end -->':
                         table_end_found = True
 
-                # If we start copying but never find a closing tag or can't copy the old table content, warn the user
-                # NOTE: This will not fail the release workflow as this would be a bad experience for the user
-                if old_table_found is False or old_table == '':
-                    logger.error('Could not find start/end tags for project table in README.')
+                    if table_start_found and not table_end_found:
+                        old_table += line
+                    elif table_end_found:
+                        old_table_found = True
+                        break
+
+            # If we start copying but never find a closing tag or can't copy the old table content, warn the user
+            # NOTE: This will not fail the release workflow as this would be a bad experience for the user
+            if old_table_found is False or old_table == '':
+                logger.error('Could not find both start and end tags for project table in README.')
         else:
             logger.error('Could not find a valid README in this project to update.')
 
