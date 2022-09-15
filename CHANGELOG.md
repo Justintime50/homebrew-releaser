@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.13.3 (2022-09-14)
+
+- Fixes a bug that would replace the README table start/end tags when replacing the content of a table. Now the tags will remain while the table content itself will get updated
+
 ## v0.13.2 (2022-09-13)
 
 - Fixes a bug that wouldn't generate the README table correctly even when the start and end tags were found

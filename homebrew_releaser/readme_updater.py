@@ -9,6 +9,9 @@ import woodchips
 from homebrew_releaser.constants import FORMULA_FOLDER, LOGGER_NAME
 from homebrew_releaser.git import Git
 
+TABLE_START_TAG = '<!-- project_table_start -->'
+TABLE_END_TAG = '<!-- project_table_end -->'
+
 
 class ReadmeUpdater:
     @staticmethod
@@ -115,12 +118,15 @@ class ReadmeUpdater:
         if readme:
             with open(readme, 'r') as readme_contents:
                 for line in readme_contents:
-                    if line.strip().lower() == '<!-- project_table_start -->':
+                    line_content = line.strip().lower()
+                    if line_content == TABLE_START_TAG:
                         table_start_found = True
-                    elif line.strip().lower() == '<!-- project_table_end -->':
+                    elif line_content == TABLE_END_TAG:
                         table_end_found = True
 
-                    if table_start_found and not table_end_found:
+                    if (table_start_found and not table_end_found) and (
+                        line_content != TABLE_START_TAG and line_content != TABLE_END_TAG
+                    ):
                         old_table += line
                     elif table_end_found:
                         old_table_found = True
