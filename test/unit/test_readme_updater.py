@@ -109,9 +109,11 @@ def test_generate_table():
 
     # fmt: off
     assert table == (
+        '<!-- project_table_start -->\n'
         '| Project                                                      | Description      | Install                     |\n' # noqa
         '| ------------------------------------------------------------ | ---------------- | --------------------------- |\n' # noqa
-        '| [mock-formula](https://github.com/justintime50/mock-formula) | mock description | `brew install mock-formula` |' # noqa
+        '| [mock-formula](https://github.com/justintime50/mock-formula) | mock description | `brew install mock-formula` |\n' # noqa
+        '<!-- project_table_end -->'
     )
     # fmt: on
 
@@ -124,25 +126,23 @@ def test_retrieve_old_table_not_found():
     assert old_table_found is False
 
 
-def test_retrieve_old_table():
-    """Tests that we retrieve only the old table data when start and end tags exist."""
-    table_content = """<!-- project_table_start -->
+@pytest.mark.parametrize(
+    'table_content',
+    [
+        """<!-- project_table_start -->
 here is some mock data...
-<!-- project_table_end -->"""
-    with patch('builtins.open', mock_open(read_data=table_content)):
-        old_table, old_table_found = ReadmeUpdater.retrieve_old_table('./')
+<!-- project_table_end -->""",
+        """<!-- project_table_start -->
+<!-- project_table_end -->""",
+        """<!-- project_table_start -->
 
-    assert old_table == table_content
-    assert old_table_found is True
+<!-- project_table_end -->""",
+    ],
+)
+def test_retrieve_old_table(table_content):
+    """Tests that we retrieve only the old table data when start and end tags exist.
 
-
-def test_retrieve_old_table_empty_tags():
-    """Tests that we retrieve the table tags even when there is no table content.
-
-    NOTE: For this to work for a user, there must at least be a line break since we
-    check for starting/ending tags per line and they must be isolated on their own."""
-    table_content = """<!-- project_table_start -->
-<!-- project_table_end -->"""
+    We ensure that regardless of table content (null, filled, or newline) that this works."""
     with patch('builtins.open', mock_open(read_data=table_content)):
         old_table, old_table_found = ReadmeUpdater.retrieve_old_table('./')
 

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.14.1 (2022-09-18)
+
+- Fixes an ommission of start/end tags on the replacement README table
+
 ## v0.14.0 (2022-09-18)
 
 - Fixes a bug that wouldn't update a README table if there was no content between the start and end tags

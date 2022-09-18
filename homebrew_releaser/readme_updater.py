@@ -110,9 +110,11 @@ class ReadmeUpdater:
             empty_cell_placeholder='NA',
         )
 
-        logger.debug(table)
+        final_table = TABLE_START_TAG + '\n' + table + '\n' + TABLE_END_TAG
 
-        return table
+        logger.debug(final_table)
+
+        return final_table
 
     @staticmethod
     def retrieve_old_table(homebrew_tap: str) -> Tuple[str, bool]:
