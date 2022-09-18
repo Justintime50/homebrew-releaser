@@ -48,8 +48,8 @@ class ReadmeUpdater:
         formulas = []
         files = os.listdir(homebrew_tap_path)
 
-        if len(files) == 0:
-            raise SystemExit('No files found in the "formula_folder" provided.')
+        if not any([file.endswith('.rb') for file in files]):
+            raise SystemExit('No Ruby files found in the "formula_folder" provided.')
 
         try:
             for filename in sorted(files):
@@ -119,7 +119,7 @@ class ReadmeUpdater:
         """Retrives all content between the start/end tags in the README file."""
         logger = woodchips.get(LOGGER_NAME)
 
-        readme = ReadmeUpdater.determine_readme(homebrew_tap)
+        readme = ReadmeUpdater.does_readme_exist(homebrew_tap)
         old_table_found = False
         table_start_found = False
         table_end_found = False
@@ -128,23 +128,23 @@ class ReadmeUpdater:
         if readme:
             with open(readme, 'r') as readme_contents:
                 for line in readme_contents:
-                    line_content = line.strip().lower()
-                    if line_content == TABLE_START_TAG:
+                    normalized_line = line.strip().lower()
+                    if normalized_line == TABLE_START_TAG:
                         table_start_found = True
-                    elif line_content == TABLE_END_TAG:
+                    elif normalized_line == TABLE_END_TAG:
                         table_end_found = True
 
-                    if (table_start_found and not table_end_found) and (
-                        line_content != TABLE_START_TAG and line_content != TABLE_END_TAG
-                    ):
+                    # Once we find the start tag, start building the potential replacement
+                    if table_start_found:
                         old_table += line
-                    elif table_end_found:
+                    # Once we find both start and end tags, break out of reading more README lines
+                    if table_start_found and table_end_found:
                         old_table_found = True
                         break
 
-            # If we start copying but never find a closing tag or can't copy the old table content, warn the user
-            # NOTE: This will not fail the release workflow as this would be a bad experience for the user
-            if old_table_found is False or old_table == '':
+            if old_table_found is False:
+                # If we can't find both start/end tags, reset the table so we don't blow away unassociated README data
+                old_table = ''
                 logger.error('Could not find both start and end tags for project table in README.')
         else:
             logger.error('Could not find a valid README in this project to update.')
@@ -156,7 +156,7 @@ class ReadmeUpdater:
         """Reads the current README content."""
         logger = woodchips.get(LOGGER_NAME)
 
-        readme = ReadmeUpdater.determine_readme(homebrew_tap)
+        readme = ReadmeUpdater.does_readme_exist(homebrew_tap)
         file_content = None
 
         if readme:
@@ -169,34 +169,33 @@ class ReadmeUpdater:
     @staticmethod
     def replace_table_contents(file_content: _io.TextIOWrapper, old_table: str, new_table: str, homebrew_tap: str):
         """Replaces the old README project table string with the new
-        project table string.
+        project table string including start/end tags.
         """
         logger = woodchips.get(LOGGER_NAME)
 
-        readme = ReadmeUpdater.determine_readme(homebrew_tap)
+        readme = ReadmeUpdater.does_readme_exist(homebrew_tap)
 
         if readme:
             with open(readme, 'w') as readme_contents:
-                readme_contents.write(file_content.replace(old_table, new_table + '\n'))
+                readme_contents.write(file_content.replace(old_table, new_table))
             logger.debug(f'{readme} table updated successfully.')
 
             Git.add(homebrew_tap)
 
     @staticmethod
-    def determine_readme(homebrew_tap: str) -> Optional[str]:
+    def does_readme_exist(homebrew_tap: str) -> Optional[str]:
         """Determines the README file to open. The README file must either be:
 
-        1. Completely uppercase or completely lowercase
-        2. Have the file extension of `.md`
-        3. Reside in the root of a project
+        1. Have the file extension of `.md`
+        2. Reside in the root of a project
         """
         readme_to_open = None
-        uppercase_readme = os.path.join(homebrew_tap, 'README.md')
-        lowercase_readme = os.path.join(homebrew_tap, 'readme.md')
+        readme_filename = 'readme.md'
+        files = os.listdir(homebrew_tap)
 
-        if os.path.isfile(uppercase_readme):
-            readme_to_open = uppercase_readme
-        elif os.path.isfile(lowercase_readme):
-            readme_to_open = lowercase_readme
+        for filename in files:
+            if filename.lower() == readme_filename:
+                readme_to_open = os.path.join(homebrew_tap, filename)
+                break
 
         return readme_to_open

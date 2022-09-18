@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v0.14.0 (2022-09-18)
+
+- Fixes a bug that wouldn't update a README table if there was no content between the start and end tags
+- README filename determination is much more robust allowing for alternative filename casing
+- Added error handling for formula directories that do not contain any Ruby files
+- Comprehensive, 100% test coverage for the `update_readme` module
+- Added `bandit` for security scanning and added new `isort` config
+
 ## v0.13.3 (2022-09-14)
 
 - Fixes a bug that would replace the README table start/end tags when replacing the content of a table. Now the tags will remain while the table content itself will get updated

@@ -57,13 +57,47 @@ def test_update_readme_cannot_find_old_table(
     mock_replace_table_contents.assert_not_called()
 
 
-# TODO: Add a test that formats the data, this is difficult because we need a mock git repo
-def test_format_formula_data_not_found():
-    with pytest.raises(FileNotFoundError):
+@patch('homebrew_releaser.readme_updater.FORMULA_FOLDER', 'test')
+def test_format_formula_data_no_ruby_files():
+    """Tests that we throw an error when the formula folder provided does not contain any
+    Ruby files (formula files).
+    """
+    with pytest.raises(SystemExit) as error:
         ReadmeUpdater.format_formula_data('./')
+
+    assert str(error.value) == 'No Ruby files found in the "formula_folder" provided.'
+
+
+@patch('homebrew_releaser.readme_updater.FORMULA_FOLDER', 'formulas')
+def test_format_formula_data():
+    """Tests that we build a list of formula metadata correctly based on what we found in the repo.
+
+    Here, we reuse our 'recorded' formulas from the test suite as the dummy formulas that may have
+    been found in a user's git repo.
+    """
+    formulas = ReadmeUpdater.format_formula_data('./test')
+
+    assert len(formulas) == 9
+    assert formulas[0] == {
+        'name': 'test-formula-template',
+        'desc': 'Tool to release scripts, binaries, and executables to github',
+        'homepage': 'https://github.com/Justintime50/test-formula-template',
+    }
+
+
+@patch('homebrew_releaser.readme_updater.FORMULA_FOLDER', 'formulas')
+def test_format_formula_data_error_reading_formula():
+    """Tests that we throw an error when we cannot properly read formula data."""
+    with patch('builtins.open', mock_open()) as mock_opening:
+        mock_opening.side_effect = OSError
+        with pytest.raises(SystemExit) as error:
+            ReadmeUpdater.format_formula_data('./test')
+
+    assert str(error.value) == 'There was a problem opening or reading the formula data: '
 
 
 def test_generate_table():
+    """Tests that we can properly generate the README table content"""
     formulas = [
         {
             'name': 'mock-formula',
@@ -82,21 +116,59 @@ def test_generate_table():
     # fmt: on
 
 
-# TODO: Add another test with a table in the README
 def test_retrieve_old_table_not_found():
+    """Tests that we set the `table_found` variable to False when we can't find opening/closing README tags."""
     old_table, old_table_found = ReadmeUpdater.retrieve_old_table('./')
 
     assert old_table == ''
     assert old_table_found is False
 
 
-def test_read_current_readme():
-    readme = ReadmeUpdater.read_current_readme('./mock-bad-dir')
+def test_retrieve_old_table():
+    """Tests that we retrieve only the old table data when start and end tags exist."""
+    table_content = """<!-- project_table_start -->
+here is some mock data...
+<!-- project_table_end -->"""
+    with patch('builtins.open', mock_open(read_data=table_content)):
+        old_table, old_table_found = ReadmeUpdater.retrieve_old_table('./')
+
+    assert old_table == table_content
+    assert old_table_found is True
+
+
+def test_retrieve_old_table_empty_tags():
+    """Tests that we retrieve the table tags even when there is no table content.
+
+    NOTE: For this to work for a user, there must at least be a line break since we
+    check for starting/ending tags per line and they must be isolated on their own."""
+    table_content = """<!-- project_table_start -->
+<!-- project_table_end -->"""
+    with patch('builtins.open', mock_open(read_data=table_content)):
+        old_table, old_table_found = ReadmeUpdater.retrieve_old_table('./')
+
+    assert old_table == table_content
+    assert old_table_found is True
+
+
+@patch('logging.Logger.error')
+def test_retrieve_old_table_no_readme(mock_logger):
+    """Tests that we retrieve only the old table data when start and end tags exist."""
+    old_table, old_table_found = ReadmeUpdater.retrieve_old_table('./test')
+
+    mock_logger.assert_called_once_with('Could not find a valid README in this project to update.')
+    assert old_table == ''
+    assert old_table_found is False
+
+
+def test_read_current_readme_does_not_exist():
+    """Tests that the file contents of a README that doesn't exist is empty."""
+    readme = ReadmeUpdater.read_current_readme('./test')
 
     assert readme is None
 
 
-def test_read_current_readme_does_not_exist():
+def test_read_current_readme():
+    """Tests that the content of a README found is returned."""
     readme = ReadmeUpdater.read_current_readme('./')
 
     assert '# Homebrew Releaser' in readme
@@ -104,13 +176,33 @@ def test_read_current_readme_does_not_exist():
 
 @patch('homebrew_releaser.git.Git.add')
 def test_replace_table_contents(mock_git_add):
+    """Test that we add the new README changes to git."""
     with patch('builtins.open', mock_open()):
-        ReadmeUpdater.replace_table_contents('mock file contents', 'old table contents', 'new table contents', './')
+        ReadmeUpdater.replace_table_contents(
+            file_content='mock file contents',
+            old_table='old table contents',
+            new_table='new table contents',
+            homebrew_tap='./',
+        )
 
     mock_git_add.assert_called_once()
 
 
-def test_determine_readme():
-    readme = ReadmeUpdater.determine_readme('./')
+@patch('homebrew_releaser.git.Git.add')
+def test_replace_table_contents_no_readme(mock_git_add):
+    """Tests that we do not `git add` for a README that doesn't exist."""
+    ReadmeUpdater.replace_table_contents(
+        file_content='mock file contents',
+        old_table='old table contents',
+        new_table='new table contents',
+        homebrew_tap='./test',
+    )
+
+    mock_git_add.assert_not_called()
+
+
+def test_does_readme_exist():
+    """Tests that we can find a README in a directory."""
+    readme = ReadmeUpdater.does_readme_exist('./')
 
     assert readme == './README.md'
