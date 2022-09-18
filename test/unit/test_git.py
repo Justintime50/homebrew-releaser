@@ -1,10 +1,16 @@
 import subprocess
-from unittest.mock import patch
+from unittest.mock import (
+    patch,
+)
 
 import pytest
 
-from homebrew_releaser.constants import SUBPROCESS_TIMEOUT
-from homebrew_releaser.git import Git
+from homebrew_releaser.constants import (
+    SUBPROCESS_TIMEOUT,
+)
+from homebrew_releaser.git import (
+    Git,
+)
 
 
 @patch('homebrew_releaser.git.GITHUB_TOKEN', '123')

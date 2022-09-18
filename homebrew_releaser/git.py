@@ -1,8 +1,12 @@
-import subprocess
+import subprocess  # nosec
 
 import woodchips
 
-from homebrew_releaser.constants import GITHUB_TOKEN, LOGGER_NAME, SUBPROCESS_TIMEOUT
+from homebrew_releaser.constants import (
+    GITHUB_TOKEN,
+    LOGGER_NAME,
+    SUBPROCESS_TIMEOUT,
+)
 
 
 class Git:
@@ -25,7 +29,7 @@ class Git:
             ]
 
             for command in commands:
-                subprocess.check_output(
+                subprocess.check_output(  # nosec
                     command,
                     stdin=None,
                     stderr=None,
@@ -44,7 +48,7 @@ class Git:
 
         try:
             command = ['git', '-C', homebrew_tap, 'add', '.']
-            subprocess.check_output(
+            subprocess.check_output(  # nosec
                 command,
                 stdin=None,
                 stderr=None,
@@ -65,7 +69,7 @@ class Git:
             # fmt: off
             command = ['git', '-C', homebrew_tap, 'commit', '-m', f'"Brew formula update for {repo_name} version {version}"']  # noqa
             # fmt: on
-            subprocess.check_output(
+            subprocess.check_output(  # nosec
                 command,
                 stdin=None,
                 stderr=None,
@@ -86,7 +90,7 @@ class Git:
             # fmt: off
             command = ['git', '-C', homebrew_tap, 'push', f'https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git']  # noqa
             # fmt: on
-            subprocess.check_output(
+            subprocess.check_output(  # nosec
                 command,
                 stdin=None,
                 stderr=None,

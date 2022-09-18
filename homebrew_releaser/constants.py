@@ -1,5 +1,6 @@
 import os
 
+
 # User Input
 FORMULA_FOLDER = os.getenv('INPUT_FORMULA_FOLDER', 'formula')
 GITHUB_TOKEN = os.getenv('INPUT_GITHUB_TOKEN')

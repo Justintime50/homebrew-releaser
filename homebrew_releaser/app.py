@@ -2,7 +2,9 @@ import os
 
 import woodchips
 
-from homebrew_releaser.checksum import Checksum
+from homebrew_releaser.checksum import (
+    Checksum,
+)
 from homebrew_releaser.constants import (
     CHECKSUM_FILE,
     FORMULA_FOLDER,
@@ -17,10 +19,19 @@ from homebrew_releaser.constants import (
     TARGET_LINUX_AMD64,
     TARGET_LINUX_ARM64,
 )
-from homebrew_releaser.formula import Formula
-from homebrew_releaser.git import Git
-from homebrew_releaser.readme_updater import ReadmeUpdater
-from homebrew_releaser.utils import Utils
+from homebrew_releaser.formula import (
+    Formula,
+)
+from homebrew_releaser.git import (
+    Git,
+)
+from homebrew_releaser.readme_updater import (
+    ReadmeUpdater,
+)
+from homebrew_releaser.utils import (
+    Utils,
+)
+
 
 GITHUB_BASE_URL = 'https://api.github.com'
 

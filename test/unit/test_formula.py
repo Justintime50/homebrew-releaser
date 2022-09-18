@@ -1,7 +1,12 @@
 import os
-from unittest.mock import patch
+from unittest.mock import (
+    patch,
+)
 
-from homebrew_releaser.formula import Formula
+from homebrew_releaser.formula import (
+    Formula,
+)
+
 
 formula_path = 'test/formulas'
 

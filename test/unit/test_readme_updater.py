@@ -1,8 +1,13 @@
-from unittest.mock import mock_open, patch
+from unittest.mock import (
+    mock_open,
+    patch,
+)
 
 import pytest
 
-from homebrew_releaser.readme_updater import ReadmeUpdater
+from homebrew_releaser.readme_updater import (
+    ReadmeUpdater,
+)
 
 
 @patch('homebrew_releaser.readme_updater.ReadmeUpdater.format_formula_data')

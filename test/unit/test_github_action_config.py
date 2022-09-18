@@ -1,7 +1,11 @@
 import os
-from unittest.mock import patch
+from unittest.mock import (
+    patch,
+)
 
-from homebrew_releaser.app import App
+from homebrew_releaser.app import (
+    App,
+)
 
 
 @patch.dict(os.environ, {'INPUT_SKIP_COMMIT': 'false'})

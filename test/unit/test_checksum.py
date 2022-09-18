@@ -1,11 +1,18 @@
 import subprocess
-from unittest.mock import mock_open, patch
+from unittest.mock import (
+    mock_open,
+    patch,
+)
 
 import pytest
 import requests
 
-from homebrew_releaser.checksum import Checksum
-from homebrew_releaser.constants import SUBPROCESS_TIMEOUT
+from homebrew_releaser.checksum import (
+    Checksum,
+)
+from homebrew_releaser.constants import (
+    SUBPROCESS_TIMEOUT,
+)
 
 
 @patch('subprocess.check_output')

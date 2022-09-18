@@ -1,9 +1,14 @@
-from typing import Optional
+from typing import (
+    Optional,
+)
 
 import requests
 import woodchips
 
-from homebrew_releaser.constants import GITHUB_HEADERS, LOGGER_NAME
+from homebrew_releaser.constants import (
+    GITHUB_HEADERS,
+    LOGGER_NAME,
+)
 
 
 class Utils:

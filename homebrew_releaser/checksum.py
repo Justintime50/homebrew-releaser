@@ -1,4 +1,4 @@
-import subprocess
+import subprocess  # nosec
 
 import requests
 import woodchips
@@ -11,7 +11,9 @@ from homebrew_releaser.constants import (
     LOGGER_NAME,
     SUBPROCESS_TIMEOUT,
 )
-from homebrew_releaser.utils import Utils
+from homebrew_releaser.utils import (
+    Utils,
+)
 
 
 class Checksum:
@@ -22,7 +24,7 @@ class Checksum:
 
         try:
             command = ['shasum', '-a', '256', tar_filepath]
-            output = subprocess.check_output(
+            output = subprocess.check_output(  # nosec
                 command,
                 stdin=None,
                 stderr=None,

@@ -1,13 +1,23 @@
 import os
 import re
-from typing import List, Optional, Tuple
+from typing import (
+    List,
+    Optional,
+    Tuple,
+)
 
 import _io  # type: ignore
 import pretty_tables
 import woodchips
 
-from homebrew_releaser.constants import FORMULA_FOLDER, LOGGER_NAME
-from homebrew_releaser.git import Git
+from homebrew_releaser.constants import (
+    FORMULA_FOLDER,
+    LOGGER_NAME,
+)
+from homebrew_releaser.git import (
+    Git,
+)
+
 
 TABLE_START_TAG = '<!-- project_table_start -->'
 TABLE_END_TAG = '<!-- project_table_end -->'
