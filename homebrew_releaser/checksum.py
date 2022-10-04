@@ -11,9 +11,7 @@ from homebrew_releaser.constants import (
     LOGGER_NAME,
     SUBPROCESS_TIMEOUT,
 )
-from homebrew_releaser.utils import (
-    Utils,
-)
+from homebrew_releaser.utils import Utils
 
 
 class Checksum:

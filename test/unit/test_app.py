@@ -1,12 +1,8 @@
-from unittest.mock import (
-    patch,
-)
+from unittest.mock import patch
 
 import pytest
 
-from homebrew_releaser.app import (
-    App,
-)
+from homebrew_releaser.app import App
 
 
 @patch('homebrew_releaser.app.SKIP_COMMIT', True)

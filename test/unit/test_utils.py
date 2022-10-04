@@ -6,12 +6,8 @@ from unittest.mock import (
 import pytest
 import requests
 
-from homebrew_releaser.constants import (
-    GITHUB_HEADERS,
-)
-from homebrew_releaser.utils import (
-    Utils,
-)
+from homebrew_releaser.constants import GITHUB_HEADERS
+from homebrew_releaser.utils import Utils
 
 
 @patch('requests.get')

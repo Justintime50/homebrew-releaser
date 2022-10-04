@@ -14,9 +14,7 @@ from homebrew_releaser.constants import (
     FORMULA_FOLDER,
     LOGGER_NAME,
 )
-from homebrew_releaser.git import (
-    Git,
-)
+from homebrew_releaser.git import Git
 
 
 TABLE_START_TAG = '<!-- project_table_start -->'
