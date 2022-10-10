@@ -88,19 +88,31 @@ class App:
         archive_urls.append(auto_generated_release_zip)
 
         if TARGET_DARWIN_AMD64:
-            archive_urls.append(
-                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-amd64.tar.gz'  # noqa
-            )
+            if type(TARGET_DARWIN_AMD64) == str:
+               archive_urls.append(TARGET_DARWIN_AMD64)
+            else: 
+                archive_urls.append(
+                    f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-amd64.tar.gz'  # noqa
+                )
         if TARGET_DARWIN_ARM64:
-            archive_urls.append(
-                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-arm64.tar.gz'  # noqa
-            )
+            if type(TARGET_DARWIN_ARM64) == str:
+               archive_urls.append(TARGET_DARWIN_ARM64)
+            else: 
+                archive_urls.append(
+                    f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-arm64.tar.gz'  # noqa
+                )
         if TARGET_LINUX_AMD64:
-            archive_urls.append(
-                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-amd64.tar.gz'  # noqa
-            )
+            if type(TARGET_LINUX_AMD64) == str:
+               archive_urls.append(TARGET_LINUX_AMD64)
+            else: 
+                archive_urls.append(
+                    f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-amd64.tar.gz'  # noqa
+                )
         if TARGET_LINUX_ARM64:
-            archive_urls.append(
+            if type(TARGET_LINUX_ARM64) == str:
+               archive_urls.append(TARGET_LINUX_ARM64)
+            else:
+                archive_urls.append(
                 f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-arm64.tar.gz'  # noqa
             )
 
