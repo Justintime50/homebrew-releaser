@@ -73,6 +73,7 @@ def test_generate_formula():
                 f'{mock_repo_name}.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                    'type': 'auto_tar',
                 },
             }
         ],
@@ -110,6 +111,7 @@ def test_generate_formula_no_article_description():
                 f'{mock_repo_name}.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                    'type': 'auto_tar',
                 },
             }
         ],
@@ -145,6 +147,7 @@ def test_generate_formula_no_depends_on():
                 f'{mock_repo_name}.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                    'type': 'auto_tar',
                 },
             }
         ],
@@ -180,6 +183,7 @@ def test_generate_formula_no_test():
                 f'{mock_repo_name}.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                    'type': 'auto_tar',
                 },
             }
         ],
@@ -219,30 +223,35 @@ def test_generate_formula_complete_matrix():
                 'test-formula-template-complete-matrix.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-template-complete-matrix',  # noqa
+                    'type': 'auto_tar',
                 },
             },
             {
                 'test-formula-0.1.0-darwin-amd64.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz',  # noqa
+                    'type': 'darwin_amd64',
                 },
             },
             {
                 'test-formula-0.1.0-darwin-arm64.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz',  # noqa
+                    'type': 'darwin_arm64',
                 },
             },
             {
                 'test-formula-0.1.0-linux-amd64.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz',  # noqa
+                    'type': 'linux_amd64',
                 },
             },
             {
                 'test-formula-0.1.0-linux-arm64.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-arm64.tar.gz',  # noqa
+                    'type': 'linux_arm64',
                 },
             },
         ],
@@ -279,19 +288,22 @@ def test_generate_formula_darwin_matrix():
             {
                 'test-formula-template-darwin-matrix.tar.gz': {
                     'checksum': CHECKSUM,
-                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-template-darwin-matrix.tar.gz',  # noqa
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-template-complete-matrix.tar.gz',  # noqa
+                    'type': 'auto_tar',
                 },
             },
             {
                 'test-formula-0.1.0-darwin-amd64.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz',  # noqa
+                    'type': 'darwin_amd64',
                 },
             },
             {
                 'test-formula-0.1.0-darwin-arm64.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz',  # noqa
+                    'type': 'darwin_arm64',
                 },
             },
         ],
@@ -329,18 +341,21 @@ def test_generate_formula_linux_matrix():
                 'test-formula-template-linux-matrix.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-template-linux-matrix.tar.gz',  # noqa
+                    'type': 'auto_tar',
                 },
             },
             {
                 'test-formula-0.1.0-linux-amd64.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz',  # noqa
+                    'type': 'linux_amd64',
                 },
             },
             {
                 'test-formula-0.1.0-linux-arm64.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-arm64.tar.gz',  # noqa
+                    'type': 'linux_arm64',
                 },
             },
         ],
@@ -381,6 +396,7 @@ def test_generate_formula_string_false_configs():
                 f'{mock_repo_name}.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                    'type': 'auto_tar',
                 },
             }
         ],
@@ -414,6 +430,7 @@ def test_generate_formula_empty_fields():
                 f'{mock_repo_name}.tar.gz': {
                     'checksum': CHECKSUM,
                     'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                    'type': 'auto_tar',
                 },
             }
         ],
