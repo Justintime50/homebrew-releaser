@@ -78,46 +78,46 @@ class App:
         logger.info(f'Latest release ({version}) successfully identified!')
 
         logger.info('Generating tar archive checksum(s)...')
-        archive_urls = []
+        archive_urls = {}
 
         # Auto-generated tar URL must come first for later use
         auto_generated_release_tar = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'
-        archive_urls.append(auto_generated_release_tar)
+        archive_urls.update({"auto_tar": auto_generated_release_tar})
 
         auto_generated_release_zip = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.zip'
-        archive_urls.append(auto_generated_release_zip)
+        archive_urls.update({"auto_zip": auto_generated_release_zip})
 
         if TARGET_DARWIN_AMD64:
             if type(TARGET_DARWIN_AMD64) == str:
-               archive_urls.append(TARGET_DARWIN_AMD64)
+               archive_urls.update({"darwin_amd64": TARGET_DARWIN_AMD64})
             else: 
-                archive_urls.append(
-                    f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-amd64.tar.gz'  # noqa
+                archive_urls.update(
+                    {"darwin_amd64": f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-amd64.tar.gz'} # noqa
                 )
         if TARGET_DARWIN_ARM64:
             if type(TARGET_DARWIN_ARM64) == str:
-               archive_urls.append(TARGET_DARWIN_ARM64)
+               archive_urls.update({"darwin_arm64": TARGET_DARWIN_ARM64})
             else: 
-                archive_urls.append(
-                    f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-arm64.tar.gz'  # noqa
+                archive_urls.update(
+                    {"darwin_arm64": f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-arm64.tar.gz'}  # noqa
                 )
         if TARGET_LINUX_AMD64:
             if type(TARGET_LINUX_AMD64) == str:
-               archive_urls.append(TARGET_LINUX_AMD64)
+               archive_urls.update({"linux_amd64": TARGET_LINUX_AMD64})
             else: 
-                archive_urls.append(
-                    f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-amd64.tar.gz'  # noqa
+                archive_urls.update(
+                    {"linux_amd64": f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-amd64.tar.gz'}  # noqa
                 )
         if TARGET_LINUX_ARM64:
             if type(TARGET_LINUX_ARM64) == str:
-               archive_urls.append(TARGET_LINUX_ARM64)
+               archive_urls.update({"linux_arm64": TARGET_LINUX_ARM64})
             else:
-                archive_urls.append(
-                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-arm64.tar.gz'  # noqa
+                archive_urls.update(
+                    {"linux_arm64": f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-arm64.tar.gz'}  # noqa
             )
 
         checksums = []
-        for archive_url in archive_urls:
+        for archive_type, archive_url in archive_urls.items():
             tar_filename = App.download_tar_archive(archive_url)
             checksum = Checksum.get_checksum(tar_filename)
             archive_checksum_entry = f'{checksum} {tar_filename}'
@@ -126,6 +126,7 @@ class App:
                     tar_filename: {
                         'checksum': checksum,
                         'url': archive_url,
+                        'type': archive_type,
                     }
                 },
             )
