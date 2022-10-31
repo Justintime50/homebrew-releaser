@@ -93,8 +93,8 @@ class App:
             else:
                 archive_urls.update(
                     {
-                        "darwin_amd64": f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-amd64.tar.gz'
-                    }  # noqa
+                        "darwin_amd64": f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-amd64.tar.gz'  # noqa
+                    }
                 )
         if TARGET_DARWIN_ARM64:
             if type(TARGET_DARWIN_ARM64) == str:
@@ -102,8 +102,8 @@ class App:
             else:
                 archive_urls.update(
                     {
-                        "darwin_arm64": f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-arm64.tar.gz'
-                    }  # noqa
+                        "darwin_arm64": f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-arm64.tar.gz'  # noqa
+                    }
                 )
         if TARGET_LINUX_AMD64:
             if type(TARGET_LINUX_AMD64) == str:
@@ -111,8 +111,8 @@ class App:
             else:
                 archive_urls.update(
                     {
-                        "linux_amd64": f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-amd64.tar.gz'
-                    }  # noqa
+                        "linux_amd64": f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-amd64.tar.gz'  # noqa
+                    }
                 )
         if TARGET_LINUX_ARM64:
             if type(TARGET_LINUX_ARM64) == str:
@@ -120,8 +120,8 @@ class App:
             else:
                 archive_urls.update(
                     {
-                        "linux_arm64": f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-arm64.tar.gz'
-                    }  # noqa
+                        "linux_arm64": f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-arm64.tar.gz'  # noqa
+                    }
                 )
 
         checksums = []
