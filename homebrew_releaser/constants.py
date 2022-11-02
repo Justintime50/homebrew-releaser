@@ -7,7 +7,7 @@ def translate_target(target):
     return bool
 
   # Must check for string `false`/`true` since GitHub Actions passes the bool as a string
-  if target.lower() not in set('true', 'false'):
+  if target.lower() not in set(('true', 'false')):
     return target
   else:
     return target.lower() == 'true'
