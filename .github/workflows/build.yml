@@ -23,7 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: "3.10"
+          python-version: "3.11"
       - name: Install Dependencies
         run: make install
       - name: Check format
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        pythonversion: ["3.10"]
+        pythonversion: ["3.11"]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -55,9 +55,10 @@ jobs:
         run: make coverage
       - name: Coveralls
         if: github.ref == 'refs/heads/main'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: venv/bin/coveralls --service=github
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: "./coverage.lcov"
   brew-audit:
     runs-on: ubuntu-latest
     steps:
