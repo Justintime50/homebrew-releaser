@@ -111,7 +111,7 @@ def test_generate_table():
         '| Project                                                      | Description      | Install                     |\n' # noqa
         '| ------------------------------------------------------------ | ---------------- | --------------------------- |\n' # noqa
         '| [mock-formula](https://github.com/justintime50/mock-formula) | mock description | `brew install mock-formula` |\n' # noqa
-        '<!-- project_table_end -->'
+        '<!-- project_table_end -->\n'
     )
     # fmt: on
 

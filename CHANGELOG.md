@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.14.2 (2022-11-28)
+
+- Adds a missing newline after replacing the README table if elected
+
 ## v0.14.1 (2022-09-18)
 
 - Fixes an ommission of start/end tags on the replacement README table

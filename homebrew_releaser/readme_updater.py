@@ -108,7 +108,7 @@ class ReadmeUpdater:
             empty_cell_placeholder='NA',
         )
 
-        final_table = TABLE_START_TAG + '\n' + table + '\n' + TABLE_END_TAG
+        final_table = TABLE_START_TAG + '\n' + table + '\n' + TABLE_END_TAG + '\n'
 
         logger.debug(final_table)
 
