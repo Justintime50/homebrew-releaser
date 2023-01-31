@@ -490,7 +490,8 @@ def test_generate_formula_string_false_configs():
 
 def test_generate_formula_empty_fields():
     """Tests that we generate the formula content correctly when there are empty fields
-    such as the `license` or the `description` - they should not be included.
+    such as the `license` or the `description` - license should not be included, desc should
+    be a placeholder.
 
     NOTE: See docstring in `record_formula` for more details on how recording formulas works.
     """
@@ -520,5 +521,5 @@ def test_generate_formula_empty_fields():
 
     record_formula(formula_path, formula_filename, formula)
 
-    assert 'desc' not in formula
+    assert 'desc "NA"' in formula
     assert 'license' not in formula
