@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.14.3 (2023-01-31)
+
+- Bumps image from Python 3.10 to 3.11
+- Strips formula name from description on generated formula to be compliant with `brew audit`
+- Bumps test dependencies
+
 ## v0.14.2 (2022-11-28)
 
 - Adds a missing newline after replacing the README table if elected

@@ -14,10 +14,10 @@ REQUIREMENTS = [
 DEV_REQUIREMENTS = [
     'bandit == 1.7.*',
     'black == 22.*',
-    'build == 0.8.*',
-    'flake8 == 5.*',
+    'build == 0.10.*',
+    'flake8 == 6.*',
     'isort == 5.*',
-    'mypy == 0.971',
+    'mypy == 0.991',
     'pytest == 7.*',
     'pytest-cov == 4.*',
     'twine == 4.*',
@@ -26,7 +26,7 @@ DEV_REQUIREMENTS = [
 
 setuptools.setup(
     name='homebrew-releaser',
-    version='0.14.2',
+    version='0.14.3',
     description='Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.',
     long_description=long_description,
     long_description_content_type="text/markdown",

@@ -1,3 +1,4 @@
+import inspect
 import os
 from unittest.mock import patch
 
@@ -48,7 +49,7 @@ def test_generate_formula():
 
     NOTE: See docstring in `record_formula` for more details on how recording formulas works.
     """
-    formula_filename = 'test_formula_template.rb'
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
@@ -92,8 +93,8 @@ def test_generate_formula():
     )
     assert (
         '''desc "Tool to release scripts, binaries, and executables to github"
-  homepage "https://github.com/Justintime50/test-formula-template"
-  url "https://github.com/Justintime50/test-formula-template/archive/v0.1.0.tar.gz"
+  homepage "https://github.com/Justintime50/test-generate-formula"
+  url "https://github.com/Justintime50/test-generate-formula/archive/v0.1.0.tar.gz"
   sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   license "MIT"'''
         in formula
@@ -120,7 +121,7 @@ def test_generate_formula_no_article_description():
 
     NOTE: See docstring in `record_formula` for more details on how recording formulas works.
     """
-    formula_filename = 'test_formula_template_no_article_description.rb'
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
@@ -153,12 +154,51 @@ def test_generate_formula_no_article_description():
     assert 'desc "Release scripts, binaries, and executables to github"' in formula
 
 
+def test_generate_formula_formula_name_starts_description():
+    """Tests that we generate the formula content correctly (when the name of the formula
+    starts the description field) - it should get stripped out per `brew audit`.
+
+    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    """
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
+    mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
+
+    repository = {
+        # Here we don't start the description off with an article
+        'description': 'TestGenerateFormulaFormulaNameStartsDescription is a tool',
+        'license': LICENSE,
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                },
+            }
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=None,
+        test=None,
+    )
+
+    record_formula(formula_path, formula_filename, formula)
+
+    assert 'desc "Is a tool"' in formula
+
+
 def test_generate_formula_no_depends_on():
     """Tests that we generate the formula content correctly (when no depends_on given).
 
     NOTE: See docstring in `record_formula` for more details on how recording formulas works.
     """
-    formula_filename = 'test_formula_template_no_depends_on.rb'
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
@@ -195,7 +235,7 @@ def test_generate_formula_no_test():
 
     NOTE: See docstring in `record_formula` for more details on how recording formulas works.
     """
-    formula_filename = 'test_formula_template_no_test.rb'
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
@@ -236,7 +276,7 @@ def test_generate_formula_complete_matrix():
 
     NOTE: See docstring in `record_formula` for more details on how recording formulas works.
     """
-    formula_filename = 'test_formula_template_complete_matrix.rb'
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
@@ -251,9 +291,9 @@ def test_generate_formula_complete_matrix():
         repository=repository,
         checksums=[
             {
-                'test-formula-template-complete-matrix.tar.gz': {
+                'test-generate-formula-complete-matrix.tar.gz': {
                     'checksum': CHECKSUM,
-                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-template-complete-matrix',  # noqa
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-generate-formula-complete-matrix',  # noqa
                 },
             },
             {
@@ -302,7 +342,7 @@ def test_generate_formula_darwin_matrix():
 
     NOTE: See docstring in `record_formula` for more details on how recording formulas works.
     """
-    formula_filename = 'test_formula_template_darwin_matrix.rb'
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
@@ -317,9 +357,9 @@ def test_generate_formula_darwin_matrix():
         repository=repository,
         checksums=[
             {
-                'test-formula-template-darwin-matrix.tar.gz': {
+                'test-generate-formula-darwin-matrix.tar.gz': {
                     'checksum': CHECKSUM,
-                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-template-darwin-matrix.tar.gz',  # noqa
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-generate-formula-darwin-matrix.tar.gz',  # noqa
                 },
             },
             {
@@ -356,7 +396,7 @@ def test_generate_formula_linux_matrix():
 
     NOTE: See docstring in `record_formula` for more details on how recording formulas works.
     """
-    formula_filename = 'test_formula_template_linux_matrix.rb'
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
@@ -371,9 +411,9 @@ def test_generate_formula_linux_matrix():
         repository=repository,
         checksums=[
             {
-                'test-formula-template-linux-matrix.tar.gz': {
+                'test-generate-formula-linux-matrix.tar.gz': {
                     'checksum': CHECKSUM,
-                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-template-linux-matrix.tar.gz',  # noqa
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-generate-formula-linux-matrix.tar.gz',  # noqa
                 },
             },
             {
@@ -413,7 +453,7 @@ def test_generate_formula_string_false_configs():
 
     NOTE: See docstring in `record_formula` for more details on how recording formulas works.
     """
-    formula_filename = 'test_formula_template_false_string_bools.rb'
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 
@@ -454,7 +494,7 @@ def test_generate_formula_empty_fields():
 
     NOTE: See docstring in `record_formula` for more details on how recording formulas works.
     """
-    formula_filename = 'test_formula_template_empty_fields.rb'
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
     mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
 

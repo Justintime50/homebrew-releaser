@@ -34,8 +34,9 @@ class Formula:
 
         We attempt to ensure generated formula will pass `brew audit --strict --online` if given correct inputs:
         - Proper class name
-        - 80 characters or less desc field (alphanumeric characters and does not start with an article)
-        - Present homepage
+        - 80 characters or less desc field (alphanumeric characters and does not start with
+            an article or the name of the formula)
+        - Homepage
         - URL points to the tar file
         - Checksum matches the url archive
         - Proper installable binary
@@ -52,14 +53,14 @@ class Formula:
             re.sub(r'[.!]+', '', repository.get('description', '')[:max_desc_field_length]).strip().capitalize()
         )
 
-        # If the first word of the desc is an article, we cut it out per `brew audit`
+        # If the first word of the desc is an article or the name of the formula, we cut it out per `brew audit`
         articles = {
             'a',
             'an',
             'the',
         }
         first_word_of_desc = description.split(' ', 1)
-        if first_word_of_desc[0].lower() in articles:
+        if first_word_of_desc[0].lower() in articles or first_word_of_desc[0].lower() == class_name.lower():
             description = first_word_of_desc[1].strip().capitalize()
 
         dependencies_object: Dict[str, Any] = {

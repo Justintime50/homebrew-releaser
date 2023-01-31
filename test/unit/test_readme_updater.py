@@ -75,11 +75,11 @@ def test_format_formula_data():
     """
     formulas = ReadmeUpdater.format_formula_data('./test')
 
-    assert len(formulas) == 9
+    assert len(formulas) == 10
     assert formulas[0] == {
-        'name': 'test-formula-template',
+        'name': 'test-generate-formula',
         'desc': 'Tool to release scripts, binaries, and executables to github',
-        'homepage': 'https://github.com/Justintime50/test-formula-template',
+        'homepage': 'https://github.com/Justintime50/test-generate-formula',
     }
 
 
