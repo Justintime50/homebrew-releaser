@@ -21,10 +21,11 @@ When you cut a new release when using this GitHub Action, it will clone your rep
 
 **Notes:**
 
-* Shell scripts distributed via Homebrew Releaser must be executable and contain a proper shebang to work.
-* Homebrew Releaser will always use the latest tag of a GitHub project. Git tags must follow semantic versioning for Homebrew to properly infer the installation instructions (eg: `v1.2.0` or `0.3.0`, etc).
-* The Homebrew formula filename will match the github repo name.
-* It is **highly** recommended to enable debug mode and skip the commit on the first run through to ensure you have configured your workflow correctly and that the generated formula looks the way you want.
+- Shell scripts distributed via Homebrew Releaser **must be executable** and contain a proper shebang to work.
+- Homebrew Releaser **will always use the latest tag** of a GitHub project. Git tags must follow semantic versioning for Homebrew to properly infer the installation instructions (eg: `v1.2.0` or `0.3.0`, etc).
+- The Homebrew formula filename will match the github repo name.
+- It is **highly** recommended to enable debug mode and skip the commit on the first run through to ensure you have configured your workflow correctly and that the generated formula looks the way you want.
+- Homebrew Releaser is **not** compatible with monorepos.
 
 ### GitHub Actions YML
 
@@ -47,35 +48,35 @@ jobs:
         uses: Justintime50/homebrew-releaser@v1
         with:
           # The name of the homebrew tap to publish your formula to as it appears on GitHub.
-          # Required - strings.
+          # Required - strings
           homebrew_owner: Justintime50
           homebrew_tap: homebrew-formulas
 
           # The name of the folder in your homebrew tap where formula will be committed to.
-          # Default is shown - string.
+          # Default is shown - string
           formula_folder: formula
 
           # The GitHub Token (saved as a repo secret) that has `repo` permissions for the homebrew tap you want to release to.
-          # Required - string.
+          # Required - string
           github_token: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
 
           # Git author info used to commit to the homebrew tap.
-          # Defaults are shown - strings.
+          # Defaults are shown - strings
           commit_owner: homebrew-releaser
           commit_email: homebrew-releaser@example.com
 
           # Custom dependencies in case other formulas are needed to build the current one.
-          # Optional - multiline string.
+          # Optional - multiline string
           depends_on: |
             "bash" => :build
             "gcc"
 
           # Custom install command for your formula.
-          # Required - string.
+          # Required - string
           install: 'bin.install "src/my-script.sh" => "my-script"'
 
           # Custom test command for your formula so you can run `brew test`.
-          # Optional - string.
+          # Optional - string
           test: 'assert_match("my script output", shell_output("my-script-command"))'
 
           # Adds URL and checksum targets for different OS and architecture pairs. Using this option assumes 
@@ -83,7 +84,7 @@ jobs:
           # https://github.com/{GITHUB_OWNER}/{REPO_NAME}/releases/download/{TAG}/{REPO_NAME}-{VERSION}-{OPERATING_SYSTEM}-{ARCHITECTURE}.tar.gz'
           # Darwin AMD pre-existing path example: https://github.com/justintime50/myrepo/releases/download/v1.2.0/myrepo-1.2.0-darwin-amd64.tar.gz
           # Linux ARM pre-existing path example: https://github.com/justintime50/myrepo/releases/download/v1.2.0/myrepo-1.2.0-linux-arm64.tar.gz
-          # Optional - booleans.
+          # Optional - booleans
           target_darwin_amd64: true
           target_darwin_arm64: false
           target_linux_amd64: true
@@ -101,18 +102,18 @@ jobs:
           # Simply place the following in your README or wrap your project in these comment tags:
           # <!-- project_table_start -->
           # TABLE HERE
-          # <!--project_table_end -->
+          # <!-- project_table_end -->
           #
           # Finally, mark `update_readme_table` as `true` in your GitHub Action config and we'll do the work of building a custom table for you.
-          # Default is `false` - boolean.
+          # Default is `false` - boolean
           update_readme_table: true
 
           # Skips committing the generated formula to a homebrew tap (useful for local testing).
-          # Default is shown - boolean.
+          # Default is shown - boolean
           skip_commit: false
 
           # Logs debugging info to console.
-          # Default is shown - boolean.
+          # Default is shown - boolean
           debug: false
 ```
 
