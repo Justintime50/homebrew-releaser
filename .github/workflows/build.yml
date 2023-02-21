@@ -70,6 +70,6 @@ jobs:
       - name: Setup Homebrew packages
         run: |
           brew install bash
-          brew install gcc 
+          brew install gcc
       - name: Run brew audit on generated test formula
         run: brew audit --formula /home/runner/work/homebrew-releaser/homebrew-releaser/test/formulas/*.rb

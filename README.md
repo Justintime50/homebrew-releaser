@@ -29,7 +29,7 @@ When you cut a new release when using this GitHub Action, it will clone your rep
 
 ### GitHub Actions YML
 
-After releasing to GitHub, Homebrew Releaser can publish that release to a personal Homebrew tap by updating the project description, version, tar archive url, license, checksum, installation and testing command, and any other required info so you don't have to. You can check the [Homebrew documentation](https://docs.brew.sh/) and the [formula cookbook](https://docs.brew.sh/Formula-Cookbook) for more details on setting up a Homebrew formula or tap.
+After you release a project on GitHub, Homebrew Releaser can publish that release to a personal Homebrew tap by updating the project description, version, tar archive url, license, checksum, installation and testing command, and any other required info so you don't have to. You can check the [Homebrew documentation on taps](https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap) and the [formula cookbook](https://docs.brew.sh/Formula-Cookbook) for more details on setting up a Homebrew formula or tap.
 
 ```yml
 # .github/workflows/release.yml
@@ -99,7 +99,7 @@ jobs:
           # | [formula_2](https://github.com/user/repo2) | helpful text | `brew install formula_2` |
           # | [formula_3](https://github.com/user/repo3) | helpful text | `brew install formula_3` |
           #
-          # Simply place the following in your README or wrap your project in these comment tags:
+          # Place the following in your README or wrap your project's table in these comment tags:
           # <!-- project_table_start -->
           # TABLE HERE
           # <!-- project_table_end -->
