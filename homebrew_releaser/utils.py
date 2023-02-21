@@ -29,7 +29,7 @@ class Utils:
         return response
 
     @staticmethod
-    def write_file(file_path: str, content: bytes, mode: str = 'w'):
+    def write_file(file_path: str, content: str | bytes, mode: str = 'w'):
         """Writes content to a file."""
         logger = woodchips.get(LOGGER_NAME)
 

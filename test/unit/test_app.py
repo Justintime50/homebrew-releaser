@@ -15,13 +15,13 @@ from homebrew_releaser.app import App
 @patch('homebrew_releaser.utils.Utils.write_file')
 @patch('homebrew_releaser.formula.Formula.generate_formula_data')
 @patch('homebrew_releaser.checksum.Checksum.get_checksum', return_value=('123', 'mock-repo'))
-@patch('homebrew_releaser.app.App.download_tar_archive')
+@patch('homebrew_releaser.app.App.download_archive')
 @patch('homebrew_releaser.utils.Utils.make_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
 def test_run_github_action_skip_commit(
     mock_check_env_variables,
     mock_make_get_request,
-    mock_download_tar_archive,
+    mock_download_archive,
     mock_get_checksum,
     mock_generate_formula,
     mock_write_file,
@@ -37,7 +37,7 @@ def test_run_github_action_skip_commit(
     mock_logger.assert_called()
     mock_check_env_variables.assert_called_once()
     assert mock_make_get_request.call_count == 2
-    mock_download_tar_archive.call_count == 2
+    mock_download_archive.call_count == 2
     mock_get_checksum.call_count == 2
     mock_generate_formula.assert_called_once()
     mock_write_file.call_count == 2
@@ -57,13 +57,13 @@ def test_run_github_action_skip_commit(
 @patch('homebrew_releaser.utils.Utils.write_file')
 @patch('homebrew_releaser.formula.Formula.generate_formula_data')
 @patch('homebrew_releaser.checksum.Checksum.get_checksum', return_value=('123', 'mock-repo'))
-@patch('homebrew_releaser.app.App.download_tar_archive')
+@patch('homebrew_releaser.app.App.download_archive')
 @patch('homebrew_releaser.utils.Utils.make_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
 def test_run_github_action(
     mock_check_env_variables,
     mock_make_get_request,
-    mock_download_tar_archive,
+    mock_download_archive,
     mock_get_checksum,
     mock_generate_formula,
     mock_write_file,
@@ -80,7 +80,7 @@ def test_run_github_action(
     mock_logger.assert_called()
     mock_check_env_variables.assert_called_once()
     assert mock_make_get_request.call_count == 2
-    mock_download_tar_archive.call_count == 2
+    mock_download_archive.call_count == 2
     mock_get_checksum.call_count == 2
     mock_generate_formula.assert_called_once()
     mock_write_file.call_count == 2
@@ -102,13 +102,13 @@ def test_run_github_action(
 @patch('homebrew_releaser.utils.Utils.write_file')
 @patch('homebrew_releaser.formula.Formula.generate_formula_data')
 @patch('homebrew_releaser.checksum.Checksum.get_checksum', return_value=('123', 'mock-repo'))
-@patch('homebrew_releaser.app.App.download_tar_archive')
+@patch('homebrew_releaser.app.App.download_archive')
 @patch('homebrew_releaser.utils.Utils.make_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
 def test_run_github_action_update_readme(
     mock_check_env_variables,
     mock_make_get_request,
-    mock_download_tar_archive,
+    mock_download_archive,
     mock_get_checksum,
     mock_generate_formula,
     mock_write_file,
@@ -126,7 +126,7 @@ def test_run_github_action_update_readme(
     mock_logger.assert_called()
     mock_check_env_variables.assert_called_once()
     assert mock_make_get_request.call_count == 2
-    mock_download_tar_archive.call_count == 2
+    mock_download_archive.call_count == 2
     mock_get_checksum.call_count == 2
     mock_generate_formula.assert_called_once()
     mock_write_file.call_count == 2
@@ -151,13 +151,13 @@ def test_run_github_action_update_readme(
 @patch('homebrew_releaser.utils.Utils.write_file')
 @patch('homebrew_releaser.formula.Formula.generate_formula_data')
 @patch('homebrew_releaser.checksum.Checksum.get_checksum', return_value=('123', 'mock-repo'))
-@patch('homebrew_releaser.app.App.download_tar_archive')
+@patch('homebrew_releaser.app.App.download_archive')
 @patch('homebrew_releaser.utils.Utils.make_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
 def test_run_github_action_target_matrix(
     mock_check_env_variables,
     mock_make_get_request,
-    mock_download_tar_archive,
+    mock_download_archive,
     mock_get_checksum,
     mock_generate_formula,
     mock_write_file,
@@ -175,7 +175,7 @@ def test_run_github_action_target_matrix(
     mock_logger.assert_called()
     mock_check_env_variables.assert_called_once()
     assert mock_make_get_request.call_count == 2
-    mock_download_tar_archive.call_count == 2
+    mock_download_archive.call_count == 2
     mock_get_checksum.call_count == 2
     mock_generate_formula.assert_called_once()
     mock_write_file.call_count == 2
@@ -217,9 +217,9 @@ def test_check_required_env_variables_missing_env_variable(mock_system_exit):
 
 @patch('homebrew_releaser.utils.Utils.write_file')
 @patch('homebrew_releaser.utils.Utils.make_get_request')
-def test_download_tar_archive(mock_make_get_request, mock_write_file):
+def test_download_archive(mock_make_get_request, mock_write_file):
     url = 'https://api.github.com/repos/Justintime50/homebrew-releaser/archive/v0.1.0.tar.gz'
-    App.download_tar_archive(url)
+    App.download_archive(url)
 
     mock_make_get_request.assert_called_once_with(url, True)
     mock_write_file.assert_called_once()  # TODO: Assert `called_with` here instead

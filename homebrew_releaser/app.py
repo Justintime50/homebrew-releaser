@@ -106,12 +106,12 @@ class App:
 
         checksums = []
         for archive_url in archive_urls:
-            tar_filename = App.download_tar_archive(archive_url)
-            checksum = Checksum.get_checksum(tar_filename)
-            archive_checksum_entry = f'{checksum} {tar_filename}'
+            archive_filename = App.download_archive(archive_url)
+            checksum = Checksum.get_checksum(archive_filename)
+            archive_checksum_entry = f'{checksum} {archive_filename}'
             checksums.append(
                 {
-                    tar_filename: {
+                    archive_filename: {
                         'checksum': checksum,
                         'url': archive_url,
                     }
@@ -184,8 +184,8 @@ class App:
         logger.debug('All required environment variables are present.')
 
     @staticmethod
-    def download_tar_archive(url: str) -> str:
-        """Gets a tar archive from GitHub and saves it locally."""
+    def download_archive(url: str) -> str:
+        """Gets an archive (eg: zip, tar) from GitHub and saves it locally."""
         response = Utils.make_get_request(url, True)
         filename = url.rsplit('/', 1)[1]
         Utils.write_file(filename, response.content, 'wb')
