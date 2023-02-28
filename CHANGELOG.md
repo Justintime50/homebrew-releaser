@@ -1,8 +1,8 @@
 # CHANGELOG
 
-## Next Release
+## v0.15.0 (2023-02-28)
 
-- Add support for private repos by using the `GITHUB_TOKEN` env var available to GitHub Actions to make the HTTP request to the repo in question
+- Add support for private repos by using the already existing `GITHUB_TOKEN` env var available to GitHub Actions to make authenticated HTTP requests to the GitHub API instead of the previously unauthenticated requests
 
 ## v0.14.3 (2023-01-31)
 
