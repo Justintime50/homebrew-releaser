@@ -44,7 +44,7 @@ class Checksum:
         logger = woodchips.get(LOGGER_NAME)
 
         latest_release_url = f'https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/latest'
-        latest_release_response = Utils.make_get_request(latest_release_url)
+        latest_release_response = Utils.make_get_request(url=latest_release_url)
         latest_release_id = latest_release_response.json()['id']
 
         with open(CHECKSUM_FILE, 'rb') as filename:

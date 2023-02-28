@@ -56,9 +56,9 @@ jobs:
           # Default is shown - string
           formula_folder: formula
 
-          # The GitHub Token (saved as a repo secret) that has `repo` permissions for the homebrew tap you want to release to.
+          # The Personal Access Token (saved as a repo secret) that has `repo` permissions for the repo running the action AND Homebrew tap you want to release to.
           # Required - string
-          github_token: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
 
           # Git author info used to commit to the homebrew tap.
           # Defaults are shown - strings
