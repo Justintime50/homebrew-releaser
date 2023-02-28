@@ -26,8 +26,9 @@ When you cut a new release when using this GitHub Action, it will clone your rep
 - The Homebrew formula filename will match the github repo name.
 - It is **highly** recommended to enable debug mode and skip the commit on the first run through to ensure you have configured your workflow correctly and that the generated formula looks the way you want.
 - Homebrew Releaser is **not** compatible with monorepos.
+- Every precaution will be made to ensure that major releases of this action remain compatible (every `0.x` release of this action rebuilds and packages the `v1` action as a convenience to users). If you value stability over "getting new features for free", it's highly recommended to pin a specific version or commit hash of this action when using it (eg: `v0.15.0`)
 
-### GitHub Actions YML
+### GitHub Actions YAML
 
 After you release a project on GitHub, Homebrew Releaser can publish that release to a personal Homebrew tap by updating the project description, version, tar archive url, license, checksum, installation and testing command, and any other required info so you don't have to. You can check the [Homebrew documentation on taps](https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap) and the [formula cookbook](https://docs.brew.sh/Formula-Cookbook) for more details on setting up a Homebrew formula or tap.
 
