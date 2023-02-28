@@ -65,14 +65,8 @@ class App:
         Git.setup(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER, HOMEBREW_TAP)
 
         logger.info(f'Collecting data about {GITHUB_REPO}...')
-        repository = Utils.make_get_request(
-            url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}',
-            stream=False,
-        ).json()
-        tags = Utils.make_get_request(
-            url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/tags',
-            stream=False,
-        ).json()
+        repository = Utils.make_get_request(url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}').json()
+        tags = Utils.make_get_request(url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/tags').json()
         version = tags[0]['name']
         version_no_v = version.replace('v', '')
         logger.info(f'Latest release ({version}) successfully identified!')
@@ -186,7 +180,10 @@ class App:
     @staticmethod
     def download_archive(url: str) -> str:
         """Gets an archive (eg: zip, tar) from GitHub and saves it locally."""
-        response = Utils.make_get_request(url, True)
+        response = Utils.make_get_request(
+            url=url,
+            stream=True,
+        )
         filename = url.rsplit('/', 1)[1]
         Utils.write_file(filename, response.content, 'wb')
 

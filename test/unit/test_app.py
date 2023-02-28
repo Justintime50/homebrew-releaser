@@ -221,5 +221,5 @@ def test_download_archive(mock_make_get_request, mock_write_file):
     url = 'https://api.github.com/repos/Justintime50/homebrew-releaser/archive/v0.1.0.tar.gz'
     App.download_archive(url)
 
-    mock_make_get_request.assert_called_once_with(url, True)
+    mock_make_get_request.assert_called_once_with(url=url, stream=True)
     mock_write_file.assert_called_once()  # TODO: Assert `called_with` here instead

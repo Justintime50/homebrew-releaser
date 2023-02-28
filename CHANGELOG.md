@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Next Release
+
+- Add support for private repos by using the `GITHUB_TOKEN` env var available to GitHub Actions to make the HTTP request to the repo in question
+
 ## v0.14.3 (2023-01-31)
 
 - Bumps image from Python 3.10 to 3.11
