@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Next Release
+
+- Fixes a bug where the browser URL was used to download assets instead of the asset URL which wasn't accessible for private repos
+- Instead of retrieving a list of all tags and then grabbing the most recent one, we grab the single latest release and grab the tag from it. Most workflows should continue to work as expected if you were cutting GitHub releases; however, if you were using this action without using GitHub releases and only using git tags, you will need to start using releases per the README. This change was necessary to get asset URLs working along with bringing the expectation more inline with what the docs suggested in the README. This should also slightly improve performance for repos with many tags since the response from GitHub will be much smaller
+
 ## v0.15.0 (2023-02-28)
 
 - Add support for private repos by using the already existing `GITHUB_TOKEN` env var available to GitHub Actions to make authenticated HTTP requests to the GitHub API instead of the previously unauthenticated requests

@@ -65,9 +65,12 @@ class App:
         Git.setup(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER, HOMEBREW_TAP)
 
         logger.info(f'Collecting data about {GITHUB_REPO}...')
-        repository = Utils.make_get_request(url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}').json()
-        tags = Utils.make_get_request(url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/tags').json()
-        version = tags[0]['name']
+        repository = Utils.make_github_get_request(url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}').json()
+        latest_release = Utils.make_github_get_request(
+            url=f'https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/latest'
+        ).json()
+        assets = latest_release['assets']
+        version = latest_release['tag_name']
         version_no_v = version.replace('v', '')
         logger.info(f'Latest release ({version}) successfully identified!')
 
@@ -81,22 +84,25 @@ class App:
         auto_generated_release_zip = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.zip'
         archive_urls.append(auto_generated_release_zip)
 
+        # We check if matching browser URLs exist but use the asset URL so that this works for
+        # both public and private repos since the browser URL isn't accessible via private repos
+        asset_browser_urls = [asset['browser_download_url'] for asset in assets]
         if TARGET_DARWIN_AMD64:
-            archive_urls.append(
-                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-amd64.tar.gz'  # noqa
-            )
+            darwin_amd64_browser_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-amd64.tar.gz'  # noqa
+            if darwin_amd64_browser_url in asset_browser_urls:
+                archive_urls.append(darwin_amd64_browser_url)
         if TARGET_DARWIN_ARM64:
-            archive_urls.append(
-                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-arm64.tar.gz'  # noqa
-            )
+            darwin_arm64_browser_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-arm64.tar.gz'  # noqa
+            if darwin_arm64_browser_url in asset_browser_urls:
+                archive_urls.append(darwin_arm64_browser_url)
         if TARGET_LINUX_AMD64:
-            archive_urls.append(
-                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-amd64.tar.gz'  # noqa
-            )
+            linux_amd64_browser_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-amd64.tar.gz'  # noqa
+            if linux_amd64_browser_url in asset_browser_urls:
+                archive_urls.append(linux_amd64_browser_url)
         if TARGET_LINUX_ARM64:
-            archive_urls.append(
-                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-arm64.tar.gz'  # noqa
-            )
+            linux_arm64_browser_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-arm64.tar.gz'  # noqa
+            if linux_arm64_browser_url in asset_browser_urls:
+                archive_urls.append(linux_arm64_browser_url)
 
         checksums = []
         for archive_url in archive_urls:
@@ -139,7 +145,7 @@ class App:
             logger.info(f'Skipping commit to {HOMEBREW_TAP}.')
         else:
             logger.info(f'Attempting to upload checksum.txt to the latest release of {GITHUB_REPO}...')
-            Checksum.upload_checksum_file()
+            Checksum.upload_checksum_file(latest_release)
 
             logger.info(f'Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...')
             Git.add(HOMEBREW_TAP)
@@ -180,7 +186,7 @@ class App:
     @staticmethod
     def download_archive(url: str) -> str:
         """Gets an archive (eg: zip, tar) from GitHub and saves it locally."""
-        response = Utils.make_get_request(
+        response = Utils.make_github_get_request(
             url=url,
             stream=True,
         )

@@ -11,18 +11,18 @@ from homebrew_releaser.utils import Utils
 
 
 @patch('requests.get')
-def test_make_get_request(mock_request):
+def test_make_github_get_request(mock_request):
     url = 'https://api.github.com/repos/Justintime50/homebrew-releaser'
-    Utils.make_get_request(url=url)
+    Utils.make_github_get_request(url=url)
 
     mock_request.assert_called_once_with(url, headers=GITHUB_HEADERS, stream=False)
 
 
 @patch('requests.get', side_effect=requests.exceptions.RequestException('mock-error'))
-def test_make_get_request_exception(mock_request):
+def test_make_github_get_request_exception(mock_request):
     url = 'https://api.github.com/repos/Justintime50/homebrew-releaser'
     with pytest.raises(SystemExit) as error:
-        Utils.make_get_request(url=url)
+        Utils.make_github_get_request(url=url)
 
     assert 'mock-error' == str(error.value)
 

@@ -18,11 +18,11 @@ from homebrew_releaser.app import App
 @patch('homebrew_releaser.formula.Formula.generate_formula_data')
 @patch('homebrew_releaser.checksum.Checksum.get_checksum', return_value=('123', 'mock-repo'))
 @patch('homebrew_releaser.app.App.download_archive')
-@patch('homebrew_releaser.utils.Utils.make_get_request')
+@patch('homebrew_releaser.utils.Utils.make_github_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
 def test_run_github_action_string_false_config(
     mock_check_env_variables,
-    mock_make_get_request,
+    mock_make_github_get_request,
     mock_download_archive,
     mock_get_checksum,
     mock_generate_formula,

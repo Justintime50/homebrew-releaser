@@ -11,7 +11,7 @@ from homebrew_releaser.constants import (
 
 class Utils:
     @staticmethod
-    def make_get_request(url: str, stream: Optional[bool] = False) -> requests.Response:
+    def make_github_get_request(url: str, stream: Optional[bool] = False) -> requests.Response:
         """Make an HTTP GET request."""
         logger = woodchips.get(LOGGER_NAME)
 
