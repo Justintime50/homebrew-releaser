@@ -86,23 +86,30 @@ class App:
 
         # We check if matching browser URLs exist but use the asset URL so that this works for
         # both public and private repos since the browser URL isn't accessible via private repos
-        asset_browser_urls = [asset['browser_download_url'] for asset in assets]
         if TARGET_DARWIN_AMD64:
             darwin_amd64_browser_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-amd64.tar.gz'  # noqa
-            if darwin_amd64_browser_url in asset_browser_urls:
-                archive_urls.append(darwin_amd64_browser_url)
+            for asset in assets:
+                if asset['browser_download_url'] == darwin_amd64_browser_url:
+                    archive_urls.append(asset['url'])
+                    break
         if TARGET_DARWIN_ARM64:
             darwin_arm64_browser_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-arm64.tar.gz'  # noqa
-            if darwin_arm64_browser_url in asset_browser_urls:
-                archive_urls.append(darwin_arm64_browser_url)
+            for asset in assets:
+                if asset['browser_download_url'] == darwin_arm64_browser_url:
+                    archive_urls.append(asset['url'])
+                    break
         if TARGET_LINUX_AMD64:
             linux_amd64_browser_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-amd64.tar.gz'  # noqa
-            if linux_amd64_browser_url in asset_browser_urls:
-                archive_urls.append(linux_amd64_browser_url)
+            for asset in assets:
+                if asset['browser_download_url'] == linux_amd64_browser_url:
+                    archive_urls.append(asset['url'])
+                    break
         if TARGET_LINUX_ARM64:
             linux_arm64_browser_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-arm64.tar.gz'  # noqa
-            if linux_arm64_browser_url in asset_browser_urls:
-                archive_urls.append(linux_arm64_browser_url)
+            for asset in assets:
+                if asset['browser_download_url'] == linux_arm64_browser_url:
+                    archive_urls.append(asset['url'])
+                    break
 
         checksums = []
         for archive_url in archive_urls:
