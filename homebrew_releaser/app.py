@@ -101,10 +101,17 @@ class App:
         checksums = []
         for archive_url in archive_urls:
             for asset in assets:
-                asset_url = asset['url']
-                if archive_url == asset['browser_download_url']:
-                    # Download the asset url so private repos work but use the brower URL for name and path in formula
-                    downloaded_filename = App.download_archive(asset_url)
+                # Download the asset url so private repos work but use the brower URL for name and path in formula
+                if archive_url == auto_generated_release_tar or archive_url == auto_generated_release_zip:
+                    download_url = archive_url
+                else:
+                    download_url = asset['url']
+                if (
+                    archive_url == auto_generated_release_tar
+                    or archive_url == auto_generated_release_zip
+                    or archive_url == asset['browser_download_url']
+                ):
+                    downloaded_filename = App.download_archive(download_url)
                     checksum = Checksum.get_checksum(downloaded_filename)
                     archive_filename = Utils.get_filename_from_path(archive_url)
                     archive_checksum_entry = f'{checksum} {archive_filename}'
