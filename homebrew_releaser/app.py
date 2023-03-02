@@ -104,9 +104,9 @@ class App:
                 asset_url = asset['url']
                 if archive_url == asset['browser_download_url']:
                     # Download the asset file so private repos work but use the brower URL for name and path in formula
-                    App.download_archive(asset_url)
+                    downloaded_filename = App.download_archive(asset_url)
+                    checksum = Checksum.get_checksum(downloaded_filename)
                     archive_filename = Utils.get_filename_from_path(archive_url)
-                    checksum = Checksum.get_checksum(archive_filename)
                     archive_checksum_entry = f'{checksum} {archive_filename}'
                     checksums.append(
                         {
