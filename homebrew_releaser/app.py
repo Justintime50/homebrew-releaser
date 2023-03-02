@@ -117,7 +117,7 @@ class App:
                         },
                     )
 
-                Utils.write_file(CHECKSUM_FILE, archive_checksum_entry, 'a')
+                    Utils.write_file(CHECKSUM_FILE, archive_checksum_entry, 'a')
 
         logger.info(f'Generating Homebrew formula for {GITHUB_REPO}...')
         template = Formula.generate_formula_data(
