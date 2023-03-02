@@ -103,7 +103,7 @@ class App:
             for asset in assets:
                 asset_url = asset['url']
                 if archive_url == asset['browser_download_url']:
-                    # Download the asset file so private repos work but use the brower URL for name and path in formula
+                    # Download the asset url so private repos work but use the brower URL for name and path in formula
                     downloaded_filename = App.download_archive(asset_url)
                     checksum = Checksum.get_checksum(downloaded_filename)
                     archive_filename = Utils.get_filename_from_path(archive_url)
@@ -116,8 +116,8 @@ class App:
                             }
                         },
                     )
-
                     Utils.write_file(CHECKSUM_FILE, archive_checksum_entry, 'a')
+                    break
 
         logger.info(f'Generating Homebrew formula for {GITHUB_REPO}...')
         template = Formula.generate_formula_data(
