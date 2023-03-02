@@ -37,3 +37,11 @@ def test_write_file_exception():
         mock_open_file.side_effect = Exception
         with pytest.raises(SystemExit):
             Utils.write_file('mock-file', 'mock-content', mode='w')
+
+
+def test_get_filename_from_path():
+    """Tests that we can pull the last part of a path out as a filename."""
+    path = '/mock/path/to/filename.txt'
+    filename = Utils.get_filename_from_path(path)
+
+    assert filename == 'filename.txt'

@@ -49,7 +49,7 @@ class App:
 
         1. Setup logging
         2. Grab the details about the tap
-        3. Download the tar archive(s)
+        3. Download the archive(s)
         4. Generate checksum(s)
         5. Generate the new formula
         6. Update README table (optional)
@@ -77,55 +77,47 @@ class App:
         logger.info('Generating tar archive checksum(s)...')
         archive_urls = []
 
-        # Auto-generated tar URL must come first for later use
-        auto_generated_release_tar = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'
+        # Auto-generated tar URL must come first for later use (order is important)
+        archive_base_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}'
+        auto_generated_release_tar = f'{archive_base_url}.tar.gz'
         archive_urls.append(auto_generated_release_tar)
-
-        auto_generated_release_zip = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.zip'
+        auto_generated_release_zip = f'{archive_base_url}.zip'
         archive_urls.append(auto_generated_release_zip)
 
         # We check if matching browser URLs exist but use the asset URL so that this works for
         # both public and private repos since the browser URL isn't accessible via private repos
+        target_browser_download_base_url = (
+            f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}'
+        )
         if TARGET_DARWIN_AMD64:
-            darwin_amd64_browser_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-amd64.tar.gz'  # noqa
-            for asset in assets:
-                if asset['browser_download_url'] == darwin_amd64_browser_url:
-                    archive_urls.append(asset['url'])
-                    break
+            archive_urls.append(f'{target_browser_download_base_url}-darwin-amd64.tar.gz')
         if TARGET_DARWIN_ARM64:
-            darwin_arm64_browser_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-arm64.tar.gz'  # noqa
-            for asset in assets:
-                if asset['browser_download_url'] == darwin_arm64_browser_url:
-                    archive_urls.append(asset['url'])
-                    break
+            archive_urls.append(f'{target_browser_download_base_url}-darwin-arm64.tar.gz')
         if TARGET_LINUX_AMD64:
-            linux_amd64_browser_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-amd64.tar.gz'  # noqa
-            for asset in assets:
-                if asset['browser_download_url'] == linux_amd64_browser_url:
-                    archive_urls.append(asset['url'])
-                    break
+            archive_urls.append(f'{target_browser_download_base_url}-linux-amd64.tar.gz')
         if TARGET_LINUX_ARM64:
-            linux_arm64_browser_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-arm64.tar.gz'  # noqa
-            for asset in assets:
-                if asset['browser_download_url'] == linux_arm64_browser_url:
-                    archive_urls.append(asset['url'])
-                    break
+            archive_urls.append(f'{target_browser_download_base_url}-linux-arm64.tar.gz')
 
         checksums = []
         for archive_url in archive_urls:
-            archive_filename = App.download_archive(archive_url)
-            checksum = Checksum.get_checksum(archive_filename)
-            archive_checksum_entry = f'{checksum} {archive_filename}'
-            checksums.append(
-                {
-                    archive_filename: {
-                        'checksum': checksum,
-                        'url': archive_url,
-                    }
-                },
-            )
+            for asset in assets:
+                asset_url = asset['url']
+                if archive_url == asset['browser_download_url']:
+                    # Download the asset file so private repos work but use the brower URL for name and path in formula
+                    App.download_archive(asset_url)
+                    archive_filename = Utils.get_filename_from_path(archive_url)
+                    checksum = Checksum.get_checksum(archive_filename)
+                    archive_checksum_entry = f'{checksum} {archive_filename}'
+                    checksums.append(
+                        {
+                            archive_filename: {
+                                'checksum': checksum,
+                                'url': archive_url,
+                            }
+                        },
+                    )
 
-            Utils.write_file(CHECKSUM_FILE, archive_checksum_entry, 'a')
+                Utils.write_file(CHECKSUM_FILE, archive_checksum_entry, 'a')
 
         logger.info(f'Generating Homebrew formula for {GITHUB_REPO}...')
         template = Formula.generate_formula_data(
@@ -197,7 +189,7 @@ class App:
             url=url,
             stream=True,
         )
-        filename = url.rsplit('/', 1)[1]
+        filename = Utils.get_filename_from_path(url)
         Utils.write_file(filename, response.content, 'wb')
 
         return filename

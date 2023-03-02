@@ -39,3 +39,8 @@ class Utils:
             logger.debug(f'{file_path} written successfully.')
         except Exception as error:
             raise SystemExit(error)
+
+    @staticmethod
+    def get_filename_from_path(path: str) -> str:
+        """Gets the last part of a path (the filename)."""
+        return path.rsplit('/', 1)[1]
