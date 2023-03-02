@@ -34,6 +34,9 @@ inputs:
   test:
     description: "Custom test command for your formula so you can run `brew test`."
     required: false
+  download_strategy:
+    description: "The Homebrew download strategy to use for formulas."
+    required: false
   target_darwin_amd64:
     description: "Add a custom URL/checksum target for AMD64 Darwin builds."
     required: false

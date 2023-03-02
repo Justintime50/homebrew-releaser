@@ -329,6 +329,8 @@ def test_generate_formula_complete_matrix():
 
     record_formula(formula_path, formula_filename, formula)
 
+    assert formula.count('url') == 5
+    assert formula.count('sha256') == 5
     assert 'on_macos' in formula
     assert 'on_intel' in formula
     assert 'on_linux' in formula
@@ -523,3 +525,69 @@ def test_generate_formula_empty_fields():
 
     assert 'desc "NA"' in formula
     assert 'license' not in formula
+
+
+@patch('homebrew_releaser.formula.TARGET_DARWIN_AMD64', True)
+@patch('homebrew_releaser.formula.TARGET_DARWIN_ARM64', True)
+@patch('homebrew_releaser.formula.TARGET_LINUX_AMD64', True)
+@patch('homebrew_releaser.formula.TARGET_LINUX_ARM64', True)
+def test_generate_formula_download_strategy():
+    """Tests that we generate the formula content correctly when there a custom download strategy specified.
+
+    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    """
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
+    mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
+
+    repository = {
+        'description': DESCRIPTION,
+        'license': LICENSE,
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                },
+            },
+            {
+                'test-formula-0.1.0-darwin-amd64.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz',  # noqa
+                },
+            },
+            {
+                'test-formula-0.1.0-darwin-arm64.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz',  # noqa
+                },
+            },
+            {
+                'test-formula-0.1.0-linux-amd64.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz',  # noqa
+                },
+            },
+            {
+                'test-formula-0.1.0-linux-arm64.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-arm64.tar.gz',  # noqa
+                },
+            },
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=None,
+        test=None,
+        download_strategy='GitHubPrivateRepositoryReleaseDownloadStrategy',
+    )
+
+    record_formula(formula_path, formula_filename, formula)
+
+    assert formula.count(', :using => GitHubPrivateRepositoryReleaseDownloadStrategy') == 5

@@ -79,6 +79,10 @@ jobs:
           # Optional - string
           test: 'assert_match("my script output", shell_output("my-script-command"))'
 
+          # Custom download strategy you want to use for downloading formula.
+          # Optional - string
+          download_strategy: GitHubPrivateRepositoryReleaseDownloadStrategy
+
           # Adds URL and checksum targets for different OS and architecture pairs. Using this option assumes 
           # a tar archive exists on your GitHub repo with the following URL pattern (this cannot be customized):
           # https://github.com/{GITHUB_OWNER}/{REPO_NAME}/releases/download/{TAG}/{REPO_NAME}-{VERSION}-{OPERATING_SYSTEM}-{ARCHITECTURE}.tar.gz'

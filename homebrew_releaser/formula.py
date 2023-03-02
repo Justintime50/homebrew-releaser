@@ -29,6 +29,7 @@ class Formula:
         tar_url: str,
         depends_on: Optional[str] = None,
         test: Optional[str] = None,
+        download_strategy: Optional[str] = None,
     ) -> str:
         """Generates the formula data for Homebrew.
 
@@ -116,7 +117,7 @@ class Formula:
 class {{class_name}} < Formula
   desc "{{description}}"
   homepage "https://github.com/{{owner}}/{{repo_name}}"
-  url "{{tar_url}}"
+  url "{{tar_url}}"{{# download_strategy}}, :using => {{download_strategy}}{{/ download_strategy}}
   sha256 "{{autogenerate_tar_checksum}}"
   {{# license_type}}
   license "{{license_type}}"
@@ -130,14 +131,14 @@ class {{class_name}} < Formula
   on_macos do
     {{# darwin_amd64_url}}
     on_intel do
-      url "{{darwin_amd64_url}}"
+      url "{{darwin_amd64_url}}"{{# download_strategy}}, :using => {{download_strategy}}{{/ download_strategy}}
       sha256 "{{darwin_amd64_checksum}}"
     end
     {{/ darwin_amd64_url}}
     {{# darwin_arm64_url}}
 
     on_arm do
-      url "{{darwin_arm64_url}}"
+      url "{{darwin_arm64_url}}"{{# download_strategy}}, :using => {{download_strategy}}{{/ download_strategy}}
       sha256 "{{darwin_arm64_checksum}}"
     end
     {{/ darwin_arm64_url}}
@@ -148,14 +149,14 @@ class {{class_name}} < Formula
   on_linux do
     {{# linux_amd64_url}}
     on_intel do
-      url "{{linux_amd64_url}}"
+      url "{{linux_amd64_url}}"{{# download_strategy}}, :using => {{download_strategy}}{{/ download_strategy}}
       sha256 "{{linux_amd64_checksum}}"
     end
     {{/ linux_amd64_url}}
     {{# linux_arm64_url}}
 
     on_arm do
-      url "{{linux_arm64_url}}"
+      url "{{linux_arm64_url}}"{{# download_strategy}}, :using => {{download_strategy}}{{/ download_strategy}}
       sha256 "{{linux_arm64_checksum}}"
     end
     {{/ linux_arm64_url}}
@@ -190,6 +191,7 @@ end
                 'dependencies': dependencies_list,
                 'install_instructions': install.strip(),
                 'test_instructions': test.strip() if test else None,
+                'download_strategy': download_strategy,
                 'darwin_amd64_url': darwin_amd64_url,
                 'darwin_amd64_checksum': darwin_amd64_checksum,
                 'darwin_arm64_url': darwin_arm64_url,

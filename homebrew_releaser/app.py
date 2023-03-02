@@ -5,6 +5,7 @@ import woodchips
 from homebrew_releaser.checksum import Checksum
 from homebrew_releaser.constants import (
     CHECKSUM_FILE,
+    DOWNLOAD_STRATEGY,
     FORMULA_FOLDER,
     GITHUB_OWNER,
     GITHUB_REPO,
@@ -136,6 +137,7 @@ class App:
             auto_generated_release_tar,
             DEPENDS_ON,
             TEST,
+            DOWNLOAD_STRATEGY,
         )
 
         Utils.write_file(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER, f'{repository["name"]}.rb'), template, 'w')
