@@ -85,8 +85,6 @@ class App:
         auto_generated_release_zip = f'{archive_base_url}.zip'
         archive_urls.append(auto_generated_release_zip)
 
-        # We check if matching browser URLs exist but use the asset URL so that this works for
-        # both public and private repos since the browser URL isn't accessible via private repos
         target_browser_download_base_url = (
             f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}'
         )
