@@ -11,14 +11,18 @@ from homebrew_releaser.constants import (
 
 class Utils:
     @staticmethod
-    def make_get_request(url: str, stream: Optional[bool] = False) -> requests.Response:
+    def make_github_get_request(url: str, stream: Optional[bool] = False) -> requests.Response:
         """Make an HTTP GET request."""
         logger = woodchips.get(LOGGER_NAME)
+
+        headers = GITHUB_HEADERS
+        if stream:
+            headers['Accept'] = 'application/octet-stream'
 
         try:
             response = requests.get(
                 url,
-                headers=GITHUB_HEADERS,
+                headers=headers,
                 stream=stream,
             )
             response.raise_for_status()
@@ -39,3 +43,8 @@ class Utils:
             logger.debug(f'{file_path} written successfully.')
         except Exception as error:
             raise SystemExit(error)
+
+    @staticmethod
+    def get_filename_from_path(path: str) -> str:
+        """Gets the last part of a path (the filename)."""
+        return path.rsplit('/', 1)[1]

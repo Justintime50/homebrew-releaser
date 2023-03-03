@@ -5,6 +5,8 @@ import woodchips
 from homebrew_releaser.checksum import Checksum
 from homebrew_releaser.constants import (
     CHECKSUM_FILE,
+    CUSTOM_REQUIRE,
+    DOWNLOAD_STRATEGY,
     FORMULA_FOLDER,
     GITHUB_OWNER,
     GITHUB_REPO,
@@ -49,7 +51,7 @@ class App:
 
         1. Setup logging
         2. Grab the details about the tap
-        3. Download the tar archive(s)
+        3. Download the archive(s)
         4. Generate checksum(s)
         5. Generate the new formula
         6. Update README table (optional)
@@ -65,54 +67,64 @@ class App:
         Git.setup(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER, HOMEBREW_TAP)
 
         logger.info(f'Collecting data about {GITHUB_REPO}...')
-        repository = Utils.make_get_request(url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}').json()
-        tags = Utils.make_get_request(url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/tags').json()
-        version = tags[0]['name']
+        repository = Utils.make_github_get_request(url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}').json()
+        latest_release = Utils.make_github_get_request(
+            url=f'https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/latest'
+        ).json()
+        assets = latest_release['assets']
+        version = latest_release['tag_name']
         version_no_v = version.replace('v', '')
         logger.info(f'Latest release ({version}) successfully identified!')
 
         logger.info('Generating tar archive checksum(s)...')
         archive_urls = []
 
-        # Auto-generated tar URL must come first for later use
-        auto_generated_release_tar = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.tar.gz'
+        # Auto-generated tar URL must come first for later use (order is important)
+        archive_base_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}'
+        auto_generated_release_tar = f'{archive_base_url}.tar.gz'
         archive_urls.append(auto_generated_release_tar)
-
-        auto_generated_release_zip = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}.zip'
+        auto_generated_release_zip = f'{archive_base_url}.zip'
         archive_urls.append(auto_generated_release_zip)
 
+        target_browser_download_base_url = (
+            f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}'
+        )
         if TARGET_DARWIN_AMD64:
-            archive_urls.append(
-                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-amd64.tar.gz'  # noqa
-            )
+            archive_urls.append(f'{target_browser_download_base_url}-darwin-amd64.tar.gz')
         if TARGET_DARWIN_ARM64:
-            archive_urls.append(
-                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-darwin-arm64.tar.gz'  # noqa
-            )
+            archive_urls.append(f'{target_browser_download_base_url}-darwin-arm64.tar.gz')
         if TARGET_LINUX_AMD64:
-            archive_urls.append(
-                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-amd64.tar.gz'  # noqa
-            )
+            archive_urls.append(f'{target_browser_download_base_url}-linux-amd64.tar.gz')
         if TARGET_LINUX_ARM64:
-            archive_urls.append(
-                f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}-linux-arm64.tar.gz'  # noqa
-            )
+            archive_urls.append(f'{target_browser_download_base_url}-linux-arm64.tar.gz')
 
         checksums = []
         for archive_url in archive_urls:
-            archive_filename = App.download_archive(archive_url)
-            checksum = Checksum.get_checksum(archive_filename)
-            archive_checksum_entry = f'{checksum} {archive_filename}'
-            checksums.append(
-                {
-                    archive_filename: {
-                        'checksum': checksum,
-                        'url': archive_url,
-                    }
-                },
-            )
-
-            Utils.write_file(CHECKSUM_FILE, archive_checksum_entry, 'a')
+            for asset in assets:
+                # Download the asset url so private repos work but use the brower URL for name and path in formula
+                if archive_url == auto_generated_release_tar or archive_url == auto_generated_release_zip:
+                    download_url = archive_url
+                else:
+                    download_url = asset['url']
+                if (
+                    archive_url == auto_generated_release_tar
+                    or archive_url == auto_generated_release_zip
+                    or archive_url == asset['browser_download_url']
+                ):
+                    downloaded_filename = App.download_archive(download_url)
+                    checksum = Checksum.get_checksum(downloaded_filename)
+                    archive_filename = Utils.get_filename_from_path(archive_url)
+                    archive_checksum_entry = f'{checksum} {archive_filename}'
+                    checksums.append(
+                        {
+                            archive_filename: {
+                                'checksum': checksum,
+                                'url': archive_url,
+                            }
+                        },
+                    )
+                    Utils.write_file(CHECKSUM_FILE, archive_checksum_entry, 'a')
+                    break
 
         logger.info(f'Generating Homebrew formula for {GITHUB_REPO}...')
         template = Formula.generate_formula_data(
@@ -124,6 +136,8 @@ class App:
             auto_generated_release_tar,
             DEPENDS_ON,
             TEST,
+            DOWNLOAD_STRATEGY,
+            CUSTOM_REQUIRE,
         )
 
         Utils.write_file(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER, f'{repository["name"]}.rb'), template, 'w')
@@ -139,7 +153,7 @@ class App:
             logger.info(f'Skipping commit to {HOMEBREW_TAP}.')
         else:
             logger.info(f'Attempting to upload checksum.txt to the latest release of {GITHUB_REPO}...')
-            Checksum.upload_checksum_file()
+            Checksum.upload_checksum_file(latest_release)
 
             logger.info(f'Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...')
             Git.add(HOMEBREW_TAP)
@@ -180,11 +194,11 @@ class App:
     @staticmethod
     def download_archive(url: str) -> str:
         """Gets an archive (eg: zip, tar) from GitHub and saves it locally."""
-        response = Utils.make_get_request(
+        response = Utils.make_github_get_request(
             url=url,
             stream=True,
         )
-        filename = url.rsplit('/', 1)[1]
+        filename = Utils.get_filename_from_path(url)
         Utils.write_file(filename, response.content, 'wb')
 
         return filename
