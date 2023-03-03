@@ -15,8 +15,8 @@ CUSTOM_REQUIRE = os.getenv('INPUT_CUSTOM_REQUIRE')
 LOGGER_NAME = 'homebrew-releaser'
 SUBPROCESS_TIMEOUT = 30
 GITHUB_HEADERS = {
-    'accept': 'application/vnd.github.v3+json',
-    'agent': 'Homebrew Releaser',
+    'Accept': 'application/vnd.github.v3+json',
+    'Agent': 'Homebrew Releaser',
     'Authorization': f'Bearer {GITHUB_TOKEN}',
 }
 CHECKSUM_FILE = 'checksum.txt'
