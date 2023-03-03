@@ -83,11 +83,11 @@ jobs:
           # to implement the strategy and add it to your tap repository.
           # Example: https://docs.brew.sh/Formula-Cookbook#specifying-the-download-strategy-explicitly
           # Optional - string
-          download_strategy: GitHubPrivateRepositoryReleaseDownloadStrategy
+          download_strategy: CurlDownloadStrategy
 
           # Allows you to add a custom require_relative at the top of the formula template.
           # Optional - string
-          custom_require: lib/private_strategy
+          custom_require: custom_download_strategy
 
           # Adds URL and checksum targets for different OS and architecture pairs. Using this option assumes 
           # a tar archive exists on your GitHub repo with the following URL pattern (this cannot be customized):

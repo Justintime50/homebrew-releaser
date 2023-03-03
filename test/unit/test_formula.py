@@ -585,11 +585,11 @@ def test_generate_formula_download_strategy():
         tar_url=mock_tar_url,
         depends_on=None,
         test=None,
-        download_strategy='GitHubPrivateRepositoryReleaseDownloadStrategy',
+        download_strategy='CustomDownloadStrategy',
         custom_require='../mock_download_strategy',
     )
 
     record_formula(formula_path, formula_filename, formula)
 
-    assert formula.count(', using: GitHubPrivateRepositoryReleaseDownloadStrategy') == 5
+    assert formula.count(', using: CustomDownloadStrategy') == 5
     assert 'require_relative "../mock_download_strategy"' in formula
