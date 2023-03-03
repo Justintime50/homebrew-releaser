@@ -18,6 +18,18 @@ def test_make_github_get_request(mock_request):
     mock_request.assert_called_once_with(url, headers=GITHUB_HEADERS, stream=False)
 
 
+@patch('requests.get')
+def test_make_github_get_request_stream(mock_request):
+    """Tests that we setup a request correctly when we enable streaming."""
+    url = 'https://api.github.com/repos/Justintime50/homebrew-releaser'
+    Utils.make_github_get_request(url=url, stream=True)
+
+    headers = GITHUB_HEADERS
+    headers['Accept'] = 'application/octet-stream'
+
+    mock_request.assert_called_once_with(url, headers=headers, stream=True)
+
+
 @patch('requests.get', side_effect=requests.exceptions.RequestException('mock-error'))
 def test_make_github_get_request_exception(mock_request):
     url = 'https://api.github.com/repos/Justintime50/homebrew-releaser'
