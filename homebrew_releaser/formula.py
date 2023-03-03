@@ -108,6 +108,10 @@ class Formula:
                 linux_arm64_url = checksum_url
                 linux_arm64_checksum = checksum[checksum_filename]['checksum']  # type: ignore
 
+        # We set these so we can properly space items only if both are present
+        darwin_amd_and_arm = darwin_amd64_url and darwin_arm64_url
+        linux_amd_and_arm = linux_amd64_url and linux_arm64_url
+
         # Ruby template data MUST remain double spaced to conform to `brew audit`.
         # You may notice some template checks have a line break after the opening tag, this is to ensure
         # we only add that line break when that section is present.
@@ -140,8 +144,10 @@ class {{class_name}} < Formula
       sha256 "{{darwin_amd64_checksum}}"
     end
     {{/ darwin_amd64_url}}
-    {{# darwin_arm64_url}}
+    {{# darwin_amd_and_arm}}
 
+    {{/ darwin_amd_and_arm}}
+    {{# darwin_arm64_url}}
     on_arm do
       url "{{darwin_arm64_url}}"{{# download_strategy}}, using: {{download_strategy}}{{/ download_strategy}}
       sha256 "{{darwin_arm64_checksum}}"
@@ -158,8 +164,10 @@ class {{class_name}} < Formula
       sha256 "{{linux_amd64_checksum}}"
     end
     {{/ linux_amd64_url}}
-    {{# linux_arm64_url}}
+    {{# linux_amd_and_arm}}
 
+    {{/ linux_amd_and_arm}}
+    {{# linux_arm64_url}}
     on_arm do
       url "{{linux_arm64_url}}"{{# download_strategy}}, using: {{download_strategy}}{{/ download_strategy}}
       sha256 "{{linux_arm64_checksum}}"
@@ -206,6 +214,8 @@ end
                 'linux_amd64_checksum': linux_amd64_checksum,
                 'linux_arm64_url': linux_arm64_url,
                 'linux_arm64_checksum': linux_arm64_checksum,
+                'darwin_amd_and_arm': darwin_amd_and_arm,
+                'linux_amd_and_arm': linux_amd_and_arm,
                 'darwin': target_darwin,
                 'linux': target_linux,
             },

@@ -445,6 +445,61 @@ def test_generate_formula_linux_matrix():
     assert 'on_arm' in formula
 
 
+@patch('homebrew_releaser.formula.TARGET_DARWIN_ARM64', True)
+@patch('homebrew_releaser.formula.TARGET_LINUX_AMD64', True)
+def test_one_of_each_matrix():
+    """Tests that we generate the formula content correctly when we specify only one arch from each OS.
+    This test helps ensure that we properly spaces the `on_` functions correctly when only one is present.
+
+    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    """
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
+    mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/v0.1.0.tar.gz'
+
+    repository = {
+        'description': DESCRIPTION,
+        'license': LICENSE,
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                },
+            },
+            {
+                'test-formula-0.1.0-darwin-arm64.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz',  # noqa
+                },
+            },
+            {
+                'test-formula-0.1.0-linux-amd64.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': 'https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz',  # noqa
+                },
+            },
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=None,
+        test=None,
+    )
+
+    record_formula(formula_path, formula_filename, formula)
+
+    assert 'on_macos' in formula
+    assert 'on_intel' in formula
+    assert 'on_linux' in formula
+    assert 'on_arm' in formula
+
+
 @patch.dict(os.environ, {'INPUT_TARGET_DARWIN_AMD64': 'false'})
 @patch.dict(os.environ, {'INPUT_TARGET_DARWIN_ARM64': 'false'})
 @patch.dict(os.environ, {'INPUT_TARGET_LINUX_AMD64': 'false'})
