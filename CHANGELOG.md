@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Next Release
+## v0.16.0 (2023-03-03)
 
 - Adds `download_strategy` input to define a custom Homebrew download strategy for your formula
 - Adds `custom_require` input to define a custom `relative_require` in the formula template
