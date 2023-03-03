@@ -79,9 +79,15 @@ jobs:
           # Optional - string
           test: 'assert_match("my script output", shell_output("my-script-command"))'
 
-          # Custom download strategy you want to use for downloading formula.
+          # Allows you to set a custom download strategy. Note that you'll need
+          # to implement the strategy and add it to your tap repository.
+          # Example: https://docs.brew.sh/Formula-Cookbook#specifying-the-download-strategy-explicitly
           # Optional - string
           download_strategy: GitHubPrivateRepositoryReleaseDownloadStrategy
+
+          # Allows you to add a custom require_relative at the top of the formula template.
+          # Optional - string
+          custom_require: lib/private_strategy
 
           # Adds URL and checksum targets for different OS and architecture pairs. Using this option assumes 
           # a tar archive exists on your GitHub repo with the following URL pattern (this cannot be customized):

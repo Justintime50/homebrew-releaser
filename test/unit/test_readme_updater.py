@@ -55,7 +55,7 @@ def test_update_readme_cannot_find_old_table(
     mock_replace_table_contents.assert_not_called()
 
 
-@patch('homebrew_releaser.readme_updater.FORMULA_FOLDER', 'test')
+@patch('homebrew_releaser.readme_updater.FORMULA_FOLDER', 'test/unit')
 def test_format_formula_data_no_ruby_files():
     """Tests that we throw an error when the formula folder provided does not contain any
     Ruby files (formula files).

@@ -37,6 +37,9 @@ inputs:
   download_strategy:
     description: "The Homebrew download strategy to use for formulas."
     required: false
+  custom_require:
+    description: "Allows you to add a custom require_relative at the top of the formula template."
+    required: false
   target_darwin_amd64:
     description: "Add a custom URL/checksum target for AMD64 Darwin builds."
     required: false
