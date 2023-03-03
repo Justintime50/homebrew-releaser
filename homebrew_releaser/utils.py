@@ -22,7 +22,7 @@ class Utils:
         try:
             response = requests.get(
                 url,
-                headers=GITHUB_HEADERS,
+                headers=headers,
                 stream=stream,
             )
             response.raise_for_status()

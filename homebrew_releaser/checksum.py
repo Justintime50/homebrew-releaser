@@ -50,7 +50,7 @@ class Checksum:
 
         upload_url = f'https://uploads.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/{latest_release_id}/assets?name={CHECKSUM_FILE}'  # noqa
         headers = GITHUB_HEADERS
-        headers.update({'Content-Type': 'text/plain'})
+        headers['Content-Type'] = 'text/plain'
 
         try:
             _ = requests.post(
