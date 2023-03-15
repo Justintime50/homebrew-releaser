@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.16.1 (2023-03-15)
+
+- Use `x-access-token` as Username when authenticating for git clone and push operations which should allow password to explicitly be stored in the correct field
+
 ## v0.16.0 (2023-03-03)
 
 - Adds `download_strategy` input to define a custom Homebrew download strategy for your formula

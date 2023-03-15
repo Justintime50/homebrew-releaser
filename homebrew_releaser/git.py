@@ -23,7 +23,12 @@ class Git:
 
         try:
             commands = [
-                ['git', 'clone', '--depth=1', f'https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git'],
+                [
+                    'git',
+                    'clone',
+                    '--depth=1',
+                    f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git',
+                ],
                 ['git', '-C', homebrew_tap, 'config', 'user.name', f'"{commit_owner}"'],
                 ['git', '-C', homebrew_tap, 'config', 'user.email', commit_email],
             ]
@@ -88,7 +93,7 @@ class Git:
 
         try:
             # fmt: off
-            command = ['git', '-C', homebrew_tap, 'push', f'https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git']  # noqa
+            command = ['git', '-C', homebrew_tap, 'push', f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git']  # noqa
             # fmt: on
             subprocess.check_output(  # nosec
                 command,

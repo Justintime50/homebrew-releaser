@@ -121,7 +121,13 @@ def test_push(mock_subprocess):
     Git.push(homebrew_tap, homebrew_owner)
 
     mock_subprocess.assert_called_once_with(
-        ['git', '-C', homebrew_tap, 'push', f'https://123@github.com/{homebrew_owner}/{homebrew_tap}.git'],
+        [
+            'git',
+            '-C',
+            homebrew_tap,
+            'push',
+            f'https://x-access-token:123@github.com/{homebrew_owner}/{homebrew_tap}.git',
+        ],
         stdin=None,
         stderr=None,
         timeout=SUBPROCESS_TIMEOUT,
