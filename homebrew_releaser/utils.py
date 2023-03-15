@@ -6,6 +6,7 @@ import woodchips
 from homebrew_releaser.constants import (
     GITHUB_HEADERS,
     LOGGER_NAME,
+    TIMEOUT,
 )
 
 
@@ -24,6 +25,7 @@ class Utils:
                 url,
                 headers=headers,
                 stream=stream,
+                timeout=TIMEOUT,
             )
             response.raise_for_status()
             logger.debug(f'HTTP GET request made successfully to {url}.')

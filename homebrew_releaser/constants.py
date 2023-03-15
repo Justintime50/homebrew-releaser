@@ -13,7 +13,7 @@ CUSTOM_REQUIRE = os.getenv('INPUT_CUSTOM_REQUIRE')
 
 # App Constants
 LOGGER_NAME = 'homebrew-releaser'
-SUBPROCESS_TIMEOUT = 30
+TIMEOUT = 30
 GITHUB_HEADERS = {
     'Accept': 'application/vnd.github.v3+json',
     'Agent': 'Homebrew Releaser',

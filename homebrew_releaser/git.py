@@ -5,7 +5,7 @@ import woodchips
 from homebrew_releaser.constants import (
     GITHUB_TOKEN,
     LOGGER_NAME,
-    SUBPROCESS_TIMEOUT,
+    TIMEOUT,
 )
 
 
@@ -38,7 +38,7 @@ class Git:
                     command,
                     stdin=None,
                     stderr=None,
-                    timeout=SUBPROCESS_TIMEOUT,
+                    timeout=TIMEOUT,
                 )
             logger.debug('Git environment setup successfully.')
         except subprocess.TimeoutExpired as error:
@@ -57,7 +57,7 @@ class Git:
                 command,
                 stdin=None,
                 stderr=None,
-                timeout=SUBPROCESS_TIMEOUT,
+                timeout=TIMEOUT,
             )
             logger.debug('Assets added to git commit successfully.')
         except subprocess.TimeoutExpired as error:
@@ -78,7 +78,7 @@ class Git:
                 command,
                 stdin=None,
                 stderr=None,
-                timeout=SUBPROCESS_TIMEOUT,
+                timeout=TIMEOUT,
             )
             logger.debug('Assets committed successfully.')
         except subprocess.TimeoutExpired as error:
@@ -99,7 +99,7 @@ class Git:
                 command,
                 stdin=None,
                 stderr=None,
-                timeout=SUBPROCESS_TIMEOUT,
+                timeout=TIMEOUT,
             )
             logger.debug(f'Assets pushed successfully to {homebrew_tap}.')
         except subprocess.TimeoutExpired as error:

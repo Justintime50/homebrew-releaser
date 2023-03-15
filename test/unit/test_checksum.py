@@ -8,7 +8,7 @@ import pytest
 import requests
 
 from homebrew_releaser.checksum import Checksum
-from homebrew_releaser.constants import SUBPROCESS_TIMEOUT
+from homebrew_releaser.constants import TIMEOUT
 
 
 @patch('subprocess.check_output')
@@ -20,7 +20,7 @@ def test_get_checksum(mock_subprocess, mock_tar_filename):
         ['shasum', '-a', '256', mock_tar_filename],
         stdin=None,
         stderr=None,
-        timeout=SUBPROCESS_TIMEOUT,
+        timeout=TIMEOUT,
     )
 
 
