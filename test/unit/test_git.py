@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from homebrew_releaser.constants import SUBPROCESS_TIMEOUT
+from homebrew_releaser.constants import TIMEOUT
 from homebrew_releaser.git import Git
 
 
@@ -51,7 +51,7 @@ def test_add(mock_subprocess):
         ['git', '-C', homebrew_tap, 'add', '.'],
         stdin=None,
         stderr=None,
-        timeout=SUBPROCESS_TIMEOUT,
+        timeout=TIMEOUT,
     )
 
 
@@ -85,7 +85,7 @@ def test_commit(mock_subprocess):
         ['git', '-C', homebrew_tap, 'commit', '-m', f'"Brew formula update for {repo_name} version {version}"'],
         stdin=None,
         stderr=None,
-        timeout=SUBPROCESS_TIMEOUT,
+        timeout=TIMEOUT,
     )
 
 
@@ -121,10 +121,16 @@ def test_push(mock_subprocess):
     Git.push(homebrew_tap, homebrew_owner)
 
     mock_subprocess.assert_called_once_with(
-        ['git', '-C', homebrew_tap, 'push', f'https://123@github.com/{homebrew_owner}/{homebrew_tap}.git'],
+        [
+            'git',
+            '-C',
+            homebrew_tap,
+            'push',
+            f'https://x-access-token:123@github.com/{homebrew_owner}/{homebrew_tap}.git',
+        ],
         stdin=None,
         stderr=None,
-        timeout=SUBPROCESS_TIMEOUT,
+        timeout=TIMEOUT,
     )
 
 

@@ -5,7 +5,7 @@ import woodchips
 from homebrew_releaser.constants import (
     GITHUB_TOKEN,
     LOGGER_NAME,
-    SUBPROCESS_TIMEOUT,
+    TIMEOUT,
 )
 
 
@@ -23,7 +23,12 @@ class Git:
 
         try:
             commands = [
-                ['git', 'clone', '--depth=1', f'https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git'],
+                [
+                    'git',
+                    'clone',
+                    '--depth=1',
+                    f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git',
+                ],
                 ['git', '-C', homebrew_tap, 'config', 'user.name', f'"{commit_owner}"'],
                 ['git', '-C', homebrew_tap, 'config', 'user.email', commit_email],
             ]
@@ -33,7 +38,7 @@ class Git:
                     command,
                     stdin=None,
                     stderr=None,
-                    timeout=SUBPROCESS_TIMEOUT,
+                    timeout=TIMEOUT,
                 )
             logger.debug('Git environment setup successfully.')
         except subprocess.TimeoutExpired as error:
@@ -52,7 +57,7 @@ class Git:
                 command,
                 stdin=None,
                 stderr=None,
-                timeout=SUBPROCESS_TIMEOUT,
+                timeout=TIMEOUT,
             )
             logger.debug('Assets added to git commit successfully.')
         except subprocess.TimeoutExpired as error:
@@ -73,7 +78,7 @@ class Git:
                 command,
                 stdin=None,
                 stderr=None,
-                timeout=SUBPROCESS_TIMEOUT,
+                timeout=TIMEOUT,
             )
             logger.debug('Assets committed successfully.')
         except subprocess.TimeoutExpired as error:
@@ -88,13 +93,13 @@ class Git:
 
         try:
             # fmt: off
-            command = ['git', '-C', homebrew_tap, 'push', f'https://{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git']  # noqa
+            command = ['git', '-C', homebrew_tap, 'push', f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git']  # noqa
             # fmt: on
             subprocess.check_output(  # nosec
                 command,
                 stdin=None,
                 stderr=None,
-                timeout=SUBPROCESS_TIMEOUT,
+                timeout=TIMEOUT,
             )
             logger.debug(f'Assets pushed successfully to {homebrew_tap}.')
         except subprocess.TimeoutExpired as error:

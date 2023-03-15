@@ -15,7 +15,7 @@ def test_make_github_get_request(mock_request):
     url = 'https://api.github.com/repos/Justintime50/homebrew-releaser'
     Utils.make_github_get_request(url=url)
 
-    mock_request.assert_called_once_with(url, headers=GITHUB_HEADERS, stream=False)
+    mock_request.assert_called_once_with(url, headers=GITHUB_HEADERS, stream=False, timeout=30)
 
 
 @patch('requests.get')
@@ -27,7 +27,7 @@ def test_make_github_get_request_stream(mock_request):
     headers = GITHUB_HEADERS
     headers['Accept'] = 'application/octet-stream'
 
-    mock_request.assert_called_once_with(url, headers=headers, stream=True)
+    mock_request.assert_called_once_with(url, headers=headers, stream=True, timeout=30)
 
 
 @patch('requests.get', side_effect=requests.exceptions.RequestException('mock-error'))

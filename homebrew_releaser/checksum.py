@@ -10,7 +10,7 @@ from homebrew_releaser.constants import (
     GITHUB_OWNER,
     GITHUB_REPO,
     LOGGER_NAME,
-    SUBPROCESS_TIMEOUT,
+    TIMEOUT,
 )
 
 
@@ -26,7 +26,7 @@ class Checksum:
                 command,
                 stdin=None,
                 stderr=None,
-                timeout=SUBPROCESS_TIMEOUT,
+                timeout=TIMEOUT,
             )
             checksum = output.decode().split()[0]
             checksum_filename = output.decode().split()[1]
@@ -57,6 +57,7 @@ class Checksum:
                 upload_url,
                 headers=headers,
                 data=checksum_binary,
+                timeout=TIMEOUT,
             )
             logger.info(f'checksum.txt uploaded successfully to {GITHUB_REPO}.')
         except requests.exceptions.RequestException as error:
