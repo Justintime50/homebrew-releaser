@@ -148,6 +148,7 @@ class App:
         else:
             logger.debug('Skipping update to project README.')
 
+        # Although users can skip a commit, still commit (and don't push) to dry-run a commit
         Git.add(HOMEBREW_TAP)
         Git.commit(HOMEBREW_TAP, GITHUB_REPO, version)
 

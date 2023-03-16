@@ -14,7 +14,6 @@ from homebrew_releaser.constants import (
     FORMULA_FOLDER,
     LOGGER_NAME,
 )
-from homebrew_releaser.git import Git
 
 
 TABLE_START_TAG = '<!-- project_table_start -->'
@@ -179,8 +178,6 @@ class ReadmeUpdater:
             with open(readme, 'w') as readme_contents:
                 readme_contents.write(file_content.replace(old_table, new_table))
             logger.debug(f'{readme} table updated successfully.')
-
-            Git.add(homebrew_tap)
 
     @staticmethod
     def does_readme_exist(homebrew_tap: str) -> Optional[str]:
