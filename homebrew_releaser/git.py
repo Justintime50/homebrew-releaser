@@ -40,7 +40,7 @@ class Git:
                     timeout=TIMEOUT,
                 )
             except subprocess.CalledProcessError as error:
-                logger.critical(error.stderr)
+                logger.critical(error.output)
                 raise
 
         logger.debug('Git environment setup successfully.')
