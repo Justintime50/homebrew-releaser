@@ -36,6 +36,7 @@ class Git:
             subprocess.check_output(  # nosec
                 command,
                 stderr=subprocess.STDOUT,
+                text=True,
                 timeout=TIMEOUT,
             )
 
@@ -50,6 +51,7 @@ class Git:
         subprocess.check_output(  # nosec
             command,
             stderr=subprocess.STDOUT,
+            text=True,
             timeout=TIMEOUT,
         )
         logger.debug('Assets added to git commit successfully.')
@@ -65,6 +67,7 @@ class Git:
         subprocess.check_output(  # nosec
             command,
             stderr=subprocess.STDOUT,
+            text=True,
             timeout=TIMEOUT,
         )
         logger.debug('Assets committed successfully.')
@@ -80,6 +83,7 @@ class Git:
         subprocess.check_output(  # nosec
             command,
             stderr=subprocess.STDOUT,
+            text=True,
             timeout=TIMEOUT,
         )
         logger.debug(f'Assets pushed successfully to {homebrew_tap}.')
