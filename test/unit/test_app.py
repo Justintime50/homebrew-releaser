@@ -42,8 +42,8 @@ def test_run_github_action_skip_commit(
     mock_generate_formula.assert_called_once()
     mock_write_file.call_count == 2
     mock_setup_git.assert_called_once()
-    mock_add_formula.assert_not_called()
-    mock_commit_formula.assert_not_called()
+    mock_add_formula.assert_called_once()
+    mock_commit_formula.assert_called_once()
     mock_push_formula.assert_not_called()
 
 

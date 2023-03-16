@@ -33,15 +33,11 @@ class Git:
         ]
 
         for command in commands:
-            try:
-                subprocess.check_output(  # nosec
-                    command,
-                    stdin=None,
-                    timeout=TIMEOUT,
-                )
-            except subprocess.CalledProcessError as error:
-                logger.critical(error.output.decode())
-                raise
+            subprocess.check_output(  # nosec
+                command,
+                stdin=None,
+                timeout=TIMEOUT,
+            )
 
         logger.debug('Git environment setup successfully.')
 
