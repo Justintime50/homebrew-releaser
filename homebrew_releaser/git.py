@@ -35,7 +35,6 @@ class Git:
         for command in commands:
             subprocess.check_output(  # nosec
                 command,
-                stdin=None,
                 timeout=TIMEOUT,
             )
 
@@ -49,7 +48,6 @@ class Git:
         command = ['git', '-C', homebrew_tap, 'add', '.']
         subprocess.check_output(  # nosec
             command,
-            stdin=None,
             timeout=TIMEOUT,
         )
         logger.debug('Assets added to git commit successfully.')
@@ -64,7 +62,6 @@ class Git:
         # fmt: on
         subprocess.check_output(  # nosec
             command,
-            stdin=None,
             timeout=TIMEOUT,
         )
         logger.debug('Assets committed successfully.')
@@ -79,7 +76,6 @@ class Git:
         # fmt: on
         subprocess.check_output(  # nosec
             command,
-            stdin=None,
             timeout=TIMEOUT,
         )
         logger.debug(f'Assets pushed successfully to {homebrew_tap}.')
