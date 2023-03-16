@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.16.2 (2023-03-15)
+
+- Fixes a packaging issue with v0.16.1
+
 ## v0.16.1 (2023-03-15)
 
 - Use `x-access-token` as Username when authenticating for git clone and push operations which should allow password to explicitly be stored in the correct field
