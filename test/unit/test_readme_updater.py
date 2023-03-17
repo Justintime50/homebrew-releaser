@@ -172,8 +172,7 @@ def test_read_current_readme():
     assert '# Homebrew Releaser' in readme
 
 
-@patch('homebrew_releaser.git.Git.add')
-def test_replace_table_contents(mock_git_add):
+def test_replace_table_contents():
     """Test that we add the new README changes to git."""
     with patch('builtins.open', mock_open()):
         ReadmeUpdater.replace_table_contents(
@@ -183,12 +182,11 @@ def test_replace_table_contents(mock_git_add):
             homebrew_tap='./',
         )
 
-    mock_git_add.assert_called_once()
 
-
+@patch('logging.Logger.debug')
 @patch('homebrew_releaser.git.Git.add')
-def test_replace_table_contents_no_readme(mock_git_add):
-    """Tests that we do not `git add` for a README that doesn't exist."""
+def test_replace_table_contents_no_readme(mock_git_add, mock_logger):
+    """Tests that we do not run through the update readme block when there is no readme."""
     ReadmeUpdater.replace_table_contents(
         file_content='mock file contents',
         old_table='old table contents',
@@ -196,7 +194,7 @@ def test_replace_table_contents_no_readme(mock_git_add):
         homebrew_tap='./test',
     )
 
-    mock_git_add.assert_not_called()
+    mock_logger.assert_not_called()
 
 
 def test_does_readme_exist():

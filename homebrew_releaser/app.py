@@ -148,16 +148,17 @@ class App:
         else:
             logger.debug('Skipping update to project README.')
 
+        # Although users can skip a commit, still commit (and don't push) to dry-run a commit
+        Git.add(HOMEBREW_TAP)
+        Git.commit(HOMEBREW_TAP, GITHUB_REPO, version)
+
         if SKIP_COMMIT:
             logger.info(f'Skipping upload of checksum.txt to {HOMEBREW_TAP}.')
-            logger.info(f'Skipping commit to {HOMEBREW_TAP}.')
+            logger.info(f'Skipping push to {HOMEBREW_TAP}.')
         else:
             logger.info(f'Attempting to upload checksum.txt to the latest release of {GITHUB_REPO}...')
             Checksum.upload_checksum_file(latest_release)
-
             logger.info(f'Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...')
-            Git.add(HOMEBREW_TAP)
-            Git.commit(HOMEBREW_TAP, GITHUB_REPO, version)
             Git.push(HOMEBREW_TAP, HOMEBREW_OWNER)
             logger.info(f'Successfully released {version} of {GITHUB_REPO} to {HOMEBREW_TAP}!')
 
