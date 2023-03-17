@@ -1,5 +1,14 @@
 # CHANGELOG
 
+## v0.16.3 (2023-03-16)
+
+- Refactors git subprocess error handling
+  - Sends `stderr` to `stdout` and captures the subprocess error output as text (previously got clobbered)
+  - Returns stack trace
+  - Use new helper function to keep all git calls uniform
+  - More appropriate error logging and capture
+  - Better tests surrounding subprocesses
+
 ## v0.16.2 (2023-03-15)
 
 - Fixes a packaging issue with v0.16.1
