@@ -8,6 +8,8 @@
   - Use new helper function to keep all git calls uniform
   - More appropriate error logging and capture
   - Better tests surrounding subprocesses
+- When updating a README table, we now only `git add` once instead of twice
+- Even if you specify `skip_commit`, we will now run `git commit` but will continue to skip the `git push`, this will ensure a more complete dry-run and will help debug committing issues since it now can commit safely without updating a remote repo
 
 ## v0.16.2 (2023-03-15)
 
