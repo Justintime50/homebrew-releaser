@@ -183,6 +183,20 @@ def test_replace_table_contents():
         )
 
 
+@patch('logging.Logger.debug')
+@patch('homebrew_releaser.git.Git.add')
+def test_replace_table_contents_no_readme(mock_git_add, mock_logger):
+    """Tests that we do not run through the update readme block when there is no readme."""
+    ReadmeUpdater.replace_table_contents(
+        file_content='mock file contents',
+        old_table='old table contents',
+        new_table='new table contents',
+        homebrew_tap='./test',
+    )
+
+    mock_logger.assert_not_called()
+
+
 def test_does_readme_exist():
     """Tests that we can find a README in a directory."""
     readme = ReadmeUpdater.does_readme_exist('./')

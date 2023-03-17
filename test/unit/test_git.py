@@ -101,11 +101,12 @@ def test_push(mock_subprocess):
     )
 
 
+@patch('logging.Logger.debug')
 @patch(
     'subprocess.check_output',
     side_effect=subprocess.CalledProcessError(cmd='subprocess.check_output', returncode=1),
 )
-def test_setup_called_process_error(mock_subprocess):
+def test_setup_called_process_error(mock_subprocess, mock_logger):
     """Tests that we log a subprocess error when they happen.
 
     All git commands should fail in the same manner.
@@ -116,12 +117,15 @@ def test_setup_called_process_error(mock_subprocess):
     with pytest.raises(subprocess.CalledProcessError):
         Git.setup(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
 
+    mock_logger.assert_not_called()
 
+
+@patch('logging.Logger.debug')
 @patch(
     'subprocess.check_output',
     side_effect=Exception(),
 )
-def test_setup_exception(mock_subprocess):
+def test_setup_exception(mock_subprocess, mock_logger):
     """Tests that we log an exception when they happen.
 
     All git commands should fail in the same manner.
@@ -131,3 +135,5 @@ def test_setup_exception(mock_subprocess):
     commit_email = 'user@example.com'
     with pytest.raises(Exception):
         Git.setup(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
+
+    mock_logger.assert_not_called()
