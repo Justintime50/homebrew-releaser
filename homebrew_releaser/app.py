@@ -78,6 +78,7 @@ class App:
 
         logger.info('Generating tar archive checksum(s)...')
         archive_urls = []
+        archive_checksum_entries = ''
 
         # Auto-generated tar URL must come first for later use (order is important)
         archive_base_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/{version}'
@@ -106,6 +107,7 @@ class App:
                     download_url = archive_url
                 else:
                     download_url = asset['url']
+
                 if (
                     archive_url == auto_generated_release_tar
                     or archive_url == auto_generated_release_zip
@@ -114,7 +116,7 @@ class App:
                     downloaded_filename = App.download_archive(download_url)
                     checksum = Checksum.get_checksum(downloaded_filename)
                     archive_filename = Utils.get_filename_from_path(archive_url)
-                    archive_checksum_entry = f'{checksum} {archive_filename}'
+                    archive_checksum_entries += f'{checksum} {archive_filename}\n'
                     checksums.append(
                         {
                             archive_filename: {
@@ -123,8 +125,9 @@ class App:
                             }
                         },
                     )
-                    Utils.write_file(CHECKSUM_FILE, archive_checksum_entry, 'a')
                     break
+
+        Utils.write_file(CHECKSUM_FILE, archive_checksum_entries)
 
         logger.info(f'Generating Homebrew formula for {GITHUB_REPO}...')
         template = Formula.generate_formula_data(
