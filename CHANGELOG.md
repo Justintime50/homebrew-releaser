@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.16.5 (2023-03-23)
+
+- Fixes a bug that wouldn't build formula when no assets were present
+
 ## v0.16.4 (2023-03-20)
 
 - Writes checksum file once instead of appending for each

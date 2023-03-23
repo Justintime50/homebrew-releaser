@@ -101,6 +101,8 @@ class App:
 
         checksums = []
         for archive_url in archive_urls:
+            if not assets:
+                assets = [0]  # TODO: This is a dumb hack to ensure we enter here even when we don't have any assets
             for asset in assets:
                 # Download the asset url so private repos work but use the brower URL for name and path in formula
                 if archive_url == auto_generated_release_tar or archive_url == auto_generated_release_zip:
