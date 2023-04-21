@@ -1,14 +1,14 @@
 name: build
 
-on: 
+on:
   push:
     paths:
       - '.github/workflows/build.yml'
       - '**/*.py'
     branches:
-      - "**"
+      - '**'
     tags:
-      - "!**"
+      - '!**'
   pull_request:
     paths:
       - '.github/workflows/build.yml'
@@ -23,7 +23,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
-          python-version: "3.11"
+          python-version: '3.11'
       - name: Install Dependencies
         run: make install
       - name: Check format
@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        pythonversion: ["3.11"]
+        pythonversion: ['3.11']
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
@@ -58,7 +58,7 @@ jobs:
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: "./coverage.lcov"
+          path-to-lcov: './coverage.lcov'
   brew-audit:
     runs-on: ubuntu-latest
     steps:
@@ -72,4 +72,4 @@ jobs:
           brew install bash
           brew install gcc
       - name: Run brew audit on generated test formula
-        run: brew audit --formula /home/runner/work/homebrew-releaser/homebrew-releaser/test/formulas/*.rb
+        run: make audit

@@ -3,10 +3,15 @@ VIRTUAL_ENV := venv
 VIRTUAL_BIN := $(VIRTUAL_ENV)/bin
 PROJECT_NAME := homebrew_releaser
 TEST_DIR := test
+CURRENT_DIR := $(shell pwd)
 
 ## help - Display help about make targets for this Makefile
 help:
 	@cat Makefile | grep '^## ' --color=never | cut -c4- | sed -e "`printf 's/ - /\t- /;'`" | column -s "`printf '\t'`" -t
+
+## audit - Runs brew audit against the generated formula
+audit:
+	brew audit --formula $(CURRENT_DIR)/test/formulas/*.rb
 
 ## build - Builds the project in preparation for release
 build:
@@ -64,4 +69,4 @@ scan:
 test:
 	$(VIRTUAL_BIN)/pytest
 
-.PHONY: help build coverage clean black black-check format format-check install isort isort-check lint mypy scan test
+.PHONY: help audit build coverage clean black black-check format format-check install isort isort-check lint mypy scan test

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.16.6 (2023-04-20)
+
+- Enables typing in generated formula to appease `brew audit`
+
 ## v0.16.5 (2023-03-23)
 
 - Fixes a bug that wouldn't build formula when no assets were present

@@ -44,6 +44,8 @@ class Formula:
         - Proper installable binary
         - Test is included
         - No version attribute if Homebrew can reliably infer the version from the tar URL (GitHub tag)
+        - Enable typing
+        - Enable frozen_string_literal
         """
         logger = woodchips.get(LOGGER_NAME)
 
@@ -115,7 +117,7 @@ class Formula:
         # Ruby template data MUST remain double spaced to conform to `brew audit`.
         # You may notice some template checks have a line break after the opening tag, this is to ensure
         # we only add that line break when that section is present.
-        template = """# typed: false
+        template = """# typed: true
 # frozen_string_literal: true
 {{# custom_require}}
 
