@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.16.7 (2023-05-24)
+
+- Only strips the leading `v` from the version string instead of replacing all `v`s with nothing so versions such as `v0.1.0.dev0` can be picked up
+
 ## v0.16.6 (2023-04-20)
 
 - Enables typing in generated formula to appease `brew audit`
