@@ -73,7 +73,7 @@ class App:
         ).json()
         assets = latest_release['assets']
         version = latest_release['tag_name']
-        version_no_v = version.replace('v', '')
+        version_no_v = version.lstrip('v')
         logger.info(f'Latest release ({version}) successfully identified!')
 
         logger.info('Generating tar archive checksum(s)...')
