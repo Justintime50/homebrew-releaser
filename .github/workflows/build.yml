@@ -18,58 +18,49 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v3
+      - uses: actions/checkout@v3
+      - uses: extractions/setup-just@v1
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - name: Install Dependencies
-        run: make install
-      - name: Check format
-        run: make format-check
-      - name: Scan for security vulnerabilities
-        run: make scan
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Build Docker image
-        run: docker build . -t justintime50/homebrew-releaser
+      - run: just install lint
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        pythonversion: ['3.11']
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v3
+      - uses: actions/checkout@v3
+      - uses: extractions/setup-just@v1
+      - uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.pythonversion }}
-      - name: Install Dependencies
-        run: make install
-      - name: Run tests
-        run: make coverage
-      - name: Coveralls
-        if: github.ref == 'refs/heads/main'
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: './coverage.lcov'
+          python-version: '3.11'
+      - run: just install coverage
   brew-audit:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
-      - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@master
+      - uses: actions/checkout@v3
+      - uses: extractions/setup-just@v1
+      - uses: Homebrew/actions/setup-homebrew@master
       # These Homebrew packages are needed since we have them as fake dependencies for some test output
-      - name: Setup Homebrew packages
-        run: |
-          brew install bash
-          brew install gcc
+      - name: Setup required Homebrew packages
+        run: brew install bash gcc
       - name: Run brew audit on generated test formula
-        run: make audit
+        run: just audit
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build Docker image
+        run: docker build . -t justintime50/homebrew-releaser
+  coverage:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: extractions/setup-just@v1
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: just install coverage
+      - uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: './coverage.lcov'

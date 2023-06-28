@@ -3,16 +3,15 @@ name: release
 on:
   push:
     tags:
-      - "*"
+      - '*'
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
         with:
-          fetch-depth: "0"
+          fetch-depth: '0'
       - name: Update stable git tag
         run: |
           git tag --force $STABLE_TAG ${GITHUB_REF##*/}

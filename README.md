@@ -131,7 +131,7 @@ jobs:
 
 ```bash
 # Get a comprehensive list of development tools
-make help
+just --list
 ```
 
 ### Run Manually via Docker
