@@ -31,7 +31,7 @@ coverage:
 
 # Remove the virtual environment and clear out .pyc files
 clean:
-    rm -rf {{VIRTUAL_ENV}} dist *.egg-info .coverage
+    rm -rf {{VIRTUAL_ENV}} dist *.egg-info .coverage htmlcov .*cache
     find . -name '*.pyc' -delete
 
 # Lints the project
