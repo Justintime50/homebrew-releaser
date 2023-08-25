@@ -2,6 +2,7 @@ import os
 
 import woodchips
 
+from homebrew_releaser._version import __version__
 from homebrew_releaser.checksum import Checksum
 from homebrew_releaser.constants import (
     CHECKSUM_FILE,
@@ -60,7 +61,7 @@ class App:
         App.setup_logger()
         logger = woodchips.get(LOGGER_NAME)
 
-        logger.info('Starting Homebrew Releaser...')
+        logger.info(f'Starting Homebrew Releaser v{__version__}...')
         App.check_required_env_variables()
 
         logger.info('Setting up git environment...')
