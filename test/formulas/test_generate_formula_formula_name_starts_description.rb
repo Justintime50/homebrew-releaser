@@ -5,7 +5,7 @@
 class TestGenerateFormulaFormulaNameStartsDescription < Formula
   desc "Is a tool"
   homepage "https://github.com/Justintime50/test-generate-formula-formula-name-starts-description"
-  url "https://github.com/Justintime50/test-generate-formula-formula-name-starts-description/archive/v0.1.0.tar.gz"
+  url "https://github.com/Justintime50/test-generate-formula-formula-name-starts-description/archive/refs/tags/v0.1.0.tar.gz"
   sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   license "MIT"
 

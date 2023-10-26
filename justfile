@@ -7,7 +7,15 @@ CURRENT_DIR := `pwd`
 
 # Runs brew audit against the generated formula
 audit:
-    brew audit --formula {{CURRENT_DIR}}/test/formulas/*.rb
+    #!/usr/bin/env bash
+    brew tap-new homebrew-releaser/test --no-git
+    cp -r test/formulas/* $(brew --repository)/Library/Taps/homebrew-releaser/homebrew-test/Formula
+    cp -r test/formula_imports $(brew --repository)/Library/Taps/homebrew-releaser/homebrew-test
+    for file in $(brew --repository)/Library/Taps/homebrew-releaser/homebrew-test/Formula/*
+    do
+        brew audit --formula "$(basename ${file%.rb})"
+    done
+    brew untap homebrew-releaser/test
 
 # Scans the project for security vulnerabilities
 bandit:
