@@ -7,7 +7,7 @@ require_relative "../formula_imports/mock_download_strategy"
 class TestGenerateFormulaDownloadStrategy < Formula
   desc "Release scripts, binaries, and executables to github"
   homepage "https://github.com/Justintime50/test-generate-formula-download-strategy"
-  url "https://github.com/Justintime50/test-generate-formula-download-strategy/archive/v0.1.0.tar.gz", using: CustomDownloadStrategy
+  url "https://github.com/Justintime50/test-generate-formula-download-strategy/archive/refs/tags/v0.1.0.tar.gz", using: CustomDownloadStrategy
   sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   license "MIT"
 

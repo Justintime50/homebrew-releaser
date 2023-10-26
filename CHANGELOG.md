@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## v0.17.0 (2023-10-25)
+## v0.17.0 (2023-10-26)
 
 - Upgrades from Python 3.11 to Python 3.12
+- Corrects `/archive` URLs to the new `/archive/refs/tags` URLs to satisfy `brew audit`
 
 ## v0.16.7 (2023-05-24)
 

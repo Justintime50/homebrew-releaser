@@ -9,11 +9,10 @@ CURRENT_DIR := `pwd`
 audit:
     #!/usr/bin/env bash
     brew tap-new homebrew-releaser/test --no-git
-    cp -r test/formula_imports $(brew --repository)/Library/Taps/homebrew-releaser/homebrew-test
     cp -r test/formulas/* $(brew --repository)/Library/Taps/homebrew-releaser/homebrew-test/Formula
+    cp -r test/formula_imports $(brew --repository)/Library/Taps/homebrew-releaser/homebrew-test
     for file in $(brew --repository)/Library/Taps/homebrew-releaser/homebrew-test/Formula/*
     do
-        echo "$(basename ${file%.rb})"
         brew audit --formula "$(basename ${file%.rb})"
     done
     brew untap homebrew-releaser/test
