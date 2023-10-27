@@ -13,7 +13,7 @@ audit:
     cp -r test/formula_imports $(brew --repository)/Library/Taps/homebrew-releaser/homebrew-test
     for file in $(brew --repository)/Library/Taps/homebrew-releaser/homebrew-test/Formula/*
     do
-        brew audit --formula "$(basename ${file%.rb})"
+        brew audit --formula "homebrew-releaser/test/$(basename ${file%.rb})"
     done
     brew untap homebrew-releaser/test
 
