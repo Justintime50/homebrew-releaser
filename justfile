@@ -21,10 +21,6 @@ audit:
 bandit:
     {{VIRTUAL_BIN}}/bandit -r {{PROJECT_NAME}}/
 
-# Builds the project in preparation for release
-build:
-    {{VIRTUAL_BIN}}/python -m build
-
 # Runs the Black Python formatter against the project
 black:
     {{VIRTUAL_BIN}}/black {{PROJECT_NAME}}/ {{TEST_DIR}}/
