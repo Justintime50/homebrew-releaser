@@ -636,3 +636,39 @@ def test_generate_formula_download_strategy():
 
     assert formula.count(', using: CustomDownloadStrategy') == 5
     assert 'require_relative "../formula_imports/mock_download_strategy"' in formula
+
+
+def test_generate_formula_override_version():
+    """Tests that we generate the formula content correctly (when the version is overridden).
+
+    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    """
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
+    mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz'
+
+    repository = {
+        'description': DESCRIPTION,
+        'license': LICENSE,
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                },
+            }
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        version='9.8.7',
+    )
+
+    record_formula(formula_path, formula_filename, formula)
+
+    assert '9.8.7' in formula

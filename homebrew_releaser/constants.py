@@ -10,6 +10,7 @@ SKIP_COMMIT = (
 )  # Must check for string `false` since GitHub Actions passes the bool as a string
 DOWNLOAD_STRATEGY = os.getenv('INPUT_DOWNLOAD_STRATEGY')
 CUSTOM_REQUIRE = os.getenv('INPUT_CUSTOM_REQUIRE')
+VERSION = os.getenv('INPUT_VERSION')
 
 # App Constants
 LOGGER_NAME = 'homebrew-releaser'
