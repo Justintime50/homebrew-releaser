@@ -67,14 +67,12 @@ def test_generate_formula():
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
-        checksums=[
-            {
-                f'{mock_repo_name}.tar.gz': {
-                    'checksum': CHECKSUM,
-                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
-                },
-            }
-        ],
+        checksums=[{
+            f'{mock_repo_name}.tar.gz': {
+                'checksum': CHECKSUM,
+                'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+            },
+        }],
         install=INSTALL,
         tar_url=mock_tar_url,
         depends_on=DEPENDS_ON,
@@ -123,14 +121,12 @@ def test_generate_formula_no_article_description():
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
-        checksums=[
-            {
-                f'{mock_repo_name}.tar.gz': {
-                    'checksum': CHECKSUM,
-                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
-                },
-            }
-        ],
+        checksums=[{
+            f'{mock_repo_name}.tar.gz': {
+                'checksum': CHECKSUM,
+                'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+            },
+        }],
         install=INSTALL,
         tar_url=mock_tar_url,
         depends_on=None,
@@ -162,14 +158,12 @@ def test_generate_formula_formula_name_starts_description():
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
-        checksums=[
-            {
-                f'{mock_repo_name}.tar.gz': {
-                    'checksum': CHECKSUM,
-                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
-                },
-            }
-        ],
+        checksums=[{
+            f'{mock_repo_name}.tar.gz': {
+                'checksum': CHECKSUM,
+                'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+            },
+        }],
         install=INSTALL,
         tar_url=mock_tar_url,
         depends_on=None,
@@ -199,14 +193,12 @@ def test_generate_formula_no_depends_on():
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
-        checksums=[
-            {
-                f'{mock_repo_name}.tar.gz': {
-                    'checksum': CHECKSUM,
-                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
-                },
-            }
-        ],
+        checksums=[{
+            f'{mock_repo_name}.tar.gz': {
+                'checksum': CHECKSUM,
+                'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+            },
+        }],
         install=INSTALL,
         tar_url=mock_tar_url,
         depends_on=None,
@@ -236,14 +228,12 @@ def test_generate_formula_no_test():
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
-        checksums=[
-            {
-                f'{mock_repo_name}.tar.gz': {
-                    'checksum': CHECKSUM,
-                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
-                },
-            }
-        ],
+        checksums=[{
+            f'{mock_repo_name}.tar.gz': {
+                'checksum': CHECKSUM,
+                'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+            },
+        }],
         install=INSTALL,
         tar_url=mock_tar_url,
         depends_on=DEPENDS_ON,
@@ -511,14 +501,12 @@ def test_generate_formula_string_false_configs():
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
-        checksums=[
-            {
-                f'{mock_repo_name}.tar.gz': {
-                    'checksum': CHECKSUM,
-                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
-                },
-            }
-        ],
+        checksums=[{
+            f'{mock_repo_name}.tar.gz': {
+                'checksum': CHECKSUM,
+                'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+            },
+        }],
         install=INSTALL,
         tar_url=mock_tar_url,
         depends_on=None,
@@ -550,14 +538,12 @@ def test_generate_formula_empty_fields():
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
-        checksums=[
-            {
-                f'{mock_repo_name}.tar.gz': {
-                    'checksum': CHECKSUM,
-                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
-                },
-            }
-        ],
+        checksums=[{
+            f'{mock_repo_name}.tar.gz': {
+                'checksum': CHECKSUM,
+                'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+            },
+        }],
         install=INSTALL,
         tar_url=mock_tar_url,
         depends_on=None,
@@ -656,14 +642,12 @@ def test_generate_formula_override_version():
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
-        checksums=[
-            {
-                f'{mock_repo_name}.tar.gz': {
-                    'checksum': CHECKSUM,
-                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
-                },
-            }
-        ],
+        checksums=[{
+            f'{mock_repo_name}.tar.gz': {
+                'checksum': CHECKSUM,
+                'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+            },
+        }],
         install=INSTALL,
         tar_url=mock_tar_url,
         version='9.8.7',
