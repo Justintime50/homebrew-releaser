@@ -93,13 +93,11 @@ class ReadmeUpdater:
         rows = []
 
         for formula in formulas:
-            rows.append(
-                [
-                    f'[{formula["name"]}]({formula.get("homepage")})',
-                    formula.get('desc'),
-                    f'`brew install {formula["name"]}`',
-                ]
-            )
+            rows.append([
+                f'[{formula["name"]}]({formula.get("homepage")})',
+                formula.get('desc'),
+                f'`brew install {formula["name"]}`',
+            ])
 
         table = pretty_tables.create(
             headers=headers,
@@ -181,7 +179,7 @@ class ReadmeUpdater:
 
     @staticmethod
     def does_readme_exist(homebrew_tap: str) -> Optional[str]:
-        """Determines the README file to open. The README file must either be:
+        """Determines the README file to open. The README file must either:
 
         1. Have the file extension of `.md`
         2. Reside in the root of a project

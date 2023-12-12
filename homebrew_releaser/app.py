@@ -19,6 +19,7 @@ from homebrew_releaser.constants import (
     TARGET_DARWIN_ARM64,
     TARGET_LINUX_AMD64,
     TARGET_LINUX_ARM64,
+    VERSION,
 )
 from homebrew_releaser.formula import Formula
 from homebrew_releaser.git import Git
@@ -73,7 +74,7 @@ class App:
             url=f'https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/latest'
         ).json()
         assets = latest_release['assets']
-        version = latest_release['tag_name']
+        version = VERSION or latest_release['tag_name']
         version_no_v = version.lstrip('v')
         logger.info(f'Latest release ({version}) successfully identified!')
 
@@ -144,6 +145,7 @@ class App:
             TEST,
             DOWNLOAD_STRATEGY,
             CUSTOM_REQUIRE,
+            version_no_v if VERSION else None,
         )
 
         Utils.write_file(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER, f'{repository["name"]}.rb'), template, 'w')

@@ -89,6 +89,13 @@ jobs:
           # Optional - string
           custom_require: custom_download_strategy
 
+          # Override the automatically detected version of a formula with an explicit value.
+          # This option should only be used if Homebrew cannot automatically detect the version when generating
+          # the Homebrew formula. Including this when not necessary could lead to uninstallable formula that may 
+          # not pass `brew audit` due to mismatched or redundant version strings
+          # Optional - string
+          version: '1.2.0'
+
           # Adds URL and checksum targets for different OS and architecture pairs. Using this option assumes 
           # a tar archive exists on your GitHub repo with the following URL pattern (this cannot be customized):
           # https://github.com/{GITHUB_OWNER}/{REPO_NAME}/releases/download/{TAG}/{REPO_NAME}-{VERSION}-{OPERATING_SYSTEM}-{ARCHITECTURE}.tar.gz'

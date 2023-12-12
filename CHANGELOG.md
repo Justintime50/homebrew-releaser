@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.18.0 (2023-12-12)
+
+- Adds a `version` parameter which can override the automatically detected version of a formula with an explicit value
+
 ## v0.17.0 (2023-10-26)
 
 - Upgrades from Python 3.11 to Python 3.12

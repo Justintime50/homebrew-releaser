@@ -40,6 +40,9 @@ inputs:
   custom_require:
     description: "Allows you to add a custom require_relative at the top of the formula template."
     required: false
+  version:
+    description: "Override the automatically detected version of a formula with an explicit value."
+    required: false
   target_darwin_amd64:
     description: "Add a custom URL/checksum target for AMD64 Darwin builds."
     required: false
