@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## v0.18.0 (2023-12-05)
+## v0.18.0 (2023-12-12)
 
 - Adds a `version` parameter which can override the automatically detected version of a formula with an explicit value
 
