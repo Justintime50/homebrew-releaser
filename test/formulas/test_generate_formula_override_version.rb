@@ -6,8 +6,8 @@ class TestGenerateFormulaOverrideVersion < Formula
   desc "Release scripts, binaries, and executables to github"
   homepage "https://github.com/Justintime50/test-generate-formula-override-version"
   url "https://github.com/Justintime50/test-generate-formula-override-version/archive/refs/tags/v0.1.0.tar.gz"
-  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   version "9.8.7"
+  sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   license "MIT"
 
   def install
