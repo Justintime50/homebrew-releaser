@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: extractions/setup-just@v1
+      - uses: extractions/setup-just@v2
       - uses: actions/setup-python@v4
         with:
           python-version: '3.12'
@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: extractions/setup-just@v1
+      - uses: extractions/setup-just@v2
       - uses: actions/setup-python@v4
         with:
           python-version: '3.12'
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: extractions/setup-just@v1
+      - uses: extractions/setup-just@v2
       - uses: Homebrew/actions/setup-homebrew@master
       # These Homebrew packages are needed since we have them as fake dependencies for some test output
       - name: Setup required Homebrew packages
@@ -55,7 +55,7 @@ jobs:
         run: docker build . -t justintime50/homebrew-releaser
   coverage:
     if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latestsetup-just@v2
     steps:
       - uses: actions/checkout@v4
       - uses: extractions/setup-just@v1
