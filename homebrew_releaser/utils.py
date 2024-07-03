@@ -24,6 +24,7 @@ class Utils:
             response = requests.get(
                 url,
                 headers=headers,
+                allow_redirects=True,
                 stream=stream,
                 timeout=TIMEOUT,
             )
