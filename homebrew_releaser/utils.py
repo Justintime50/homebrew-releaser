@@ -18,7 +18,7 @@ class Utils:
 
         headers = GITHUB_HEADERS
         if stream:
-            headers['Accept'] = 'application/octet-stream'
+            headers['Accept'] += f',application/octet-stream'
 
         try:
             response = requests.get(
