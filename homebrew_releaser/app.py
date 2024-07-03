@@ -83,10 +83,10 @@ class App:
         archive_checksum_entries = ''
 
         # Auto-generated tar URL must come first for later use (order is important)
-        archive_base_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/refs/tags/{version}'
-        auto_generated_release_tar = f'{archive_base_url}.tar.gz'
+        archive_base_url = f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}'
+        auto_generated_release_tar = f'{archive_base_url}/tarball/{version}'
         archive_urls.append(auto_generated_release_tar)
-        auto_generated_release_zip = f'{archive_base_url}.zip'
+        auto_generated_release_zip = f'{archive_base_url}/zipball/{version}'
         archive_urls.append(auto_generated_release_zip)
 
         target_browser_download_base_url = (
@@ -117,6 +117,7 @@ class App:
                     or archive_url == auto_generated_release_zip
                     or archive_url == asset['browser_download_url']
                 ):
+
                     downloaded_filename = App.download_archive(download_url)
                     checksum = Checksum.get_checksum(downloaded_filename)
                     archive_filename = Utils.get_filename_from_path(archive_url)
