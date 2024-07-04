@@ -24,7 +24,7 @@ class Utils:
             response = requests.get(
                 url,
                 headers=headers,
-                allow_redirects=True,
+                allow_redirects=True,  # We need to allow redirects to reach various GitHub resources
                 stream=stream,
                 timeout=TIMEOUT,
             )
