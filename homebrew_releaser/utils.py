@@ -18,12 +18,13 @@ class Utils:
 
         headers = GITHUB_HEADERS
         if stream:
-            headers['Accept'] = 'application/octet-stream'
+            headers['Accept'] += ',application/octet-stream'
 
         try:
             response = requests.get(
                 url,
                 headers=headers,
+                allow_redirects=True,  # We need to allow redirects to reach various GitHub resources
                 stream=stream,
                 timeout=TIMEOUT,
             )
