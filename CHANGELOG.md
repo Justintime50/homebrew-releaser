@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.18.2 (2024-07-04)
+
+- Fixes the URLs used to download the default zip/tars for private repos
+
 ## v0.18.1 (2024-01-12)
 
 - Corrects order of `version` definition in formula generation to satisfy the ever-changing Homebrew audit rules
