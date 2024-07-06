@@ -1,3 +1,5 @@
+from typing import Optional
+
 import os
 
 import woodchips
@@ -83,10 +85,18 @@ class App:
         archive_checksum_entries = ''
 
         # Auto-generated tar URL must come first for later use (order is important)
-        archive_base_url = f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}'
-        auto_generated_release_tar = f'{archive_base_url}/tarball/{version}'
+        if repository["private"]:
+            logger.info('Repository is private. Using auto-generated release tarball and zipball REST API endpoints.')
+            archive_base_url = f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}'
+            auto_generated_release_tar = f'{archive_base_url}/tarball/{version}'
+            auto_generated_release_zip = f'{archive_base_url}/zipball/{version}'
+        else:
+            logger.info('Repository is public. Using auto-generated release tarball and zipball public URLs.')
+            archive_base_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/refs/tags/{version}'
+            auto_generated_release_tar = f'{archive_base_url}.tar.gz'
+            auto_generated_release_zip = f'{archive_base_url}.zip'
+
         archive_urls.append(auto_generated_release_tar)
-        auto_generated_release_zip = f'{archive_base_url}/zipball/{version}'
         archive_urls.append(auto_generated_release_zip)
 
         target_browser_download_base_url = (
@@ -118,7 +128,9 @@ class App:
                     or archive_url == asset['browser_download_url']
                 ):
 
-                    downloaded_filename = App.download_archive(download_url)
+                    # For REST API requests, we should not stream archive file, but it is fine for browser URLs
+                    stream = False if archive_url.find("api.github.com") != -1 else True
+                    downloaded_filename = App.download_archive(download_url, stream)
                     checksum = Checksum.get_checksum(downloaded_filename)
                     archive_filename = Utils.get_filename_from_path(archive_url)
                     archive_checksum_entries += f'{checksum} {archive_filename}\n'
@@ -202,11 +214,11 @@ class App:
         logger.debug('All required environment variables are present.')
 
     @staticmethod
-    def download_archive(url: str) -> str:
+    def download_archive(url: str, stream: Optional[bool] = False) -> str:
         """Gets an archive (eg: zip, tar) from GitHub and saves it locally."""
         response = Utils.make_github_get_request(
             url=url,
-            stream=True,
+            stream=stream,
         )
         filename = Utils.get_filename_from_path(url)
         Utils.write_file(filename, response.content, 'wb')
