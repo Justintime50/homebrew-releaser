@@ -48,7 +48,7 @@ class Git:
     def commit(homebrew_tap: str, repo_name: str, version: str):
         """Commits assets to the Homebrew tap (repo)."""
         # fmt: off
-        command = ['git', '-C', homebrew_tap, 'commit', '-m', f'"Brew formula update for {repo_name} version {version}"']  # noqa
+        command = ['git', '-C', homebrew_tap, 'commit', '-m', f'chore: brew formula update for {repo_name} {version}']  # noqa
         # fmt: on
         Git._run_git_subprocess(command, 'Assets committed successfully.')
 

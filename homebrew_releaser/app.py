@@ -126,7 +126,6 @@ class App:
                     or archive_url == auto_generated_release_zip
                     or archive_url == asset['browser_download_url']
                 ):
-
                     # For REST API requests, we should not stream archive file, but it is fine for browser URLs
                     stream = False if archive_url.find("api.github.com") != -1 else True
                     downloaded_filename = App.download_archive(download_url, stream)

@@ -69,7 +69,7 @@ def test_commit(mock_subprocess):
 
     Git.commit(homebrew_tap, repo_name, version)
     mock_subprocess.assert_called_once_with(
-        ['git', '-C', homebrew_tap, 'commit', '-m', f'"Brew formula update for {repo_name} version {version}"'],
+        ['git', '-C', homebrew_tap, 'commit', '-m', f'chore: brew formula update for {repo_name} {version}'],
         stderr=-2,
         text=True,
         timeout=TIMEOUT,
