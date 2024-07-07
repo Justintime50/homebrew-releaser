@@ -93,11 +93,13 @@ class ReadmeUpdater:
         rows = []
 
         for formula in formulas:
-            rows.append([
-                f'[{formula["name"]}]({formula.get("homepage")})',
-                formula.get('desc'),
-                f'`brew install {formula["name"]}`',
-            ])
+            rows.append(
+                [
+                    f'[{formula["name"]}]({formula.get("homepage")})',
+                    formula.get('desc'),
+                    f'`brew install {formula["name"]}`',
+                ]
+            )
 
         table = pretty_tables.create(
             headers=headers,

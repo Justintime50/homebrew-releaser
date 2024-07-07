@@ -23,12 +23,12 @@ REQUIREMENTS = [
 
 DEV_REQUIREMENTS = [
     'bandit == 1.7.*',
-    'black == 23.*',
-    'flake8 == 6.*',
+    'black == 24.*',
+    'flake8 == 7.*',
     'isort == 5.*',
-    'mypy == 1.7.*',
-    'pytest == 7.*',
-    'pytest-cov == 4.*',
+    'mypy == 1.10.*',
+    'pytest == 8.*',
+    'pytest-cov == 5.*',
     'types-requests',
 ]
 

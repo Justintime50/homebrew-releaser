@@ -1,6 +1,15 @@
 # CHANGELOG
 
+## v0.18.3 (2024-07-07)
+
+- Corrects regression introduced in `v0.18.2` on the URLs used for public repo asset downloads
+- Removes the quotes that previously wrapped commit messages unintentionally
+  - Uses a conventional commit message structure
+- Bumps development dependencies
+
 ## v0.18.2 (2024-07-04)
+
+**WARNING: Do not use this version, please use v0.18.3 or later!**
 
 - Fixes the URLs used to download the default zip/tars for private repos
 
