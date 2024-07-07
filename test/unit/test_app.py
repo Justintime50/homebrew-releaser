@@ -217,9 +217,19 @@ def test_check_required_env_variables_missing_env_variable(mock_system_exit):
 
 @patch('homebrew_releaser.utils.Utils.write_file')
 @patch('homebrew_releaser.utils.Utils.make_github_get_request')
-def test_download_archive(mock_make_github_get_request, mock_write_file):
-    url = 'https://api.github.com/repos/Justintime50/homebrew-releaser/archive/v0.1.0.tar.gz'
-    App.download_archive(url)
+def test_download_public_archive(mock_make_github_get_request, mock_write_file):
+    url = 'https://github.com/repos/Justintime50/homebrew-releaser/archive/refs/tags/v0.1.0.tar.gz'
+    App.download_archive(url, True)
 
     mock_make_github_get_request.assert_called_once_with(url=url, stream=True)
+    mock_write_file.assert_called_once()  # TODO: Assert `called_with` here instead
+
+
+@patch('homebrew_releaser.utils.Utils.write_file')
+@patch('homebrew_releaser.utils.Utils.make_github_get_request')
+def test_download_private_archive(mock_make_github_get_request, mock_write_file):
+    url = 'https://api.github.com/repos/Justintime50/homebrew-releaser/tarball/v0.1.0'
+    App.download_archive(url, False)
+
+    mock_make_github_get_request.assert_called_once_with(url=url, stream=False)
     mock_write_file.assert_called_once()  # TODO: Assert `called_with` here instead
