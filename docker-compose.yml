@@ -16,6 +16,7 @@ services:
       - INPUT_TEST='assert_match("my script output", shell_output("my-script-command"))'
       - INPUT_DOWNLOAD_STRATEGY=
       - INPUT_CUSTOM_REQUIRE=
+      - INPUT_FORMULA_INCLUDES=
       - INPUT_TARGET_DARWIN_AMD64=
       - INPUT_TARGET_DARWIN_ARM64=
       - INPUT_TARGET_LINUX_AMD64=
