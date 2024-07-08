@@ -8,9 +8,9 @@ from homebrew_releaser.checksum import Checksum
 from homebrew_releaser.constants import (
     CHECKSUM_FILE,
     CUSTOM_REQUIRE,
-    FORMULA_INCLUDES,
     DOWNLOAD_STRATEGY,
     FORMULA_FOLDER,
+    FORMULA_INCLUDES,
     GITHUB_OWNER,
     GITHUB_REPO,
     GITHUB_TOKEN,
