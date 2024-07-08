@@ -31,6 +31,7 @@ class Formula:
         test: Optional[str] = None,
         download_strategy: Optional[str] = None,
         custom_require: Optional[str] = None,
+        formula_includes: str = None,
         version: Optional[str] = None,
     ) -> str:
         """Generates the formula data for Homebrew.
@@ -138,6 +139,8 @@ class {{class_name}} < Formula
   license "{{license_type}}"
   {{/ license_type}}
 
+  {{{formula_includes}}}
+
   {{# dependencies}}
   depends_on {{{dependency}}}
   {{/ dependencies}}
@@ -212,6 +215,7 @@ end
                 'test_instructions': test.strip() if test else None,
                 'download_strategy': download_strategy,
                 'custom_require': custom_require,
+                'formula_includes': formula_includes.strip() if formula_includes else None,
                 'version': version,
                 'darwin_amd64_url': darwin_amd64_url,
                 'darwin_amd64_checksum': darwin_amd64_checksum,

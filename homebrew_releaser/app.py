@@ -8,6 +8,7 @@ from homebrew_releaser.checksum import Checksum
 from homebrew_releaser.constants import (
     CHECKSUM_FILE,
     CUSTOM_REQUIRE,
+    FORMULA_INCLUDES,
     DOWNLOAD_STRATEGY,
     FORMULA_FOLDER,
     GITHUB_OWNER,
@@ -156,6 +157,7 @@ class App:
             TEST,
             DOWNLOAD_STRATEGY,
             CUSTOM_REQUIRE,
+            FORMULA_INCLUDES,
             version_no_v if VERSION else None,
         )
 
