@@ -684,3 +684,47 @@ def test_generate_formula_override_version():
     record_formula(formula_path, formula_filename, formula)
 
     assert '9.8.7' in formula
+
+
+def test_generate_formula_formula_includes():
+    """Tests that we generate the formula content correctly when all parameters are passed
+    (except a matrix so that we can test the auto-generate URL/checksum from GitHub).
+
+    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    """
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
+    mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz'
+
+    repository = {
+        # We use a badly written description string here on purpose to test our formatting code, this includes:
+        # - starting with an article
+        # - punctuation
+        # - trailing whitespace
+        # - extra capitilization
+        'description': 'A tool to release... scripts, binaries, and executables to GitHub. ',
+        'license': LICENSE,
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz',  # noqa
+                },
+            }
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=DEPENDS_ON,
+        test=TEST,
+        formula_includes='include Language::Python::Virtualenv',
+    )
+
+    record_formula(formula_path, formula_filename, formula)
+
+    assert 'include Language::Python::Virtualenv' in formula
