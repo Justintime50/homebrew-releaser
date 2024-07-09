@@ -31,7 +31,7 @@ class Formula:
         test: Optional[str] = None,
         download_strategy: Optional[str] = None,
         custom_require: Optional[str] = None,
-        formula_includes: str = None,
+        formula_includes: Optional[str] = None,
         version: Optional[str] = None,
     ) -> str:
         """Generates the formula data for Homebrew.
