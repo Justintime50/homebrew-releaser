@@ -19,31 +19,33 @@ def test_setup(mock_subprocess):
     commit_email = 'user@example.com'
     Git.setup(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
 
-    mock_subprocess.assert_has_calls([
-        call(
-            [
-                'git',
-                'clone',
-                '--depth=1',
-                'https://x-access-token:123@github.com/Justintime50/homebrew-formulas.git',
-            ],
-            stderr=-2,
-            text=True,
-            timeout=30,
-        ),
-        call(
-            ['git', '-C', 'homebrew-formulas', 'config', 'user.name', '"Justintime50"'],
-            stderr=-2,
-            text=True,
-            timeout=30,
-        ),
-        call(
-            ['git', '-C', 'homebrew-formulas', 'config', 'user.email', 'user@example.com'],
-            stderr=-2,
-            text=True,
-            timeout=30,
-        ),
-    ])
+    mock_subprocess.assert_has_calls(
+        [
+            call(
+                [
+                    'git',
+                    'clone',
+                    '--depth=1',
+                    'https://x-access-token:123@github.com/Justintime50/homebrew-formulas.git',
+                ],
+                stderr=-2,
+                text=True,
+                timeout=30,
+            ),
+            call(
+                ['git', '-C', 'homebrew-formulas', 'config', 'user.name', '"Justintime50"'],
+                stderr=-2,
+                text=True,
+                timeout=30,
+            ),
+            call(
+                ['git', '-C', 'homebrew-formulas', 'config', 'user.email', 'user@example.com'],
+                stderr=-2,
+                text=True,
+                timeout=30,
+            ),
+        ]
+    )
 
 
 @patch('subprocess.check_output')
