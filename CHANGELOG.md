@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.19.0 (2024-07-11)
+
+- Adds new `formula_includes` parameter to allow including items in the built formula
+  - eg: including a Python virtual environment, see the [Python Docs](https://github.com/Homebrew/brew/blob/master/docs/Python-for-Formula-Authors.md) for more details
+
 ## v0.18.3 (2024-07-07)
 
 - Corrects regression introduced in `v0.18.2` on the URLs used for public repo asset downloads
