@@ -75,7 +75,7 @@ def test_format_formula_data():
     """
     formulas = ReadmeUpdater.format_formula_data('./test')
 
-    assert len(formulas) == 13
+    assert len(formulas) == 14
     assert formulas[0] == {
         'name': 'test-generate-formula',
         'desc': 'Tool to release scripts, binaries, and executables to github',

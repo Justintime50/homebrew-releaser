@@ -10,6 +10,7 @@ from homebrew_releaser.constants import (
     CUSTOM_REQUIRE,
     DOWNLOAD_STRATEGY,
     FORMULA_FOLDER,
+    FORMULA_INCLUDES,
     GITHUB_OWNER,
     GITHUB_REPO,
     GITHUB_TOKEN,
@@ -156,6 +157,7 @@ class App:
             TEST,
             DOWNLOAD_STRATEGY,
             CUSTOM_REQUIRE,
+            FORMULA_INCLUDES,
             version_no_v if VERSION else None,
         )
 

@@ -89,6 +89,10 @@ jobs:
           # Optional - string
           custom_require: custom_download_strategy
 
+          # Allows you to add custom includes inside the formula class, before dependencies and install blocks.
+          # Optional - string
+          formula_includes: 'include Language::Python::Virtualenv'
+
           # Override the automatically detected version of a formula with an explicit value.
           # This option should only be used if Homebrew cannot automatically detect the version when generating
           # the Homebrew formula. Including this when not necessary could lead to uninstallable formula that may 
