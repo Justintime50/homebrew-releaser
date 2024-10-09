@@ -1,4 +1,4 @@
-FROM python:3.12-alpine
+FROM python:3.13-alpine
 
 RUN apk add --no-cache \
     # Install git to push new Homebrew formula

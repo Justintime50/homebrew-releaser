@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Next Release
+
+- Upgrades Python from 3.12 to 3.13
+
 ## v0.19.0 (2024-07-11)
 
 - Adds new `formula_includes` parameter to allow including items in the built formula

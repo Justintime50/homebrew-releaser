@@ -26,10 +26,9 @@ DEV_REQUIREMENTS = [
     'black == 24.*',
     'flake8 == 7.*',
     'isort == 5.*',
-    'mypy == 1.10.*',
+    'mypy == 1.11.*',
     'pytest == 8.*',
     'pytest-cov == 5.*',
-    'types-requests',
 ]
 
 setuptools.setup(
@@ -66,5 +65,5 @@ setuptools.setup(
             'homebrew-releaser=homebrew_releaser.releaser:main',
         ]
     },
-    python_requires='==3.12.*',
+    python_requires='==3.13.*',
 )
