@@ -23,7 +23,7 @@ jobs:
       - uses: extractions/setup-just@v2
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
       - run: just install lint
   test:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
       - uses: extractions/setup-just@v2
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
       - run: just install coverage
   brew-audit:
     runs-on: ubuntu-latest
@@ -51,7 +51,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
       - name: Build Docker image
         run: docker build . -t justintime50/homebrew-releaser
   coverage:
@@ -62,7 +62,7 @@ jobs:
       - uses: extractions/setup-just@v2
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.13'
       - run: just install coverage
       - uses: coverallsapp/github-action@v2
         with:
