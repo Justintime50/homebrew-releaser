@@ -37,7 +37,7 @@ class Formula:
         """Generates the formula data for Homebrew.
 
         We attempt to ensure generated formula will pass `brew audit --strict --online` if given correct inputs:
-        - Proper class name
+        - Proper Homebrew/Ruby class name
         - 80 characters or less desc field (alphanumeric characters and does not start with
             an article or the name of the formula)
         - Homepage
@@ -53,7 +53,7 @@ class Formula:
 
         max_desc_field_length = 80  # `brew audit` wants no more than 80 characters in the desc field
 
-        class_name = re.sub(r'[-_. ]+', '', repo_name.title())
+        class_name = Formula._generate_class_name(repo_name)
         license_type = repository['license'].get('spdx_id', '') if repository.get('license') else ''
         description = (
             re.sub(r'[.!]+', '', repository.get('description', '')[:max_desc_field_length]).strip().capitalize()
@@ -244,3 +244,20 @@ end
         logger.debug(rendered_template)
 
         return rendered_template
+
+    @staticmethod
+    def _generate_class_name(repo_name: str) -> str:
+        """Generates a Homebrew compatible formula class name.
+
+        1. Converts a repo name to a title-cased class name for Ruby.
+        2. Ensures that digits in a name do not title case the next word which is not compatible with Homebrew.
+        """
+        return re.sub(
+            r'[-_. ]+',
+            '',
+            re.sub(
+                r"\d([A-Z])",
+                lambda x: x.group(0).lower(),
+                repo_name.title(),
+            ),
+        )

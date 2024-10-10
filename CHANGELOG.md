@@ -3,6 +3,7 @@
 ## Next Release
 
 - Upgrades Python from 3.12 to 3.13
+- Fixes a bug that would not generate a proper class name for formula if it contained a digit (closes #47)
 
 ## v0.19.0 (2024-07-11)
 
