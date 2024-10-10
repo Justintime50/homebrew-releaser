@@ -2,6 +2,8 @@ import inspect
 import os
 from unittest.mock import patch
 
+import pytest
+
 from homebrew_releaser.formula import Formula
 
 
@@ -21,7 +23,7 @@ DESCRIPTION = 'Release scripts, binaries, and executables to GitHub'
 LICENSE = {'spdx_id': 'MIT'}
 
 
-def record_formula(formula_path: str, formula_name: str, formula_data: str):
+def _record_formula(formula_path: str, formula_name: str, formula_data: str):
     """Read from an existing formula file or create a new formula file if it's not present.
 
     Tests using this function will generate a formula into a file (similar to how
@@ -47,7 +49,7 @@ def test_generate_formula():
     """Tests that we generate the formula content correctly when all parameters are passed
     (except a matrix so that we can test the auto-generate URL/checksum from GitHub).
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -81,7 +83,7 @@ def test_generate_formula():
         test=TEST,
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     # The following assertions are explicitly listed as the "gold standard" for generic formula generation
     assert (
@@ -119,7 +121,7 @@ def test_generate_formula_no_article_description():
     """Tests that we generate the formula content correctly (when there is no article
     that starts the description field).
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -149,7 +151,7 @@ def test_generate_formula_no_article_description():
         test=None,
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert 'desc "Release scripts, binaries, and executables to github"' in formula
 
@@ -158,7 +160,7 @@ def test_generate_formula_formula_name_starts_description():
     """Tests that we generate the formula content correctly (when the name of the formula
     starts the description field) - it should get stripped out per `brew audit`.
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -188,7 +190,7 @@ def test_generate_formula_formula_name_starts_description():
         test=None,
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert 'desc "Is a tool"' in formula
 
@@ -196,7 +198,7 @@ def test_generate_formula_formula_name_starts_description():
 def test_generate_formula_no_depends_on():
     """Tests that we generate the formula content correctly (when no depends_on given).
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -225,7 +227,7 @@ def test_generate_formula_no_depends_on():
         test=TEST,
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert 'depends_on' not in formula
 
@@ -233,7 +235,7 @@ def test_generate_formula_no_depends_on():
 def test_generate_formula_no_test():
     """Tests that we generate the formula content correctly (when there is no test).
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -262,7 +264,7 @@ def test_generate_formula_no_test():
         test=None,
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert 'test do' not in formula
 
@@ -274,7 +276,7 @@ def test_generate_formula_no_test():
 def test_generate_formula_complete_matrix():
     """Tests that we generate the formula content correctly when we provide a complete OS matrix.
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -327,7 +329,7 @@ def test_generate_formula_complete_matrix():
         test=TEST,
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert formula.count('url') == 5
     assert formula.count('sha256') == 5
@@ -342,7 +344,7 @@ def test_generate_formula_complete_matrix():
 def test_generate_formula_darwin_matrix():
     """Tests that we generate the formula content correctly when we provide a Darwin matrix.
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -383,7 +385,7 @@ def test_generate_formula_darwin_matrix():
         test=None,
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert 'on_macos' in formula
     assert 'on_intel' in formula
@@ -396,7 +398,7 @@ def test_generate_formula_darwin_matrix():
 def test_generate_formula_linux_matrix():
     """Tests that we generate the formula content correctly when we provide a Linux matrix.
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -437,7 +439,7 @@ def test_generate_formula_linux_matrix():
         test=None,
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert 'on_macos' not in formula
     assert 'on_intel' in formula
@@ -451,7 +453,7 @@ def test_one_of_each_matrix():
     """Tests that we generate the formula content correctly when we specify only one arch from each OS.
     This test helps ensure that we properly spaces the `on_` functions correctly when only one is present.
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -492,7 +494,7 @@ def test_one_of_each_matrix():
         test=None,
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert 'on_macos' in formula
     assert 'on_intel' in formula
@@ -508,7 +510,7 @@ def test_generate_formula_string_false_configs():
     """Tests that we generate the formula content correctly when the user specifies `false` on
     boolean flags because GitHub Actions passes them in as strings...
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -537,7 +539,7 @@ def test_generate_formula_string_false_configs():
         test=None,
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert 'on_macos' not in formula
     assert 'on_intel' not in formula
@@ -550,7 +552,7 @@ def test_generate_formula_empty_fields():
     such as the `license` or the `description` - license should not be included, desc should
     be a placeholder.
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -576,7 +578,7 @@ def test_generate_formula_empty_fields():
         test=None,
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert 'desc "NA"' in formula
     assert 'license' not in formula
@@ -589,7 +591,7 @@ def test_generate_formula_empty_fields():
 def test_generate_formula_download_strategy():
     """Tests that we generate the formula content correctly when there a custom download strategy specified.
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -644,7 +646,7 @@ def test_generate_formula_download_strategy():
         custom_require='../formula_imports/mock_download_strategy',
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert formula.count(', using: CustomDownloadStrategy') == 5
     assert 'require_relative "../formula_imports/mock_download_strategy"' in formula
@@ -653,7 +655,7 @@ def test_generate_formula_download_strategy():
 def test_generate_formula_override_version():
     """Tests that we generate the formula content correctly (when the version is overridden).
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -681,7 +683,7 @@ def test_generate_formula_override_version():
         version='9.8.7',
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert '9.8.7' in formula
 
@@ -689,7 +691,7 @@ def test_generate_formula_override_version():
 def test_generate_formula_formula_includes():
     """Tests that we generate the formula content correctly when using the formula_includes param.
 
-    NOTE: See docstring in `record_formula` for more details on how recording formulas works.
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
     formula_filename = f'{inspect.stack()[0][3]}.rb'
     mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
@@ -717,6 +719,24 @@ def test_generate_formula_formula_includes():
         formula_includes='include Language::Python::Virtualenv',
     )
 
-    record_formula(formula_path, formula_filename, formula)
+    _record_formula(formula_path, formula_filename, formula)
 
     assert 'include Language::Python::Virtualenv' in formula
+
+
+@pytest.mark.parametrize(
+    'repo_name,expected_class_name',
+    [
+        ('foobarbaz', 'Foobarbaz'),
+        ('foo2bar', 'Foo2bar'),  # Homebrew doesn't want "bar" capitalized after a digit
+        ('foo-bar-baz', 'FooBarBaz'),
+        ('foo_bar_baz', 'FooBarBaz'),
+        ('foobar2', 'Foobar2'),
+        ('2foobar', '2foobar'),
+    ],
+)
+def test_generate_class_name(repo_name, expected_class_name):
+    """Tests that we generate a proper Homebrew/Ruby class name for formula under various situations."""
+    class_name = Formula._generate_class_name(repo_name)
+
+    assert class_name == expected_class_name
