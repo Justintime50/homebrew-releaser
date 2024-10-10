@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Next Release
+## v1.0.0 (2024-10-10)
 
 - Upgrades Python from 3.12 to 3.13
 - Fixes a bug that would not generate a proper class name for formula if it contained a digit (closes #47)
