@@ -13,7 +13,7 @@ inputs:
   formula_folder:
     description: "The name of the folder in your homebrew tap where formula will be committed to."
     required: true
-    default: "formula"
+    default: "Formula"
   github_token:
     description: "The GitHub Token (saved as a repo secret) that has `repo` permissions for the homebrew tap you want to release to."
     required: true

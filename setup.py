@@ -26,9 +26,9 @@ DEV_REQUIREMENTS = [
     'black == 24.*',
     'flake8 == 7.*',
     'isort == 5.*',
-    'mypy == 1.11.*',
+    'mypy == 1.13.*',
     'pytest == 8.*',
-    'pytest-cov == 5.*',
+    'pytest-cov == 6.*',
 ]
 
 setuptools.setup(

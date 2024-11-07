@@ -2,7 +2,7 @@ import os
 
 
 # User Input
-FORMULA_FOLDER = os.getenv('INPUT_FORMULA_FOLDER', 'formula')
+FORMULA_FOLDER = os.getenv('INPUT_FORMULA_FOLDER', 'Formula')
 GITHUB_TOKEN = os.getenv('INPUT_GITHUB_TOKEN')
 HOMEBREW_TAP = os.getenv('INPUT_HOMEBREW_TAP')
 SKIP_COMMIT = (

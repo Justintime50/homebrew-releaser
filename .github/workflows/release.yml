@@ -18,4 +18,4 @@ jobs:
           git push origin --delete $STABLE_TAG
           git push origin $STABLE_TAG
         env:
-          STABLE_TAG: v1
+          STABLE_TAG: v2

@@ -7,7 +7,7 @@ services:
       - INPUT_SKIP_COMMIT=true
       - INPUT_HOMEBREW_OWNER=username
       - INPUT_HOMEBREW_TAP=homebrew-formulas
-      - INPUT_FORMULA_FOLDER=formula
+      - INPUT_FORMULA_FOLDER=Formula
       - INPUT_GITHUB_TOKEN=123...
       - INPUT_COMMIT_OWNER=username
       - INPUT_COMMIT_EMAIL=userid+username@users.noreply.github.com

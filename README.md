@@ -44,8 +44,8 @@ jobs:
     runs-on: ubuntu-latest
     name: homebrew-releaser
     steps:
-      - name: Release my project to my Homebrew tap
-        uses: Justintime50/homebrew-releaser@v1
+      - name: Release project to Homebrew tap
+        uses: Justintime50/homebrew-releaser@v2
         with:
           # The name of the homebrew tap to publish your formula to as it appears on GitHub.
           # Required - strings
@@ -54,7 +54,7 @@ jobs:
 
           # The name of the folder in your homebrew tap where formula will be committed to.
           # Default is shown - string
-          formula_folder: formula
+          formula_folder: Formula
 
           # The Personal Access Token (saved as a repo secret) that has `repo` permissions for the repo running the action AND Homebrew tap you want to release to.
           # Required - string
@@ -65,27 +65,27 @@ jobs:
           commit_owner: homebrew-releaser
           commit_email: homebrew-releaser@example.com
 
+          # Install command for your formula.
+          # Required - string
+          install: 'bin.install "src/my-script.sh" => "my-script"'
+
+          # Test command for your formula, used for `brew test`.
+          # Optional - string
+          test: 'assert_match("my script output", shell_output("my-script-command"))'
+
           # Custom dependencies in case other formulas are needed to build the current one.
           # Optional - multiline string
           depends_on: |
             "bash" => :build
             "gcc"
 
-          # Custom install command for your formula.
-          # Required - string
-          install: 'bin.install "src/my-script.sh" => "my-script"'
-
-          # Custom test command for your formula so you can run `brew test`.
-          # Optional - string
-          test: 'assert_match("my script output", shell_output("my-script-command"))'
-
-          # Allows you to set a custom download strategy. Note that you'll need
-          # to implement the strategy and add it to your tap repository.
+          # Allows you to set a custom download strategy.
+          # NOTE: You'll need to implement the strategy and add it to your tap repository.
           # Example: https://docs.brew.sh/Formula-Cookbook#specifying-the-download-strategy-explicitly
           # Optional - string
           download_strategy: CurlDownloadStrategy
 
-          # Allows you to add a custom require_relative at the top of the formula template.
+          # Allows you to add a custom `require_relative` at the top of the formula template.
           # Optional - string
           custom_require: custom_download_strategy
 
@@ -94,9 +94,9 @@ jobs:
           formula_includes: 'include Language::Python::Virtualenv'
 
           # Override the automatically detected version of a formula with an explicit value.
-          # This option should only be used if Homebrew cannot automatically detect the version when generating
+          # NOTE: This option should only be used if Homebrew cannot automatically detect the version when generating
           # the Homebrew formula. Including this when not necessary could lead to uninstallable formula that may 
-          # not pass `brew audit` due to mismatched or redundant version strings
+          # not pass `brew audit` due to mismatched or redundant version strings.
           # Optional - string
           version: '1.2.0'
 
@@ -126,10 +126,10 @@ jobs:
           # <!-- project_table_end -->
           #
           # Finally, mark `update_readme_table` as `true` in your GitHub Action config and we'll do the work of building a custom table for you.
-          # Default is `false` - boolean
-          update_readme_table: true
+          # Default is shown - boolean
+          update_readme_table: false
 
-          # Skips committing the generated formula to a homebrew tap (useful for local testing).
+          # Skips committing the generated formula to a homebrew tap (useful to verify results on a first run).
           # Default is shown - boolean
           skip_commit: false
 
@@ -140,7 +140,7 @@ jobs:
 
 ## Development
 
-```bash
+```sh
 # Get a comprehensive list of development tools
 just --list
 ```
@@ -151,6 +151,6 @@ Homebrew Releaser does not clean up artifacts after completing since the tempora
 
 **Note:** All environment variables from above must be prepended with `INPUT_` for the local Docker image (eg: `INPUT_SKIP_COMMIT=true`).
 
-```bash
+```sh
 docker compose up -d --build
 ```

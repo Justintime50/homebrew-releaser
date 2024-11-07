@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v2.0.0 (2024-11-07)
+
+- Changes the default `formula_folder` from `formula` to `Formula` to follow the Homebrew convention and allow Linux installs to properly find the folder for installs out of the box without additional configuration
+  - macOS is not case sensitive and didn't care about the casing of the directory whereas Linux does
+
 ## v1.0.0 (2024-10-10)
 
 - Upgrades Python from 3.12 to 3.13
