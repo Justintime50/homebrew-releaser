@@ -6,7 +6,6 @@ from typing import (
     Tuple,
 )
 
-import _io  # type: ignore
 import pretty_tables
 import woodchips
 
@@ -151,12 +150,12 @@ class ReadmeUpdater:
         return old_table, old_table_found
 
     @staticmethod
-    def read_current_readme(homebrew_tap: str) -> _io.TextIOWrapper:
+    def read_current_readme(homebrew_tap: str) -> str:
         """Reads the current README content."""
         logger = woodchips.get(LOGGER_NAME)
 
         readme = ReadmeUpdater.does_readme_exist(homebrew_tap)
-        file_content = None
+        file_content = ""
 
         if readme:
             with open(readme, 'r') as readme_contents:
@@ -166,7 +165,7 @@ class ReadmeUpdater:
         return file_content
 
     @staticmethod
-    def replace_table_contents(file_content: _io.TextIOWrapper, old_table: str, new_table: str, homebrew_tap: str):
+    def replace_table_contents(file_content: str, old_table: str, new_table: str, homebrew_tap: str):
         """Replaces the old README project table string with the new
         project table string including start/end tags.
         """

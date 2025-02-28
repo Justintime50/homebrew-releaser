@@ -2,7 +2,6 @@ import re
 
 import setuptools
 
-
 with open('README.md', 'r') as readme_file:
     long_description = readme_file.read()
 
@@ -22,11 +21,11 @@ REQUIREMENTS = [
 ]
 
 DEV_REQUIREMENTS = [
-    'bandit == 1.7.*',
-    'black == 24.*',
+    'bandit == 1.8.*',
+    'black == 25.*',
     'flake8 == 7.*',
-    'isort == 5.*',
-    'mypy == 1.13.*',
+    'isort == 6.*',
+    'mypy == 1.15.*',
     'pytest == 8.*',
     'pytest-cov == 6.*',
 ]

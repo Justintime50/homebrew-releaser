@@ -162,7 +162,7 @@ def test_read_current_readme_does_not_exist():
     """Tests that the file contents of a README that doesn't exist is empty."""
     readme = ReadmeUpdater.read_current_readme('./test')
 
-    assert readme is None
+    assert readme == ""
 
 
 def test_read_current_readme():

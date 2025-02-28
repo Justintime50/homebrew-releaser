@@ -77,8 +77,13 @@ runs:
     - ${{ inputs.github_token }}
     - ${{ inputs.commit_owner }}
     - ${{ inputs.commit_email }}
+    - ${{ inputs.depends_on }}
     - ${{ inputs.install }}
     - ${{ inputs.test }}
+    - ${{ inputs.download_strategy }}
+    - ${{ inputs.custom_require }}
+    - ${{ inputs.formula_includes }}
+    - ${{ inputs.version }}
     - ${{ inputs.target_darwin_amd64 }}
     - ${{ inputs.target_darwin_arm64 }}
     - ${{ inputs.target_linux_amd64 }}
