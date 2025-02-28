@@ -26,7 +26,7 @@ When you cut a new release when using this GitHub Action, it will clone your rep
 - The Homebrew formula filename will match the github repo name.
 - It is **highly** recommended to enable debug mode and skip the commit on the first run through to ensure you have configured your workflow correctly and that the generated formula looks the way you want.
 - Homebrew Releaser is **not** compatible with monorepos.
-- Every precaution will be made to ensure that major releases of this action remain compatible (every `0.x` release of this action rebuilds and packages the `v1` action as a convenience to users). If you value stability over "getting new features for free", it's highly recommended to pin a specific version or commit hash of this action when using it (eg: `v0.16.0`)
+- Every precaution will be made to ensure that major releases of this action remain compatible (eg: every release of this action rebuilds and packages the current major release such as `v2` as a convenience to users). If you value stability over convenience, it's highly recommended to pin a specific version or commit hash of this action when using it (eg: `v2.0.1`)
 
 ### GitHub Actions YAML
 
