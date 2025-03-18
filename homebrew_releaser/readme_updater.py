@@ -1,7 +1,7 @@
 import os
 import re
 from typing import (
-    List,
+    Any,
     Optional,
     Tuple,
 )
@@ -36,7 +36,7 @@ class ReadmeUpdater:
             ReadmeUpdater.replace_table_contents(readme_content, old_table, new_table, homebrew_tap)
 
     @staticmethod
-    def format_formula_data(homebrew_tap: str) -> List:
+    def format_formula_data(homebrew_tap: str) -> list[dict[str, Any]]:
         """Retrieve the name, description, and homepage from each
         Ruby formula file in the homebrew tap repo.
         """
@@ -84,7 +84,7 @@ class ReadmeUpdater:
         return formulas
 
     @staticmethod
-    def generate_table(formulas: List) -> str:
+    def generate_table(formulas: list[dict[str, Any]]) -> str:
         """Generates a pretty table which will be used in the README file."""
         logger = woodchips.get(LOGGER_NAME)
 

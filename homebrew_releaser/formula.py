@@ -1,8 +1,6 @@
 import re
 from typing import (
     Any,
-    Dict,
-    List,
     Optional,
 )
 
@@ -25,8 +23,8 @@ class Formula:
     def generate_formula_data(
         owner: str,
         repo_name: str,
-        repository: Dict[str, Any],
-        checksums: List[Dict[str, str]],
+        repository: dict[str, Any],
+        checksums: list[dict[str, str]],
         install: str,
         tar_url: str,
         depends_on: Optional[str] = None,
@@ -67,7 +65,7 @@ class Formula:
         else:
             description = 'NA'
 
-        dependencies_object: Dict[str, Any] = {
+        dependencies_object: dict[str, Any] = {
             'dependencies': [],
         }
         dependencies_list = dependencies_object['dependencies']
