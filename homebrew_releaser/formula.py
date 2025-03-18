@@ -10,7 +10,9 @@ import chevron  # type: ignore
 import woodchips
 
 from homebrew_releaser.constants import (
+    ARTICLES,
     LOGGER_NAME,
+    MAX_DESC_FIELD_LENGTH,
     TARGET_DARWIN_AMD64,
     TARGET_DARWIN_ARM64,
     TARGET_LINUX_AMD64,
@@ -51,23 +53,16 @@ class Formula:
         """
         logger = woodchips.get(LOGGER_NAME)
 
-        max_desc_field_length = 80  # `brew audit` wants no more than 80 characters in the desc field
-
         class_name = Formula._generate_class_name(repo_name)
         license_type = repository['license'].get('spdx_id', '') if repository.get('license') else ''
         description = (
-            re.sub(r'[.!]+', '', repository.get('description', '')[:max_desc_field_length]).strip().capitalize()
+            re.sub(r'[.!]+', '', repository.get('description', '')[:MAX_DESC_FIELD_LENGTH]).strip().capitalize()
         )
 
         # If the first word of the desc is an article or the name of the formula, we cut it out per `brew audit`
-        articles = {
-            'a',
-            'an',
-            'the',
-        }
         if description:
             first_word_of_desc = description.split(' ', 1)
-            if first_word_of_desc[0].lower() in articles or first_word_of_desc[0].lower() == class_name.lower():
+            if first_word_of_desc[0].lower() in ARTICLES or first_word_of_desc[0].lower() == class_name.lower():
                 description = first_word_of_desc[1].strip().capitalize()
         else:
             description = 'NA'

@@ -23,6 +23,14 @@ GITHUB_HEADERS = {
 }
 CHECKSUM_FILE = 'checksum.txt'
 
+# Formula Constants
+ARTICLES = {
+    'a',
+    'an',
+    'the',
+}
+MAX_DESC_FIELD_LENGTH = 80  # `brew audit` wants no more than 80 characters in the desc field
+
 # GitHub Action env variables set by GitHub
 GITHUB_REPOSITORY = os.getenv('GITHUB_REPOSITORY', 'user/repo').split('/')
 GITHUB_OWNER = GITHUB_REPOSITORY[0]
