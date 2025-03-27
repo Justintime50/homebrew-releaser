@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v2.0.2 (2025-03-27)
+
+- Raises exceptions for unsuccessful `checksum.txt` file uploads (closes #53)
+- Switches public/private repo url log output from `INFO` to `DEBUG`
+
 ## v2.0.1 (2025-02-28)
 
 - Properly exposes the following inputs that may not have been accessible externally via the action interface: `depends_on`, `download_strategy`, `custom_require`, `formula_includes`, `version`

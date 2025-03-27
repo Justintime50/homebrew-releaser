@@ -86,12 +86,12 @@ class App:
 
         # Auto-generated tar URL must come first for later use (order is important)
         if repository["private"]:
-            logger.info('Repository is private. Using auto-generated release tarball and zipball REST API endpoints.')
+            logger.debug('Repository is private. Using auto-generated release tarball and zipball REST API endpoints.')
             archive_base_url = f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}'
             auto_generated_release_tar = f'{archive_base_url}/tarball/{version}'
             auto_generated_release_zip = f'{archive_base_url}/zipball/{version}'
         else:
-            logger.info('Repository is public. Using auto-generated release tarball and zipball public URLs.')
+            logger.debug('Repository is public. Using auto-generated release tarball and zipball public URLs.')
             archive_base_url = f'https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/refs/tags/{version}'
             auto_generated_release_tar = f'{archive_base_url}.tar.gz'
             auto_generated_release_zip = f'{archive_base_url}.zip'
@@ -114,7 +114,7 @@ class App:
         checksums = []
         for archive_url in archive_urls:
             if not assets:
-                assets = [0]  # TODO: This is a dumb hack to ensure we enter here even when we don't have any assets
+                assets = [0]  # Populate `assets` so that if we don't have any, we can use the auto generated checksums
             for asset in assets:
                 # Download the asset url so private repos work but use the brower URL for name and path in formula
                 if archive_url == auto_generated_release_tar or archive_url == auto_generated_release_zip:
@@ -141,6 +141,7 @@ class App:
                             }
                         },
                     )
+                    # We break here so we don't include duplicate checksums for the auto generated URLs
                     break
 
         Utils.write_file(CHECKSUM_FILE, archive_checksum_entries)

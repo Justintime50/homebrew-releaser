@@ -4,7 +4,10 @@ services:
     build: .
     environment:
       # Env vars that should be `false` should be left empty
+      - GITHUB_REPOSITORY=username/repo
       - INPUT_SKIP_COMMIT=true
+      - INPUT_UPDATE_README_TABLE=false
+      - INPUT_DEBUG=true
       - INPUT_HOMEBREW_OWNER=username
       - INPUT_HOMEBREW_TAP=homebrew-formulas
       - INPUT_FORMULA_FOLDER=Formula
@@ -21,6 +24,3 @@ services:
       - INPUT_TARGET_DARWIN_ARM64=
       - INPUT_TARGET_LINUX_AMD64=
       - INPUT_TARGET_LINUX_ARM64=
-      - INPUT_UPDATE_README_TABLE=true
-      - INPUT_DEBUG=true
-      - GITHUB_REPOSITORY=username/repo

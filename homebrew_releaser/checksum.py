@@ -46,19 +46,20 @@ class Checksum:
         latest_release_id = latest_release['id']
 
         with open(CHECKSUM_FILE, 'rb') as filename:
-            checksum_binary = filename.read()
+            checksum_file_content = filename.read()
 
         upload_url = f'https://uploads.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/{latest_release_id}/assets?name={CHECKSUM_FILE}'  # noqa
         headers = GITHUB_HEADERS
         headers['Content-Type'] = 'text/plain'
 
         try:
-            _ = requests.post(
+            response = requests.post(
                 upload_url,
                 headers=headers,
-                data=checksum_binary,
+                data=checksum_file_content,
                 timeout=TIMEOUT,
             )
+            response.raise_for_status()
             logger.info(f'checksum.txt uploaded successfully to {GITHUB_REPO}.')
         except requests.exceptions.RequestException as error:
             raise SystemExit(error)
