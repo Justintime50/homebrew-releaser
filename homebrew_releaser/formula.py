@@ -194,10 +194,14 @@ end
 """
 
         def match_indent_of(tag, text):
-            pattern = r"^(?P<indent>\s*)\{\{\{\s*" + re.escape(tag) + r"\s*\}\}\}"
+            pattern = r"(?m)^(?P<indent>\s*)\{\{\{\s*" + re.escape(tag) + r"\s*\}\}\}"
             matching_line = re.search(pattern, template)
             indent = matching_line and matching_line['indent'] or ''
-            return textwrap.indent(text.strip(), indent)
+            # Indent by the same amount as the template tag
+            indented_text = textwrap.indent(text.strip(), indent)
+            # Strip the indentation from the first line, because
+            # the template will render it indented already
+            return indented_text.lstrip()
 
         target_darwin = True if TARGET_DARWIN_AMD64 or TARGET_DARWIN_ARM64 else False
         target_linux = True if TARGET_LINUX_AMD64 or TARGET_LINUX_ARM64 else False
