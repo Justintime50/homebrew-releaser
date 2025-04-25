@@ -19,6 +19,14 @@ DEPENDS_ON = """
 "bash" => :build
 """
 TEST = 'assert_match("my script output", shell_output("my-script-command"))'
+MULTILINE_TEST = '''
+output = shell_output(%Q(
+  for test_case in case1 case2 case3; do
+    run_case $test_case
+  done
+))
+assert_match("my script output", output)
+'''
 DESCRIPTION = 'Release scripts, binaries, and executables to GitHub'
 LICENSE = {'spdx_id': 'MIT'}
 
@@ -277,6 +285,56 @@ def test_generate_formula_no_test():
     _record_formula(formula_path, formula_filename, formula)
 
     assert 'test do' not in formula
+
+
+def test_generate_formula_multiline_test():
+    """Tests that we generate the formula content correctly (when there is no test).
+
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
+    """
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
+    mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz'
+
+    repository = {
+        'description': DESCRIPTION,
+        'license': LICENSE,
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': (
+                        f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz'  # noqa
+                    ),
+                },
+            }
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=DEPENDS_ON,
+        test=MULTILINE_TEST,
+    )
+
+    _record_formula(formula_path, formula_filename, formula)
+
+    assert (
+        '''
+  test do
+    output = shell_output(%Q(
+      for test_case in case1 case2 case3; do
+        run_case $test_case
+      done
+    ))
+    assert_match("my script output", output)
+  end'''
+        in formula
+    )
 
 
 @patch('homebrew_releaser.formula.TARGET_DARWIN_AMD64', True)
