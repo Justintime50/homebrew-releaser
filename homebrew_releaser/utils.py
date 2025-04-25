@@ -16,7 +16,7 @@ class Utils:
         """Make an HTTP GET request."""
         logger = woodchips.get(LOGGER_NAME)
 
-        headers = GITHUB_HEADERS
+        headers = GITHUB_HEADERS.copy()
         if stream:
             headers['Accept'] = 'application/octet-stream'
 

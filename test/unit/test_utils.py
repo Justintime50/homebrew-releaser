@@ -30,7 +30,7 @@ def test_make_github_get_request_stream(mock_request):
     url = 'https://api.github.com/repos/Justintime50/homebrew-releaser'
     Utils.make_github_get_request(url=url, stream=True)
 
-    headers = GITHUB_HEADERS
+    headers = GITHUB_HEADERS.copy()
     headers['Accept'] = 'application/octet-stream'
 
     mock_request.assert_called_once_with(
