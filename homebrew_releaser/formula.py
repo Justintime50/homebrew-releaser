@@ -193,7 +193,7 @@ class {{class_name}} < Formula
 end
 """
 
-        def match_indent_of(tag, text):
+        def match_indent_of(tag: str, text: str) -> str:
             pattern = r"(?m)^(?P<indent>\s*)\{\{\{\s*" + re.escape(tag) + r"\s*\}\}\}"
             matching_line = re.search(pattern, template)
             indent = matching_line and matching_line['indent'] or ''

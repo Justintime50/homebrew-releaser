@@ -19,6 +19,8 @@ DEPENDS_ON = """
 "bash" => :build
 """
 TEST = 'assert_match("my script output", shell_output("my-script-command"))'
+DESCRIPTION = 'Release scripts, binaries, and executables to GitHub'
+LICENSE = {'spdx_id': 'MIT'}
 MULTILINE_TEST = '''
 output = shell_output(%Q(
   for test_case in case1 case2 case3; do
@@ -27,8 +29,14 @@ output = shell_output(%Q(
 ))
 assert_match("my script output", output)
 '''
-DESCRIPTION = 'Release scripts, binaries, and executables to GitHub'
-LICENSE = {'spdx_id': 'MIT'}
+MULTILINE_INSTALL = '''
+bin.install "my-script-command"
+man1.install "my-script-command.1"
+'''
+MULTILINE_INCLUDES = '''
+include Language::Python::Shebang
+include Language::Python::Virtualenv
+'''
 
 
 def _record_formula(formula_path: str, formula_name: str, formula_data: str):
@@ -287,8 +295,9 @@ def test_generate_formula_no_test():
     assert 'test do' not in formula
 
 
-def test_generate_formula_multiline_test():
-    """Tests that we generate the formula content correctly (when there is no test).
+def test_generate_formula_multiline_fields():
+    """Tests that we indent the formula content correctly when the install, test,
+       or formula_includes field content has multiple lines.
 
     NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
     """
@@ -315,13 +324,30 @@ def test_generate_formula_multiline_test():
                 },
             }
         ],
-        install=INSTALL,
+        install=MULTILINE_INSTALL,
         tar_url=mock_tar_url,
         depends_on=DEPENDS_ON,
+        formula_includes=MULTILINE_INCLUDES,
         test=MULTILINE_TEST,
     )
 
     _record_formula(formula_path, formula_filename, formula)
+
+    assert (
+        '''
+  include Language::Python::Shebang
+  include Language::Python::Virtualenv'''
+        in formula
+    )
+
+    assert (
+        '''
+  def install
+    bin.install "my-script-command"
+    man1.install "my-script-command.1"
+  end'''
+        in formula
+    )
 
     assert (
         '''
