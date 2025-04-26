@@ -22,8 +22,8 @@ class TestGenerateFormulaMultilineFields < Formula
 
   test do
     output = shell_output(%Q(
-      for test_case in case1 case2 case3; do
-        run_case $test_case
+      for test_case in 'case1' 'case2' 'case3'; do
+        run_case "$test_case"
       done
     ))
     assert_match("my script output", output)

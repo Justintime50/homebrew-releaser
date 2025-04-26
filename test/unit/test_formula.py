@@ -23,8 +23,8 @@ DESCRIPTION = 'Release scripts, binaries, and executables to GitHub'
 LICENSE = {'spdx_id': 'MIT'}
 MULTILINE_TEST = '''
 output = shell_output(%Q(
-  for test_case in case1 case2 case3; do
-    run_case $test_case
+  for test_case in 'case1' 'case2' 'case3'; do
+    run_case "$test_case"
   done
 ))
 assert_match("my script output", output)
@@ -353,8 +353,8 @@ def test_generate_formula_multiline_fields():
         '''
   test do
     output = shell_output(%Q(
-      for test_case in case1 case2 case3; do
-        run_case $test_case
+      for test_case in 'case1' 'case2' 'case3'; do
+        run_case "$test_case"
       done
     ))
     assert_match("my script output", output)
