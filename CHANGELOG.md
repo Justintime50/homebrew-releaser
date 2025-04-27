@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v2.0.3 (2025-04-26)
+
+- Sends proper headers for HTTP requests to GitHub (#54)
+- Matches indentation for all lines of multi-line strings such as `install` and `test` (#55)
+
 ## v2.0.2 (2025-03-27)
 
 - Raises exceptions for unsuccessful `checksum.txt` file uploads (closes #53)
