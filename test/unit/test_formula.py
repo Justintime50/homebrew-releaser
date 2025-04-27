@@ -21,6 +21,22 @@ DEPENDS_ON = """
 TEST = 'assert_match("my script output", shell_output("my-script-command"))'
 DESCRIPTION = 'Release scripts, binaries, and executables to GitHub'
 LICENSE = {'spdx_id': 'MIT'}
+MULTILINE_TEST = '''
+output = shell_output(%Q(
+  for test_case in 'case1' 'case2' 'case3'; do
+    run_case "$test_case"
+  done
+))
+assert_match("my script output", output)
+'''
+MULTILINE_INSTALL = '''
+bin.install "my-script-command"
+man1.install "my-script-command.1"
+'''
+MULTILINE_INCLUDES = '''
+include Language::Python::Shebang
+include Language::Python::Virtualenv
+'''
 
 
 def _record_formula(formula_path: str, formula_name: str, formula_data: str):
@@ -277,6 +293,74 @@ def test_generate_formula_no_test():
     _record_formula(formula_path, formula_filename, formula)
 
     assert 'test do' not in formula
+
+
+def test_generate_formula_multiline_fields():
+    """Tests that we indent the formula content correctly when the install, test,
+       or formula_includes field content has multiple lines.
+
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
+    """
+    formula_filename = f'{inspect.stack()[0][3]}.rb'
+    mock_repo_name = formula_filename.replace('_', '-').replace('.rb', '')
+    mock_tar_url = f'https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz'
+
+    repository = {
+        'description': DESCRIPTION,
+        'license': LICENSE,
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{mock_repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': (
+                        f'https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz'  # noqa
+                    ),
+                },
+            }
+        ],
+        install=MULTILINE_INSTALL,
+        tar_url=mock_tar_url,
+        depends_on=DEPENDS_ON,
+        formula_includes=MULTILINE_INCLUDES,
+        test=MULTILINE_TEST,
+    )
+
+    _record_formula(formula_path, formula_filename, formula)
+
+    assert (
+        '''
+  include Language::Python::Shebang
+  include Language::Python::Virtualenv'''
+        in formula
+    )
+
+    assert (
+        '''
+  def install
+    bin.install "my-script-command"
+    man1.install "my-script-command.1"
+  end'''
+        in formula
+    )
+
+    assert (
+        '''
+  test do
+    output = shell_output(%Q(
+      for test_case in 'case1' 'case2' 'case3'; do
+        run_case "$test_case"
+      done
+    ))
+    assert_match("my script output", output)
+  end'''
+        in formula
+    )
 
 
 @patch('homebrew_releaser.formula.TARGET_DARWIN_AMD64', True)
