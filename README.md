@@ -136,6 +136,10 @@ jobs:
           # Logs debugging info to console.
           # Default is shown - boolean
           debug: false
+          
+          # Run 'brew update-python-resources' on the formula to add Python resources.
+          # Default is shown - boolean
+          update_python_resources: false
 ```
 
 ## Development

@@ -1,4 +1,6 @@
 import re
+import shutil
+import subprocess  # nosec B404
 import textwrap
 from typing import (
     Any,
@@ -265,3 +267,37 @@ end
                 repo_name.title(),
             ),
         )
+
+    @staticmethod
+    def update_python_resources(formula_path: str, formula_name: str) -> None:
+        """Runs brew update-python-resources on the formula to add Python resources.
+
+        Args:
+            formula_path: The path to the formula file
+            formula_name: The name of the formula
+        """
+        logger = woodchips.get(LOGGER_NAME)
+
+        brew_path = shutil.which('brew')
+        if not brew_path:
+            logger.error("brew not found in PATH")
+            return
+
+        try:
+            logger.info(f'Running brew update-python-resources for {formula_name}...')
+            result = subprocess.run(  # nosec B603
+                [brew_path, 'update-python-resources', formula_path],
+                capture_output=True,
+                text=True,
+                check=True,
+                shell=False,  # Skip shell code to make it more secure
+            )
+
+            logger.info(f'Successfully updated Python resources for {formula_name}')
+            logger.debug(f'brew update-python-resources output: {result.stdout}')
+        except subprocess.CalledProcessError as e:
+            logger.error(
+                "Failed to update Python resources: %s\nCommand output: %s\nCommand error: %s", e, e.stdout, e.stderr
+            )
+        except Exception as e:
+            logger.error(f'An error occurred while updating Python resources: {e}')

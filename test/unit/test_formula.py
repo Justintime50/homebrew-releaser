@@ -1,5 +1,6 @@
 import inspect
 import os
+import shutil
 from unittest.mock import patch
 
 import pytest
@@ -880,3 +881,22 @@ def test_generate_class_name(repo_name, expected_class_name):
     class_name = Formula._generate_class_name(repo_name)
 
     assert class_name == expected_class_name
+
+
+@patch('woodchips.get')
+@patch('subprocess.run', side_effect=Exception('Test error'))
+def test_update_python_resources_error(mock_subprocess_run, mock_logger):
+    formula_path = '/path/to/formula.rb'
+    formula_name = 'test-formula'
+
+    Formula.update_python_resources(formula_path, formula_name)
+
+    brew_path = shutil.which('brew')
+    mock_subprocess_run.assert_called_once_with(
+        [brew_path, 'update-python-resources', formula_path],
+        capture_output=True,
+        text=True,
+        check=True,
+        shell=False,
+    )
+    mock_logger.assert_called()

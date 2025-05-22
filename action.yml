@@ -67,6 +67,9 @@ inputs:
   debug:
     description: "Logs debugging info to console."
     required: false
+  update_python_resources:
+    description: "Run 'brew update-python-resources' on the formula to add Python resources."
+    required: false
 runs:
   using: "docker"
   image: "Dockerfile"
@@ -91,3 +94,4 @@ runs:
     - ${{ inputs.update_readme_table }}
     - ${{ inputs.skip_commit }}
     - ${{ inputs.debug }}
+    - ${{ inputs.update_python_resources }}
