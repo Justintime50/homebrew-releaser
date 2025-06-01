@@ -93,6 +93,10 @@ jobs:
           # Optional - string
           formula_includes: 'include Language::Python::Virtualenv'
 
+          # Run 'brew update-python-resources' on the formula to add Python resources.
+          # Default is shown - boolean
+          update_python_resources: false
+
           # Override the automatically detected version of a formula with an explicit value.
           # NOTE: This option should only be used if Homebrew cannot automatically detect the version when generating
           # the Homebrew formula. Including this when not necessary could lead to uninstallable formula that may 
@@ -136,10 +140,6 @@ jobs:
           # Logs debugging info to console.
           # Default is shown - boolean
           debug: false
-          
-          # Run 'brew update-python-resources' on the formula to add Python resources.
-          # Default is shown - boolean
-          update_python_resources: false
 ```
 
 ## Development

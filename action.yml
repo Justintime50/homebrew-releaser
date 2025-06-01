@@ -43,6 +43,9 @@ inputs:
   formula_includes:
     description: "Allows you to add custom includes inside the formula class, before dependencies and install blocks."
     required: false
+  update_python_resources:
+    description: "Run 'brew update-python-resources' on the formula to add Python resources."
+    required: false
   version:
     description: "Override the automatically detected version of a formula with an explicit value."
     required: false
@@ -66,9 +69,6 @@ inputs:
     required: false
   debug:
     description: "Logs debugging info to console."
-    required: false
-  update_python_resources:
-    description: "Run 'brew update-python-resources' on the formula to add Python resources."
     required: false
 runs:
   using: "docker"
