@@ -1,10 +1,12 @@
 import inspect
 import os
 import shutil
+import subprocess  # nosec B404
 from unittest.mock import patch
 
 import pytest
 
+from homebrew_releaser.constants import TIMEOUT
 from homebrew_releaser.formula import Formula
 
 
@@ -883,8 +885,8 @@ def test_generate_class_name(repo_name, expected_class_name):
     assert class_name == expected_class_name
 
 
-@patch('subprocess.run', side_effect=Exception('Test error'))
-def test_update_python_resources_error(mock_subprocess_run):
+@patch('subprocess.check_output', side_effect=Exception('Test error'))
+def test_update_python_resources_error(mock_subprocess):
     formula_path = '/path/to/formula.rb'
     formula_name = 'test-formula'
 
@@ -894,10 +896,9 @@ def test_update_python_resources_error(mock_subprocess_run):
     assert str(error.value) == 'An error occurred while updating Python resources: Test error'
 
     brew_path = shutil.which('brew')
-    mock_subprocess_run.assert_called_once_with(
+    mock_subprocess.assert_called_once_with(
         [brew_path, 'update-python-resources', formula_path],
-        capture_output=True,
+        stderr=subprocess.STDOUT,
         text=True,
-        check=True,
-        shell=False,
+        timeout=TIMEOUT,
     )

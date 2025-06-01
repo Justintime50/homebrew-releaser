@@ -18,6 +18,7 @@ from homebrew_releaser.constants import (
     TARGET_DARWIN_ARM64,
     TARGET_LINUX_AMD64,
     TARGET_LINUX_ARM64,
+    TIMEOUT,
 )
 
 
@@ -284,16 +285,16 @@ end
 
         try:
             logger.info(f'Running brew update-python-resources for {formula_name}...')
-            result = subprocess.run(  # nosec B603
+            output = subprocess.check_output(  # nosec B603
                 [brew_path, 'update-python-resources', formula_path],
-                capture_output=True,
+                stderr=subprocess.STDOUT,
                 text=True,
-                check=True,
-                shell=False,  # Skip shell code to make it more secure
+                timeout=TIMEOUT,
             )
-
             logger.info(f'Successfully updated Python resources for {formula_name}')
-            logger.debug(f'brew update-python-resources output: {result.stdout}')
+            logger.debug(f'brew update-python-resources output:\n{output}')
+        except subprocess.TimeoutExpired as e:
+            raise SystemExit from e
         except subprocess.CalledProcessError as e:
             raise SystemExit(
                 "Failed to update Python resources: %s\nCommand output: %s\nCommand error: %s", e, e.stdout, e.stderr
