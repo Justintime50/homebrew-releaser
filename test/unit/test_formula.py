@@ -883,13 +883,15 @@ def test_generate_class_name(repo_name, expected_class_name):
     assert class_name == expected_class_name
 
 
-@patch('woodchips.get')
 @patch('subprocess.run', side_effect=Exception('Test error'))
-def test_update_python_resources_error(mock_subprocess_run, mock_logger):
+def test_update_python_resources_error(mock_subprocess_run):
     formula_path = '/path/to/formula.rb'
     formula_name = 'test-formula'
 
-    Formula.update_python_resources(formula_path, formula_name)
+    with pytest.raises(SystemExit) as error:
+        Formula.update_python_resources(formula_path, formula_name)
+
+    assert str(error.value) == 'An error occurred while updating Python resources: Test error'
 
     brew_path = shutil.which('brew')
     mock_subprocess_run.assert_called_once_with(
@@ -899,4 +901,3 @@ def test_update_python_resources_error(mock_subprocess_run, mock_logger):
         check=True,
         shell=False,
     )
-    mock_logger.assert_called()

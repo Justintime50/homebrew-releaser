@@ -280,8 +280,7 @@ end
 
         brew_path = shutil.which('brew')
         if not brew_path:
-            logger.error("brew not found in PATH")
-            return
+            raise SystemExit("brew not found in PATH")
 
         try:
             logger.info(f'Running brew update-python-resources for {formula_name}...')
@@ -296,8 +295,8 @@ end
             logger.info(f'Successfully updated Python resources for {formula_name}')
             logger.debug(f'brew update-python-resources output: {result.stdout}')
         except subprocess.CalledProcessError as e:
-            logger.error(
+            raise SystemExit(
                 "Failed to update Python resources: %s\nCommand output: %s\nCommand error: %s", e, e.stdout, e.stderr
-            )
+            ) from e
         except Exception as e:
-            logger.error(f'An error occurred while updating Python resources: {e}')
+            raise SystemExit(f'An error occurred while updating Python resources: {e}') from e
