@@ -11,6 +11,11 @@ SKIP_COMMIT = (
 DOWNLOAD_STRATEGY = os.getenv('INPUT_DOWNLOAD_STRATEGY')
 CUSTOM_REQUIRE = os.getenv('INPUT_CUSTOM_REQUIRE')
 FORMULA_INCLUDES = os.getenv('INPUT_FORMULA_INCLUDES')
+UPDATE_PYTHON_RESOURCES = (
+    os.getenv("INPUT_UPDATE_PYTHON_RESOURCES", False)
+    if os.getenv("INPUT_UPDATE_PYTHON_RESOURCES") != "false"
+    else False
+)
 VERSION = os.getenv('INPUT_VERSION')
 
 # App Constants
@@ -49,10 +54,3 @@ TARGET_LINUX_AMD64 = (
 TARGET_LINUX_ARM64 = (
     os.getenv('INPUT_TARGET_LINUX_ARM64', False) if os.getenv('INPUT_TARGET_LINUX_ARM64') != 'false' else False
 )  # Must check for string `false` since GitHub Actions passes the bool as a string
-
-# Python resources
-UPDATE_PYTHON_RESOURCES = (
-    os.getenv("INPUT_UPDATE_PYTHON_RESOURCES", False)
-    if os.getenv("INPUT_UPDATE_PYTHON_RESOURCES") != "false"
-    else False
-)
