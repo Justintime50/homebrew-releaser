@@ -271,12 +271,7 @@ end
 
     @staticmethod
     def update_python_resources(formula_path: str, formula_name: str) -> None:
-        """Runs brew update-python-resources on the formula to add Python resources.
-
-        Args:
-            formula_path: The path to the formula file
-            formula_name: The name of the formula
-        """
+        """Runs brew update-python-resources on the formula to add Python resources."""
         logger = woodchips.get(LOGGER_NAME)
 
         brew_path = shutil.which('brew')
@@ -284,20 +279,15 @@ end
             raise SystemExit("brew not found in PATH")
 
         try:
-            logger.info(f'Running brew update-python-resources for {formula_name}...')
-            output = subprocess.check_output(  # nosec B603
+            logger.info(f'Running brew update-python-resources for {formula_path}...')
+            subprocess.check_output(  # nosec B603
                 [brew_path, 'update-python-resources', formula_path],
                 stderr=subprocess.STDOUT,
                 text=True,
                 timeout=TIMEOUT,
             )
-            logger.info(f'Successfully updated Python resources for {formula_name}')
-            logger.debug(f'brew update-python-resources output:\n{output}')
+            logger.info(f'Successfully updated Python resources for {formula_path}')
         except subprocess.TimeoutExpired as e:
             raise SystemExit from e
         except subprocess.CalledProcessError as e:
-            raise SystemExit(
-                "Failed to update Python resources: %s\nCommand output: %s\nCommand error: %s", e, e.stdout, e.stderr
-            ) from e
-        except Exception as e:
             raise SystemExit(f'An error occurred while updating Python resources: {e}') from e
