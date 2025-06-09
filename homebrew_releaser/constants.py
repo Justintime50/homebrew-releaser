@@ -15,7 +15,7 @@ VERSION = os.getenv('INPUT_VERSION')
 
 # App Constants
 LOGGER_NAME = 'homebrew-releaser'
-TIMEOUT = 30
+TIMEOUT = 60
 GITHUB_HEADERS = {
     'Accept': 'application/vnd.github.v3+json',
     'Agent': 'Homebrew Releaser',

@@ -81,7 +81,7 @@ jobs:
 
           # Allows you to set a custom download strategy.
           # NOTE: You'll need to implement the strategy and add it to your tap repository.
-          # Example: https://docs.brew.sh/Formula-Cookbook#specifying-the-download-strategy-explicitly
+          # Docs: https://docs.brew.sh/Formula-Cookbook#specifying-the-download-strategy-explicitly
           # Optional - string
           download_strategy: CurlDownloadStrategy
 
@@ -94,6 +94,7 @@ jobs:
           formula_includes: 'include Language::Python::Virtualenv'
 
           # Run 'brew update-python-resources' on the formula to add Python resources.
+          # Docs: https://docs.brew.sh/Python-for-Formula-Authors#python-declarations-for-applications
           # Default is shown - boolean
           update_python_resources: false
 

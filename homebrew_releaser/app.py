@@ -160,15 +160,22 @@ class App:
             DOWNLOAD_STRATEGY,
             CUSTOM_REQUIRE,
             FORMULA_INCLUDES,
+            UPDATE_PYTHON_RESOURCES,
             version_no_v if VERSION else None,
         )
 
-        formula_path = os.path.join(HOMEBREW_TAP, FORMULA_FOLDER, f'{repository["name"]}.rb')
-        Utils.write_file(formula_path, template, 'w')
+        formula_filename = f'{repository["name"]}.rb'
+        formula_dir = os.path.join(HOMEBREW_TAP, FORMULA_FOLDER)
+        formula_filepath = os.path.join(formula_dir, formula_filename)
+        Utils.write_file(formula_filepath, template, 'w')
 
         if UPDATE_PYTHON_RESOURCES:
             logger.info('Attempting to update Python resources in the formula...')
-            Formula.update_python_resources(formula_path, repository["name"])
+            Formula.update_python_resources(formula_dir, formula_filename)
+            if DEBUG:
+                with open(formula_filepath, 'r') as formula_file:
+                    formula_content = formula_file.read()
+                    logger.debug(formula_content)
         else:
             logger.debug('Skipping update to Python resources.')
 

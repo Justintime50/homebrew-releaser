@@ -1,13 +1,12 @@
-FROM python:3.13-alpine
+FROM homebrew/brew
 
-RUN apk add --no-cache \
-    # Install git to push new Homebrew formula
-    git \
-    # Install perl-utils for `shasum` tool to get tar archive checksums
-    perl-utils
+WORKDIR /home/linuxbrew/homebrew-releaser
 
-COPY . .
+COPY --chown=linuxbrew:linuxbrew homebrew_releaser homebrew_releaser
+COPY --chown=linuxbrew:linuxbrew setup.py setup.py
 
-RUN pip install -e .
+RUN brew install python@3.13 \
+    && python3 -m venv venv \
+    && venv/bin/pip3 install .
 
-ENTRYPOINT [ "python", "/homebrew_releaser/app.py" ]
+ENTRYPOINT [ "venv/bin/python3", "homebrew_releaser/app.py" ]

@@ -6,7 +6,6 @@ from unittest.mock import patch
 
 import pytest
 
-from homebrew_releaser.constants import TIMEOUT
 from homebrew_releaser.formula import Formula
 
 
@@ -901,6 +900,7 @@ def test_generate_formula_update_python_resources():
         install='virtualenv_install_with_resources',
         tar_url=mock_tar_url,
         formula_includes='include Language::Python::Virtualenv',
+        update_python_resources=True,
     )
 
     update_resources = False
@@ -941,16 +941,17 @@ def test_generate_class_name(repo_name, expected_class_name):
     side_effect=subprocess.CalledProcessError(cmd='subprocess.check_output', returncode=1),
 )
 def test_update_python_resources_error(mock_subprocess):
-    FORMULA_PATH = '/path/to/formula.rb'
-    formula_name = 'test-formula'
+    FORMULA_PATH = '/homebrew-formulas/Formula'
+    formula_name = 'test-formula.rb'
 
     with pytest.raises(SystemExit):
         Formula.update_python_resources(FORMULA_PATH, formula_name)
 
     brew_path = shutil.which('brew')
     mock_subprocess.assert_called_once_with(
-        [brew_path, 'update-python-resources', FORMULA_PATH],
+        f'cd {FORMULA_PATH} && {brew_path} update-python-resources {formula_name}',
         stderr=subprocess.STDOUT,
         text=True,
-        timeout=TIMEOUT,
+        timeout=60,
+        shell=True,
     )
