@@ -936,11 +936,12 @@ def test_generate_class_name(repo_name, expected_class_name):
     assert class_name == expected_class_name
 
 
+@patch('shutil.which', return_value='/usr/local/bin/brew')
 @patch(
     'subprocess.check_output',
     side_effect=subprocess.CalledProcessError(cmd='subprocess.check_output', returncode=1),
 )
-def test_update_python_resources_error(mock_subprocess):
+def test_update_python_resources_error(mock_subprocess, mock_which):
     FORMULA_PATH = '/homebrew-formulas/Formula'
     formula_name = 'test-formula.rb'
 
