@@ -2,8 +2,6 @@ import re
 
 import setuptools
 
-with open('README.md', 'r') as readme_file:
-    long_description = readme_file.read()
 
 # Inspiration: https://stackoverflow.com/a/7071358/6064135
 with open('homebrew_releaser/_version.py', 'r') as version_file:
@@ -34,8 +32,6 @@ setuptools.setup(
     name='homebrew-releaser',
     version=version,
     description='Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.',
-    long_description=long_description,
-    long_description_content_type="text/markdown",
     url='http://github.com/Justintime50/homebrew-releaser',
     author='Justintime50',
     license='MIT',

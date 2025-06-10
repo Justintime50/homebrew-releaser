@@ -1,5 +1,7 @@
 import inspect
 import os
+import shutil
+import subprocess  # nosec B404
 from unittest.mock import patch
 
 import pytest
@@ -7,8 +9,7 @@ import pytest
 from homebrew_releaser.formula import Formula
 
 
-formula_path = 'test/formulas'
-
+FORMULA_PATH = 'test/formulas'
 USERNAME = 'Justintime50'
 VERSION = '0.1.0'
 CHECKSUM = '0' * 64  # `brew audit` wants a 64 character number here, this would be true with real data
@@ -39,7 +40,7 @@ include Language::Python::Virtualenv
 '''
 
 
-def _record_formula(formula_path: str, formula_name: str, formula_data: str):
+def _record_formula(formula_path: str, formula_name: str, formula_data: str, skip_assertions: bool = False):
     """Read from an existing formula file or create a new formula file if it's not present.
 
     Tests using this function will generate a formula into a file (similar to how
@@ -53,8 +54,9 @@ def _record_formula(formula_path: str, formula_name: str, formula_data: str):
     full_formula_filename = os.path.join(formula_path, formula_name)
 
     if os.path.isfile(full_formula_filename):
-        with open(full_formula_filename, 'r') as formula_file:
-            assert formula_data == formula_file.read()
+        if skip_assertions is False:
+            with open(full_formula_filename, 'r') as formula_file:
+                assert formula_data == formula_file.read()
     else:
         os.makedirs(formula_path, exist_ok=True)
         with open(full_formula_filename, 'w') as formula_file:
@@ -101,7 +103,7 @@ def test_generate_formula():
         test=TEST,
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     # The following assertions are explicitly listed as the "gold standard" for generic formula generation
     assert (
@@ -171,7 +173,7 @@ def test_generate_formula_no_article_description():
         test=None,
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert 'desc "Release scripts, binaries, and executables to github"' in formula
 
@@ -212,7 +214,7 @@ def test_generate_formula_formula_name_starts_description():
         test=None,
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert 'desc "Is a tool"' in formula
 
@@ -251,7 +253,7 @@ def test_generate_formula_no_depends_on():
         test=TEST,
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert 'depends_on' not in formula
 
@@ -290,7 +292,7 @@ def test_generate_formula_no_test():
         test=None,
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert 'test do' not in formula
 
@@ -331,7 +333,7 @@ def test_generate_formula_multiline_fields():
         test=MULTILINE_TEST,
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert (
         '''
@@ -433,7 +435,7 @@ def test_generate_formula_complete_matrix():
         test=TEST,
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert formula.count('url') == 5
     assert formula.count('sha256') == 5
@@ -495,7 +497,7 @@ def test_generate_formula_darwin_matrix():
         test=None,
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert 'on_macos' in formula
     assert 'on_intel' in formula
@@ -555,7 +557,7 @@ def test_generate_formula_linux_matrix():
         test=None,
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert 'on_macos' not in formula
     assert 'on_intel' in formula
@@ -616,7 +618,7 @@ def test_one_of_each_matrix():
         test=None,
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert 'on_macos' in formula
     assert 'on_intel' in formula
@@ -663,7 +665,7 @@ def test_generate_formula_string_false_configs():
         test=None,
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert 'on_macos' not in formula
     assert 'on_intel' not in formula
@@ -704,7 +706,7 @@ def test_generate_formula_empty_fields():
         test=None,
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert 'desc "NA"' in formula
     assert 'license' not in formula
@@ -782,7 +784,7 @@ def test_generate_formula_download_strategy():
         custom_require='../formula_imports/mock_download_strategy',
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert formula.count(', using: CustomDownloadStrategy') == 5
     assert 'require_relative "../formula_imports/mock_download_strategy"' in formula
@@ -821,7 +823,7 @@ def test_generate_formula_override_version():
         version='9.8.7',
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert '9.8.7' in formula
 
@@ -859,9 +861,61 @@ def test_generate_formula_formula_includes():
         formula_includes='include Language::Python::Virtualenv',
     )
 
-    _record_formula(formula_path, formula_filename, formula)
+    _record_formula(FORMULA_PATH, formula_filename, formula)
 
     assert 'include Language::Python::Virtualenv' in formula
+
+
+def test_generate_formula_update_python_resources():
+    """Tests that we generate the formula content correctly when using the update_python_resources param.
+
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
+
+    NOTE: This test is unique since we call a subprocess to update our formula after we've generated it, will
+    require a different test flow than the others.
+    """
+    formula_filename = 'homebrew_releaser.rb'
+    repo_name = 'homebrew-releaser'
+    mock_tar_url = f'https://github.com/justintime50/{repo_name}/archive/refs/tags/v1.0.0.tar.gz'
+
+    repository = {
+        'description': DESCRIPTION,
+        'license': LICENSE,
+    }
+
+    formula = Formula.generate_formula_data(
+        owner=USERNAME,
+        repo_name=repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f'{repo_name}.tar.gz': {
+                    'checksum': CHECKSUM,
+                    'url': (
+                        f'https://github.com/justintime50/{repo_name}/releases/download/1.0.0/{repo_name}-1.0.0.tar.gz'  # noqa
+                    ),
+                },
+            }
+        ],
+        install='virtualenv_install_with_resources',
+        tar_url=mock_tar_url,
+        formula_includes='include Language::Python::Virtualenv',
+        update_python_resources=True,
+    )
+
+    update_resources = False
+    full_formula_filename = os.path.join(os.getcwd(), FORMULA_PATH, formula_filename)
+    if not os.path.isfile(full_formula_filename):
+        update_resources = True
+    _record_formula(FORMULA_PATH, formula_filename, formula, skip_assertions=True)
+    if update_resources:
+        Formula.update_python_resources(full_formula_filename, repo_name)
+    with open(full_formula_filename, 'r') as formula_file:
+        formula = formula_file.read()
+
+    assert 'include Language::Python::Virtualenv' in formula
+    assert 'resource "requests" do' in formula
+    assert 'virtualenv_install_with_resources' in formula
 
 
 @pytest.mark.parametrize(
@@ -880,3 +934,25 @@ def test_generate_class_name(repo_name, expected_class_name):
     class_name = Formula._generate_class_name(repo_name)
 
     assert class_name == expected_class_name
+
+
+@patch('shutil.which', return_value='/usr/local/bin/brew')
+@patch(
+    'subprocess.check_output',
+    side_effect=subprocess.CalledProcessError(cmd='subprocess.check_output', returncode=1),
+)
+def test_update_python_resources_error(mock_subprocess, mock_which):
+    FORMULA_PATH = '/homebrew-formulas/Formula'
+    formula_name = 'test-formula.rb'
+
+    with pytest.raises(SystemExit):
+        Formula.update_python_resources(FORMULA_PATH, formula_name)
+
+    brew_path = shutil.which('brew')
+    mock_subprocess.assert_called_once_with(
+        f'cd {FORMULA_PATH} && {brew_path} update-python-resources {formula_name}',
+        stderr=subprocess.STDOUT,
+        text=True,
+        timeout=60,
+        shell=True,
+    )

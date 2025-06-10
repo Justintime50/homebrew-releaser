@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## Next Release
+
+- Changes Docker image from `python3.13` to `brew` allowing us to use all brew tools during builds
+- Adds `update_python_resources` so Python formula can update their required resources
+- Bumps `TIMEOUT` from 30 to 60 seconds for larger projects
+
 ## v2.0.3 (2025-04-26)
 
 - Sends proper headers for HTTP requests to GitHub (#54)

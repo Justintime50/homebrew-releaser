@@ -138,6 +138,53 @@ def test_run_github_action_update_readme(
 
 
 @patch('homebrew_releaser.app.HOMEBREW_TAP', '123')
+@patch('homebrew_releaser.app.UPDATE_PYTHON_RESOURCES', True)
+@patch('homebrew_releaser.checksum.Checksum.upload_checksum_file')
+@patch('woodchips.get')
+@patch('homebrew_releaser.git.Git.setup')
+@patch('homebrew_releaser.git.Git.add')
+@patch('homebrew_releaser.git.Git.commit')
+@patch('homebrew_releaser.git.Git.push')
+@patch('homebrew_releaser.utils.Utils.write_file')
+@patch('homebrew_releaser.formula.Formula.generate_formula_data')
+@patch('homebrew_releaser.checksum.Checksum.get_checksum', return_value=('123', 'mock-repo'))
+@patch('homebrew_releaser.app.App.download_archive')
+@patch('homebrew_releaser.utils.Utils.make_github_get_request')
+@patch('homebrew_releaser.app.App.check_required_env_variables')
+@patch('homebrew_releaser.formula.Formula.update_python_resources')
+def test_run_github_action_update_python_resources(
+    mock_update_python_resources,
+    mock_check_env_variables,
+    mock_make_github_get_request,
+    mock_download_archive,
+    mock_get_checksum,
+    mock_generate_formula,
+    mock_write_file,
+    mock_push_formula,
+    mock_commit_formula,
+    mock_add_formula,
+    mock_setup_git,
+    mock_logger,
+    mock_upload_checksum_file,
+):
+    App.run_github_action()
+
+    # TODO: Assert these `called_with` eventually
+    mock_logger.assert_called()
+    mock_check_env_variables.assert_called_once()
+    assert mock_make_github_get_request.call_count == 2
+    mock_download_archive.call_count == 2
+    mock_get_checksum.call_count == 2
+    mock_generate_formula.assert_called_once()
+    mock_write_file.call_count == 2
+    mock_setup_git.assert_called_once()
+    mock_add_formula.assert_called_once()
+    mock_commit_formula.assert_called_once()
+    mock_push_formula.assert_called_once()
+    mock_update_python_resources.assert_called_once()
+
+
+@patch('homebrew_releaser.app.HOMEBREW_TAP', '123')
 @patch('homebrew_releaser.app.TARGET_DARWIN_AMD64', True)
 @patch('homebrew_releaser.app.TARGET_DARWIN_ARM64', True)
 @patch('homebrew_releaser.app.TARGET_LINUX_AMD64', True)

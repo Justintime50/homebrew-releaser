@@ -21,6 +21,7 @@ from homebrew_releaser.constants import (
     TARGET_DARWIN_ARM64,
     TARGET_LINUX_AMD64,
     TARGET_LINUX_ARM64,
+    UPDATE_PYTHON_RESOURCES,
     VERSION,
 )
 from homebrew_releaser.formula import Formula
@@ -159,10 +160,24 @@ class App:
             DOWNLOAD_STRATEGY,
             CUSTOM_REQUIRE,
             FORMULA_INCLUDES,
+            UPDATE_PYTHON_RESOURCES,
             version_no_v if VERSION else None,
         )
 
-        Utils.write_file(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER, f'{repository["name"]}.rb'), template, 'w')
+        formula_filename = f'{repository["name"]}.rb'
+        formula_dir = os.path.join(HOMEBREW_TAP, FORMULA_FOLDER)
+        formula_filepath = os.path.join(formula_dir, formula_filename)
+        Utils.write_file(formula_filepath, template, 'w')
+
+        if UPDATE_PYTHON_RESOURCES:
+            logger.info('Attempting to update Python resources in the formula...')
+            Formula.update_python_resources(formula_dir, formula_filename)
+            if DEBUG:
+                with open(formula_filepath, 'r') as formula_file:
+                    formula_content = formula_file.read()
+                    logger.debug(formula_content)
+        else:
+            logger.debug('Skipping update to Python resources.')
 
         if UPDATE_README_TABLE:
             logger.info('Attempting to update the README\'s project table...')

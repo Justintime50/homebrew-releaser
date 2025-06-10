@@ -1,4 +1,6 @@
 import re
+import shutil
+import subprocess  # nosec B404
 import textwrap
 from typing import (
     Any,
@@ -16,6 +18,7 @@ from homebrew_releaser.constants import (
     TARGET_DARWIN_ARM64,
     TARGET_LINUX_AMD64,
     TARGET_LINUX_ARM64,
+    TIMEOUT,
 )
 
 
@@ -33,6 +36,7 @@ class Formula:
         download_strategy: Optional[str] = None,
         custom_require: Optional[str] = None,
         formula_includes: Optional[str] = None,
+        update_python_resources: bool = False,
         version: Optional[str] = None,
     ) -> str:
         """Generates the formula data for Homebrew.
@@ -245,7 +249,9 @@ end
         )
 
         logger.info('Homebrew formula generated successfully!')
-        logger.debug(rendered_template)
+        # If we are updating python resources, we'll log this later once resources are updated
+        if not update_python_resources:
+            logger.debug(rendered_template)
 
         return rendered_template
 
@@ -265,3 +271,27 @@ end
                 repo_name.title(),
             ),
         )
+
+    @staticmethod
+    def update_python_resources(formula_dir: str, formula_filename: str) -> None:
+        """Runs brew update-python-resources on the formula to add Python resources."""
+        logger = woodchips.get(LOGGER_NAME)
+
+        brew_path = shutil.which('brew')
+        if not brew_path:
+            raise SystemExit("brew not found in PATH")
+
+        try:
+            logger.info(f'Running brew update-python-resources for {formula_filename}...')
+            subprocess.check_output(
+                f'cd {formula_dir} && {brew_path} update-python-resources {formula_filename}',
+                stderr=subprocess.STDOUT,
+                text=True,
+                timeout=TIMEOUT,
+                shell=True,  # nosec
+            )
+            logger.info(f'Successfully updated Python resources for {formula_filename}')
+        except subprocess.TimeoutExpired as e:
+            raise SystemExit from e
+        except subprocess.CalledProcessError as e:
+            raise SystemExit(f'An error occurred while updating Python resources: {e}') from e

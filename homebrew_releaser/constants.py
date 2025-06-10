@@ -11,11 +11,16 @@ SKIP_COMMIT = (
 DOWNLOAD_STRATEGY = os.getenv('INPUT_DOWNLOAD_STRATEGY')
 CUSTOM_REQUIRE = os.getenv('INPUT_CUSTOM_REQUIRE')
 FORMULA_INCLUDES = os.getenv('INPUT_FORMULA_INCLUDES')
+UPDATE_PYTHON_RESOURCES = (
+    os.getenv("INPUT_UPDATE_PYTHON_RESOURCES", False)
+    if os.getenv("INPUT_UPDATE_PYTHON_RESOURCES") != "false"
+    else False
+)
 VERSION = os.getenv('INPUT_VERSION')
 
 # App Constants
 LOGGER_NAME = 'homebrew-releaser'
-TIMEOUT = 30
+TIMEOUT = 60
 GITHUB_HEADERS = {
     'Accept': 'application/vnd.github.v3+json',
     'Agent': 'Homebrew Releaser',
