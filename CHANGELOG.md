@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Next Release
+## v2.1.0 (2025-06-10)
 
 - Changes Docker image from `python3.13` to `brew` allowing us to use all brew tools during builds
 - Adds `update_python_resources` so Python formula can update their required resources
