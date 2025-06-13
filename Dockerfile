@@ -2,9 +2,9 @@ FROM python:3.13-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends git
 
-RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
-    && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /etc/profile \
-    && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
     
 COPY homebrew_releaser homebrew_releaser
 COPY setup.py setup.py
