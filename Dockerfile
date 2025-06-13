@@ -1,6 +1,8 @@
 FROM python:3.13-slim
 
-RUN apt-get update && apt-get install -y --no-install-recommends git
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    git
 
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
