@@ -12,7 +12,13 @@ RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/instal
 
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
 
+RUN mkdir -p /home/linuxbrew/app
+
+WORKDIR /home/linuxbrew/app
+
 COPY --chown=linuxbrew:linuxbrew homebrew_releaser homebrew_releaser
 COPY --chown=linuxbrew:linuxbrew setup.py setup.py
 
-ENTRYPOINT ["/bin/bash", "-c", "pip install . && python /home/linuxbrew/homebrew_releaser/app.py"]
+RUN pip install .
+
+ENTRYPOINT ["python", "/home/linuxbrew/app/homebrew_releaser/app.py"]
