@@ -1,11 +1,16 @@
-FROM homebrew/brew:4.5.6
+FROM python:3.13-slim
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
+    && echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /etc/profile \
+    && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    
 COPY homebrew_releaser homebrew_releaser
 COPY setup.py setup.py
 
-RUN brew install python@3.13 \
-    && python3 -m venv /home/linuxbrew/venv \
-    && /home/linuxbrew/venv/bin/pip install . \
-    && chown -R linuxbrew:linuxbrew /home/linuxbrew
+RUN pip install .
 
-ENTRYPOINT [ "/home/linuxbrew/venv/bin/python3", "/home/linuxbrew/homebrew_releaser/app.py" ]
+ENTRYPOINT [ "python", "/homebrew_releaser/app.py" ]
