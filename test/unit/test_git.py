@@ -30,19 +30,19 @@ def test_setup(mock_subprocess):
                 ],
                 stderr=-2,
                 text=True,
-                timeout=60,
+                timeout=300,
             ),
             call(
                 ['git', '-C', 'homebrew-formulas', 'config', 'user.name', '"Justintime50"'],
                 stderr=-2,
                 text=True,
-                timeout=60,
+                timeout=300,
             ),
             call(
                 ['git', '-C', 'homebrew-formulas', 'config', 'user.email', 'user@example.com'],
                 stderr=-2,
                 text=True,
-                timeout=60,
+                timeout=300,
             ),
         ]
     )

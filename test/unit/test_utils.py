@@ -20,7 +20,7 @@ def test_make_github_get_request(mock_request):
         headers=GITHUB_HEADERS,
         allow_redirects=True,
         stream=False,
-        timeout=60,
+        timeout=300,
     )
 
 
@@ -38,7 +38,7 @@ def test_make_github_get_request_stream(mock_request):
         headers=headers,
         allow_redirects=True,
         stream=True,
-        timeout=60,
+        timeout=300,
     )
 
 

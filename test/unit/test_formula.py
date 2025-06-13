@@ -953,6 +953,6 @@ def test_update_python_resources_error(mock_subprocess, mock_which):
         f'cd {FORMULA_PATH} && {brew_path} update-python-resources {formula_name}',
         stderr=subprocess.STDOUT,
         text=True,
-        timeout=60,
+        timeout=300,
         shell=True,
     )
