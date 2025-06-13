@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.1.1 (2025-06-13)
+
+- Use explicit Python/Pip paths in Dockerfile
+
 ## v2.1.0 (2025-06-10)
 
 - Changes Docker image from `python3.13` to `brew` allowing us to use all brew tools during builds
