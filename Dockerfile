@@ -15,6 +15,4 @@ ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}
 COPY --chown=linuxbrew:linuxbrew homebrew_releaser homebrew_releaser
 COPY --chown=linuxbrew:linuxbrew setup.py setup.py
 
-RUN pip install .
-
-ENTRYPOINT [ "python", "/home/linuxbrew/homebrew_releaser/app.py" ]
+ENTRYPOINT ["/bin/bash", "-c", "pip install . && python /home/linuxbrew/homebrew_releaser/app.py"]
