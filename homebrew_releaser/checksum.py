@@ -1,4 +1,4 @@
-import subprocess  # nosec
+import hashlib
 from typing import Any
 
 import requests
@@ -21,19 +21,10 @@ class Checksum:
         logger = woodchips.get(LOGGER_NAME)
 
         try:
-            command = ['shasum', '-a', '256', tar_filepath]
-            output = subprocess.check_output(  # nosec
-                command,
-                stdin=None,
-                stderr=None,
-                timeout=TIMEOUT,
-            )
-            checksum = output.decode().split()[0]
-            checksum_filename = output.decode().split()[1]
-            logger.debug(f'Checksum for {checksum_filename} generated successfully: {checksum}')
-        except subprocess.TimeoutExpired as error:
-            raise SystemExit(error)
-        except subprocess.CalledProcessError as error:
+            with open(tar_filepath, "rb") as content:
+                checksum = hashlib.sha256(content.read()).hexdigest()
+            logger.debug(f'Checksum for {tar_filepath} generated successfully: {checksum}')
+        except Exception as error:
             raise SystemExit(error)
 
         return checksum

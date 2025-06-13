@@ -2,9 +2,12 @@
 
 ## v2.1.1 (2025-06-13)
 
-- Fixes Dockerfile references so Python/Git can access what it needs
+- Rolls back the Dockerfile changes and more correctly installs Brew into the existing image we had
+- Drop `shasum` dependency and calculate checksums from inside Python
 
 ## v2.1.0 (2025-06-10)
+
+> DO NOT use this image as it cannot build properly.
 
 - Changes Docker image from `python3.13` to `brew` allowing us to use all brew tools during builds
 - Adds `update_python_resources` so Python formula can update their required resources

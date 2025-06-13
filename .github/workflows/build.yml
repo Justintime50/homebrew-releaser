@@ -62,7 +62,7 @@ jobs:
             -e INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
             -e INPUT_INSTALL=virtualenv_install_with_resources \
             -e INPUT_FORMULA_INCLUDES="include Language::Python::Virtualenv" \
-            -e INPUT_UPDATE_PYTHOHN_RESOURCES=true \
+            -e INPUT_UPDATE_PYTHON_RESOURCES=true \
             --rm justintime50/homebrew-releaser
   coverage:
     if: github.ref == 'refs/heads/main'
