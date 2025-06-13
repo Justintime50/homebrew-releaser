@@ -22,6 +22,10 @@ class Git:
         """
         logger = woodchips.get(LOGGER_NAME)
 
+        import os
+        print("User:", os.getuid(), os.getgid())
+        subprocess.run(["ls", "-ld", "."], check=True)
+
         commands = [
             [
                 'git',
