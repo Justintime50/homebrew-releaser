@@ -17,4 +17,4 @@ COPY --chown=linuxbrew:linuxbrew setup.py setup.py
 
 RUN pip install .
 
-ENTRYPOINT [ "python", "homebrew_releaser/app.py" ]
+ENTRYPOINT [ "python", "/home/linuxbrew/homebrew_releaser/app.py" ]
