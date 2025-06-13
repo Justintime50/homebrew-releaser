@@ -2,6 +2,8 @@ FROM python:3.13-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
+    # Needed for `shasum`
+    perl \
     && rm -rf /var/lib/apt/lists/*
 
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" \
