@@ -4,13 +4,17 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     git
 
+RUN useradd -m -s /bin/bash linuxbrew
+USER linuxbrew
+WORKDIR /home/linuxbrew
+
 RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
-    
-COPY homebrew_releaser homebrew_releaser
-COPY setup.py setup.py
+
+COPY --chown=linuxbrew:linuxbrew homebrew_releaser homebrew_releaser
+COPY --chown=linuxbrew:linuxbrew setup.py setup.py
 
 RUN pip install .
 
-ENTRYPOINT [ "python", "/homebrew_releaser/app.py" ]
+ENTRYPOINT [ "python", "homebrew_releaser/app.py" ]

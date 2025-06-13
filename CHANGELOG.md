@@ -4,6 +4,7 @@
 
 - Rolls back the Dockerfile changes and more correctly installs Brew into the existing image we had
 - Drop `shasum` dependency and calculate checksums from inside Python
+- Bumps `TIMEOUT` from 60 to 300 seconds for larger projects (downloading Python packages can take some time)
 
 ## v2.1.0 (2025-06-10)
 
