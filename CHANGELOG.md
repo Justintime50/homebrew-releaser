@@ -2,7 +2,7 @@
 
 ## v2.1.1 (2025-06-13)
 
-- Use explicit Python/Pip paths in Dockerfile
+- Fixes Dockerfile references so Python/Git can access what it needs
 
 ## v2.1.0 (2025-06-10)
 
