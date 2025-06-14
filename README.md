@@ -95,6 +95,7 @@ jobs:
 
           # Run 'brew update-python-resources' on the formula to add Python resources.
           # Docs: https://docs.brew.sh/Python-for-Formula-Authors#python-declarations-for-applications
+          # NOTE: This only works with public repositories currently and must be done manually if for a private repo.
           # Default is shown - boolean
           update_python_resources: false
 

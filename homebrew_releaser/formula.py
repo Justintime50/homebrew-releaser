@@ -282,7 +282,6 @@ end
             raise SystemExit("brew not found in PATH")
 
         try:
-            logger.info(f'Running brew update-python-resources for {formula_filename}...')
             subprocess.check_output(
                 f'cd {formula_dir} && {brew_path} update-python-resources {formula_filename}',
                 stderr=subprocess.STDOUT,
@@ -290,10 +289,10 @@ end
                 timeout=TIMEOUT,
                 shell=True,  # nosec
             )
-            logger.info(f'Successfully updated Python resources for {formula_filename}')
-        except subprocess.TimeoutExpired as e:
-            raise SystemExit from e
+            logger.info('Updated Python resources successfully.')
+        except subprocess.TimeoutExpired:
+            raise SystemExit('Timed out updating Python resources')
         except subprocess.CalledProcessError as e:
             error_output = e.output if hasattr(e, "output") else ""
 
-            raise SystemExit(f"An error occurred while updating Python resources: {e}\nOutput:\n{error_output}") from e
+            raise SystemExit(f"An error occurred while updating Python resources: {error_output}")

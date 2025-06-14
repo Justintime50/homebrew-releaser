@@ -17,7 +17,7 @@ from homebrew_releaser.utils import Utils
 
 class Checksum:
     @staticmethod
-    def get_checksum(tar_filepath: str) -> str:
+    def calculate_checksum(tar_filepath: str) -> str:
         """Gets the checksum of a file."""
         logger = woodchips.get(LOGGER_NAME)
 

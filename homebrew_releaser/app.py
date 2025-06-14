@@ -131,7 +131,7 @@ class App:
                     # For REST API requests, we should not stream archive file, but it is fine for browser URLs
                     stream = False if archive_url.find("api.github.com") != -1 else True
                     downloaded_filename = App.download_archive(download_url, stream)
-                    checksum = Checksum.get_checksum(downloaded_filename)
+                    checksum = Checksum.calculate_checksum(downloaded_filename)
                     archive_filename = Utils.get_filename_from_path(archive_url)
                     archive_checksum_entries += f'{checksum} {archive_filename}\n'
                     checksums.append(
@@ -185,7 +185,7 @@ class App:
         else:
             logger.debug('Skipping update to project README.')
 
-        # Although users can skip a commit, still commit (and don't push) to dry-run a commit
+        # Although users can skip a commit, still commit (but don't push) to dry-run the commit for debugging purposes
         Git.add(HOMEBREW_TAP)
         Git.commit(HOMEBREW_TAP, GITHUB_REPO, version)
 

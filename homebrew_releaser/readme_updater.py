@@ -50,7 +50,7 @@ class ReadmeUpdater:
 
         try:
             for filename in sorted(files):
-                with open(Utils.get_working_dir(os.path.join(homebrew_tap_path, filename)), 'r') as formula:
+                with open(os.path.join(homebrew_tap_path, filename), 'r') as formula:
                     # Set empty defaults
                     final_name = ''
                     final_desc = ''
