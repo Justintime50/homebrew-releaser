@@ -294,4 +294,6 @@ end
         except subprocess.TimeoutExpired as e:
             raise SystemExit from e
         except subprocess.CalledProcessError as e:
-            raise SystemExit(f'An error occurred while updating Python resources: {e}') from e
+            error_output = e.output if hasattr(e, "output") else ""
+
+            raise SystemExit(f"An error occurred while updating Python resources: {e}\nOutput:\n{error_output}") from e
