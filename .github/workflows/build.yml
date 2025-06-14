@@ -54,7 +54,8 @@ jobs:
       - name: Build and run Docker image
         run: |
           docker build . -t justintime50/homebrew-releaser
-          docker run -e INPUT_SKIP_COMMIT=true \
+          docker run --workdir /github/workspace \
+            -e INPUT_SKIP_COMMIT=true \
             -e INPUT_DEBUG=true \
             -e GITHUB_REPOSITORY=justintime50/homebrew-releaser \
             -e INPUT_HOMEBREW_OWNER=justintime50 \

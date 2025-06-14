@@ -165,7 +165,7 @@ class App:
         )
 
         formula_filename = f'{repository["name"]}.rb'
-        formula_dir = os.path.join(HOMEBREW_TAP, FORMULA_FOLDER)
+        formula_dir = Utils.get_working_dir(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER))
         formula_filepath = os.path.join(formula_dir, formula_filename)
         Utils.write_file(formula_filepath, template, 'w')
 

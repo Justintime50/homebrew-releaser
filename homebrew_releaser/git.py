@@ -8,6 +8,7 @@ from homebrew_releaser.constants import (
     LOGGER_NAME,
     TIMEOUT,
 )
+from homebrew_releaser.utils import Utils
 
 
 class Git:
@@ -28,10 +29,10 @@ class Git:
                 'clone',
                 '--depth=1',
                 f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git',
-                homebrew_tap,
+                Utils.get_working_dir(homebrew_tap),
             ],
-            ['git', '-C', homebrew_tap, 'config', 'user.name', f'"{commit_owner}"'],
-            ['git', '-C', homebrew_tap, 'config', 'user.email', commit_email],
+            ['git', '-C', Utils.get_working_dir(homebrew_tap), 'config', 'user.name', f'"{commit_owner}"'],
+            ['git', '-C', Utils.get_working_dir(homebrew_tap), 'config', 'user.email', commit_email],
         ]
 
         for command in commands:
@@ -42,14 +43,14 @@ class Git:
     @staticmethod
     def add(homebrew_tap: str):
         """Adds assets to a git commit."""
-        command = ['git', '-C', homebrew_tap, 'add', '.']
+        command = ['git', '-C', Utils.get_working_dir(homebrew_tap), 'add', '.']
         Git._run_git_subprocess(command, 'Assets added to git commit successfully.')
 
     @staticmethod
     def commit(homebrew_tap: str, repo_name: str, version: str):
         """Commits assets to the Homebrew tap (repo)."""
         # fmt: off
-        command = ['git', '-C', homebrew_tap, 'commit', '-m', f'chore: brew formula update for {repo_name} {version}']  # noqa
+        command = ['git', '-C', Utils.get_working_dir(homebrew_tap), 'commit', '-m', f'chore: brew formula update for {repo_name} {version}']  # noqa
         # fmt: on
         Git._run_git_subprocess(command, 'Assets committed successfully.')
 
@@ -57,7 +58,7 @@ class Git:
     def push(homebrew_tap: str, homebrew_owner: str):
         """Pushes assets to the remote Homebrew tap (repo)."""
         # fmt: off
-        command = ['git', '-C', homebrew_tap, 'push', f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git']  # noqa
+        command = ['git', '-C', Utils.get_working_dir(homebrew_tap), 'push', f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git']  # noqa
         # fmt: on
         Git._run_git_subprocess(command, f'Assets pushed successfully to {homebrew_tap}.')
 

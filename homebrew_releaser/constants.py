@@ -27,6 +27,7 @@ GITHUB_HEADERS = {
     'Authorization': f'Bearer {GITHUB_TOKEN}',
 }
 CHECKSUM_FILE = 'checksum.txt'
+WORKING_DIR = '/tmp/homebrew-releaser'
 
 # Formula Constants
 ARTICLES = {

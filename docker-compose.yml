@@ -2,6 +2,8 @@ services:
   homebrew-releaser:
     container_name: homebrew-releaser
     build: .
+    # Mimicks the GitHub Actions environment
+    working_dir: /github/workspace
     environment:
       # Env vars that should be `false` should be left empty
       - GITHUB_REPOSITORY=username/repo

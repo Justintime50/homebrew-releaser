@@ -12,6 +12,7 @@ from homebrew_releaser.constants import (
     LOGGER_NAME,
     TIMEOUT,
 )
+from homebrew_releaser.utils import Utils
 
 
 class Checksum:
@@ -21,7 +22,7 @@ class Checksum:
         logger = woodchips.get(LOGGER_NAME)
 
         try:
-            with open(tar_filepath, "rb") as content:
+            with open(Utils.get_working_dir(tar_filepath), "rb") as content:
                 checksum = hashlib.sha256(content.read()).hexdigest()
             logger.debug(f'Checksum for {tar_filepath} generated successfully: {checksum}')
         except Exception as error:
@@ -36,7 +37,7 @@ class Checksum:
 
         latest_release_id = latest_release['id']
 
-        with open(CHECKSUM_FILE, 'rb') as filename:
+        with open(Utils.get_working_dir(CHECKSUM_FILE), 'rb') as filename:
             checksum_file_content = filename.read()
 
         upload_url = f'https://uploads.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/{latest_release_id}/assets?name={CHECKSUM_FILE}'  # noqa
