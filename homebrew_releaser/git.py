@@ -1,4 +1,3 @@
-import os
 import subprocess  # nosec
 from typing import Optional
 

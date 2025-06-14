@@ -1,12 +1,10 @@
 FROM homebrew/brew:4.5.6
 
-COPY --chown=linuxbrew:linuxbrew homebrew_releaser homebrew_releaser
-COPY --chown=linuxbrew:linuxbrew setup.py setup.py
+COPY homebrew_releaser /tmp/homebrew_releaser
+COPY setup.py /tmp/setup.py
 
 RUN brew install python@3.13 \
-    && python3 -m venv /home/linuxbrew/venv \
-    && /home/linuxbrew/venv/bin/pip install .
+    && python3 -m venv /tmp/venv \
+    && /tmp/venv/bin/pip install .
 
-WORKDIR /tmp/homebrew-releaser
-
-ENTRYPOINT [ "/home/linuxbrew/venv/bin/python3", "/home/linuxbrew/homebrew_releaser/app.py" ]
+ENTRYPOINT [ "/tmp/venv/bin/python3", "/tmp/homebrew_releaser/app.py" ]
