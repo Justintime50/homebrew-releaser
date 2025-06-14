@@ -23,18 +23,16 @@ class Git:
         """
         logger = woodchips.get(LOGGER_NAME)
 
-        homebrew_tap_path = Git._get_homebrew_tap_path(homebrew_tap)
-
         commands = [
             [
                 'git',
                 'clone',
                 '--depth=1',
                 f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git',
-                homebrew_tap_path,
+                homebrew_tap,
             ],
-            ['git', '-C', homebrew_tap_path, 'config', 'user.name', f'"{commit_owner}"'],
-            ['git', '-C', homebrew_tap_path, 'config', 'user.email', commit_email],
+            ['git', '-C', homebrew_tap, 'config', 'user.name', f'"{commit_owner}"'],
+            ['git', '-C', homebrew_tap, 'config', 'user.email', commit_email],
         ]
 
         for command in commands:
@@ -45,25 +43,22 @@ class Git:
     @staticmethod
     def add(homebrew_tap: str):
         """Adds assets to a git commit."""
-        homebrew_tap_path = Git._get_homebrew_tap_path(homebrew_tap)
-        command = ['git', '-C', homebrew_tap_path, 'add', '.']
+        command = ['git', '-C', homebrew_tap, 'add', '.']
         Git._run_git_subprocess(command, 'Assets added to git commit successfully.')
 
     @staticmethod
     def commit(homebrew_tap: str, repo_name: str, version: str):
         """Commits assets to the Homebrew tap (repo)."""
-        homebrew_tap_path = Git._get_homebrew_tap_path(homebrew_tap)
         # fmt: off
-        command = ['git', '-C', homebrew_tap_path, 'commit', '-m', f'chore: brew formula update for {repo_name} {version}']  # noqa
+        command = ['git', '-C', homebrew_tap, 'commit', '-m', f'chore: brew formula update for {repo_name} {version}']  # noqa
         # fmt: on
         Git._run_git_subprocess(command, 'Assets committed successfully.')
 
     @staticmethod
     def push(homebrew_tap: str, homebrew_owner: str):
         """Pushes assets to the remote Homebrew tap (repo)."""
-        homebrew_tap_path = Git._get_homebrew_tap_path(homebrew_tap)
         # fmt: off
-        command = ['git', '-C', homebrew_tap_path, 'push', f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git']  # noqa
+        command = ['git', '-C', homebrew_tap, 'push', f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git']  # noqa
         # fmt: on
         Git._run_git_subprocess(command, f'Assets pushed successfully to {homebrew_tap}.')
 
@@ -87,9 +82,3 @@ class Git:
         except Exception as error:
             logger.critical(error)
             raise
-
-    @staticmethod
-    def _get_homebrew_tap_path(homebrew_tap: str) -> str:
-        """Returns the path to the Homebrew tap."""
-        os.makedirs('/tmp/homebrew-releaser', exist_ok=True)
-        return os.path.join('/tmp', 'homebrew-releaser', homebrew_tap)

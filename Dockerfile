@@ -7,4 +7,6 @@ RUN brew install python@3.13 \
     && python3 -m venv /home/linuxbrew/venv \
     && /home/linuxbrew/venv/bin/pip install .
 
+WORKDIR /tmp/homebrew-releaser
+
 ENTRYPOINT [ "/home/linuxbrew/venv/bin/python3", "/home/linuxbrew/homebrew_releaser/app.py" ]
