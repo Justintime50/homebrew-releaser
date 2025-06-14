@@ -144,12 +144,45 @@ jobs:
           debug: false
 ```
 
+#### Python
+
+To release a Python package using Homebrew Releaser, one may setup their workflow like so:
+
+```yml
+on:
+  push:
+
+jobs:
+  homebrew-releaser:
+    runs-on: ubuntu-latest
+    name: homebrew-releaser
+    steps:
+      - name: Release my project to my Homebrew tap
+        uses: Justintime50/homebrew-releaser@v2
+        with:
+          homebrew_owner: Justintime50
+          homebrew_tap: homebrew-formulas
+          github_token: ${{ secrets.HOMEBREW_TAP_GITHUB_TOKEN }}
+          commit_owner: homebrew-releaser
+          commit_email: homebrew-releaser@example.com
+
+          # Python specific variables
+          depends_on: 'python@3.y'
+          install: 'virtualenv_install_with_resources'
+          formula_includes: 'include Language::Python::Virtualenv'
+          update_python_resources: true
+```
+
 ## Development
 
 ```sh
 # Get a comprehensive list of development tools
 just --list
 ```
+
+### Docker & GitHub Actions Setup
+
+We have to play a balancing game of using Homebrew (cannot be root) and writing various files to use Homebrew Releaser (must be root or have write access), to get around this we setup and install everything using a `linuxbrew` user and directory but then everything afterwards (git clone, writing files, etc) occur inside of `/tmp`. This is an unfortunate but required path to take since using the official Python Docker image won't let us use Brew and have write access while using the Brew image gets us Homebrew but we cannot write in the normal directory. Thus we hack it a bit and just play inside of `/tmp`.
 
 ### Run Manually via Docker
 
