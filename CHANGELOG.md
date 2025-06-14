@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## v2.1.1 (2025-06-13)
+## v2.1.1 (2025-06-14)
 
-- Rolls back the Dockerfile changes and more correctly installs Brew into the existing image we had
+- Corrects Python references in Dockerfile
+- Uses `/tmp` as working directory due to permissioning issues
 - Drop `shasum` dependency and calculate checksums from inside Python
 - Bumps `TIMEOUT` from 60 to 300 seconds for larger projects (downloading Python packages can take some time)
 
