@@ -1,24 +1,10 @@
-FROM python:3.13-slim
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    curl \
-    git
-
-RUN useradd -m -s /bin/bash linuxbrew
-USER linuxbrew
-WORKDIR /home/linuxbrew
-
-RUN /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
-ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
-
-RUN mkdir -p /home/linuxbrew/app
-
-WORKDIR /home/linuxbrew/app
+FROM homebrew/brew:4.5.6
 
 COPY --chown=linuxbrew:linuxbrew homebrew_releaser homebrew_releaser
 COPY --chown=linuxbrew:linuxbrew setup.py setup.py
 
-RUN pip install .
+RUN brew install python@3.13 \
+    && python3 -m venv venv \
+    && venv/bin/pip install .
 
-ENTRYPOINT ["python", "/home/linuxbrew/app/homebrew_releaser/app.py"]
+ENTRYPOINT [ "venv/bin/python3", "homebrew_releaser/app.py" ]
