@@ -13,6 +13,7 @@ from homebrew_releaser.constants import (
     FORMULA_FOLDER,
     LOGGER_NAME,
 )
+from homebrew_releaser.utils import Utils
 
 
 TABLE_START_TAG = '<!-- project_table_start -->'
@@ -40,7 +41,7 @@ class ReadmeUpdater:
         """Retrieve the name, description, and homepage from each
         Ruby formula file in the homebrew tap repo.
         """
-        homebrew_tap_path = os.path.join(homebrew_tap, FORMULA_FOLDER)
+        homebrew_tap_path = Utils.get_working_dir(os.path.join(homebrew_tap, FORMULA_FOLDER))
         formulas = []
         files = os.listdir(homebrew_tap_path)
 
@@ -124,7 +125,7 @@ class ReadmeUpdater:
         old_table = ''
 
         if readme:
-            with open(readme, 'r') as readme_contents:
+            with open(Utils.get_working_dir(readme), 'r') as readme_contents:
                 for line in readme_contents:
                     normalized_line = line.strip().lower()
                     if normalized_line == TABLE_START_TAG:
@@ -158,7 +159,7 @@ class ReadmeUpdater:
         file_content = ""
 
         if readme:
-            with open(readme, 'r') as readme_contents:
+            with open(Utils.get_working_dir(readme), 'r') as readme_contents:
                 file_content = readme_contents.read()
             logger.debug(f'{readme} read successfully.')
 
@@ -174,7 +175,7 @@ class ReadmeUpdater:
         readme = ReadmeUpdater.does_readme_exist(homebrew_tap)
 
         if readme:
-            with open(readme, 'w') as readme_contents:
+            with open(Utils.get_working_dir(readme), 'w') as readme_contents:
                 readme_contents.write(file_content.replace(old_table, new_table))
             logger.debug(f'{readme} table updated successfully.')
 
@@ -191,7 +192,7 @@ class ReadmeUpdater:
 
         for filename in files:
             if filename.lower() == readme_filename:
-                readme_to_open = os.path.join(homebrew_tap, filename)
+                readme_to_open = Utils.get_working_dir(os.path.join(homebrew_tap, filename))
                 break
 
         return readme_to_open

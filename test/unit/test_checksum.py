@@ -8,34 +8,22 @@ import pytest
 import requests
 
 from homebrew_releaser.checksum import Checksum
-from homebrew_releaser.constants import TIMEOUT
 
 
-@patch('subprocess.check_output')
-def test_get_checksum(mock_subprocess, mock_tar_filename):
-    # TODO: Mock the subprocess better to ensure it does what it's supposed to
-    Checksum.get_checksum(mock_tar_filename)
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
+def test_calculate_checksum():
+    """Tests that we can get the checksum of a file (we use one that will never change)."""
+    checksum = Checksum.calculate_checksum('homebrew_releaser/__init__.py')
 
-    mock_subprocess.assert_called_once_with(
-        ['shasum', '-a', '256', mock_tar_filename],
-        stdin=None,
-        stderr=None,
-        timeout=TIMEOUT,
-    )
-
-
-@patch('subprocess.check_output', side_effect=subprocess.TimeoutExpired(cmd='subprocess.check_output', timeout=0.1))
-def test_get_checksum_subprocess_timeout(mock_subprocess, mock_tar_filename):
-    with pytest.raises(SystemExit):
-        Checksum.get_checksum(mock_tar_filename)
+    assert checksum == 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
 
 
 @patch(
     'subprocess.check_output', side_effect=subprocess.CalledProcessError(returncode=1, cmd='subprocess.check_output')
 )
-def test_get_checksum_process_error(mock_subprocess, mock_tar_filename):
+def test_calculate_checksum_process_error(mock_subprocess, mock_tar_filename):
     with pytest.raises(SystemExit):
-        Checksum.get_checksum(mock_tar_filename)
+        Checksum.calculate_checksum(mock_tar_filename)
 
 
 @patch('requests.post')

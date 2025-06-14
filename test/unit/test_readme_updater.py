@@ -55,6 +55,7 @@ def test_update_readme_cannot_find_old_table(
     mock_replace_table_contents.assert_not_called()
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 @patch('homebrew_releaser.readme_updater.FORMULA_FOLDER', 'test/unit')
 def test_format_formula_data_no_ruby_files():
     """Tests that we throw an error when the formula folder provided does not contain any
@@ -66,6 +67,7 @@ def test_format_formula_data_no_ruby_files():
     assert str(error.value) == 'No Ruby files found in the "formula_folder" provided.'
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 @patch('homebrew_releaser.readme_updater.FORMULA_FOLDER', 'formulas')
 def test_format_formula_data():
     """Tests that we build a list of formula metadata correctly based on what we found in the repo.
@@ -83,6 +85,7 @@ def test_format_formula_data():
     }
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 @patch('homebrew_releaser.readme_updater.FORMULA_FOLDER', 'formulas')
 def test_format_formula_data_error_reading_formula():
     """Tests that we throw an error when we cannot properly read formula data."""
@@ -116,6 +119,7 @@ def test_generate_table():
     # fmt: on
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 def test_retrieve_old_table_not_found():
     """Tests that we set the `table_found` variable to False when we can't find opening/closing README tags."""
     old_table, old_table_found = ReadmeUpdater.retrieve_old_table('./')
@@ -148,6 +152,7 @@ def test_retrieve_old_table(table_content):
     assert old_table_found is True
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 @patch('logging.Logger.error')
 def test_retrieve_old_table_no_readme(mock_logger):
     """Tests that we retrieve only the old table data when start and end tags exist."""
@@ -165,6 +170,7 @@ def test_read_current_readme_does_not_exist():
     assert readme == ""
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 def test_read_current_readme():
     """Tests that the content of a README found is returned."""
     readme = ReadmeUpdater.read_current_readme('./')
@@ -197,6 +203,7 @@ def test_replace_table_contents_no_readme(mock_git_add, mock_logger):
     mock_logger.assert_not_called()
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 def test_does_readme_exist():
     """Tests that we can find a README in a directory."""
     readme = ReadmeUpdater.does_readme_exist('./')

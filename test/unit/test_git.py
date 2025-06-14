@@ -10,6 +10,7 @@ from homebrew_releaser.constants import TIMEOUT
 from homebrew_releaser.git import Git
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 @patch('homebrew_releaser.git.GITHUB_TOKEN', '123')
 @patch('subprocess.check_output')
 def test_setup(mock_subprocess):
@@ -27,27 +28,29 @@ def test_setup(mock_subprocess):
                     'clone',
                     '--depth=1',
                     'https://x-access-token:123@github.com/Justintime50/homebrew-formulas.git',
+                    'homebrew-formulas',
                 ],
                 stderr=-2,
                 text=True,
-                timeout=60,
+                timeout=300,
             ),
             call(
                 ['git', '-C', 'homebrew-formulas', 'config', 'user.name', '"Justintime50"'],
                 stderr=-2,
                 text=True,
-                timeout=60,
+                timeout=300,
             ),
             call(
                 ['git', '-C', 'homebrew-formulas', 'config', 'user.email', 'user@example.com'],
                 stderr=-2,
                 text=True,
-                timeout=60,
+                timeout=300,
             ),
         ]
     )
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 @patch('subprocess.check_output')
 def test_add(mock_subprocess):
     """Tests that we call the correct git add command."""
@@ -62,6 +65,7 @@ def test_add(mock_subprocess):
     )
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 @patch('subprocess.check_output')
 def test_commit(mock_subprocess):
     """Tests that we call the correct git commit command."""
@@ -78,6 +82,7 @@ def test_commit(mock_subprocess):
     )
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 @patch('homebrew_releaser.git.GITHUB_TOKEN', '123')
 @patch('subprocess.check_output')
 def test_push(mock_subprocess):

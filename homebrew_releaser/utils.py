@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 
 import requests
@@ -7,6 +8,7 @@ from homebrew_releaser.constants import (
     GITHUB_HEADERS,
     LOGGER_NAME,
     TIMEOUT,
+    WORKING_DIR,
 )
 
 
@@ -41,7 +43,7 @@ class Utils:
         logger = woodchips.get(LOGGER_NAME)
 
         try:
-            with open(file_path, mode) as f:
+            with open(Utils.get_working_dir(file_path), mode) as f:
                 f.write(content)
             logger.debug(f'{file_path} written successfully.')
         except Exception as error:
@@ -51,3 +53,8 @@ class Utils:
     def get_filename_from_path(path: str) -> str:
         """Gets the last part of a path (the filename)."""
         return path.rsplit('/', 1)[1]
+
+    @staticmethod
+    def get_working_dir(additional_path: str) -> str:
+        """Gets the working directory."""
+        return os.path.join(WORKING_DIR, additional_path)

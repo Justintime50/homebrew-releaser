@@ -1,4 +1,4 @@
-import subprocess  # nosec
+import hashlib
 from typing import Any
 
 import requests
@@ -12,28 +12,20 @@ from homebrew_releaser.constants import (
     LOGGER_NAME,
     TIMEOUT,
 )
+from homebrew_releaser.utils import Utils
 
 
 class Checksum:
     @staticmethod
-    def get_checksum(tar_filepath: str) -> str:
+    def calculate_checksum(tar_filepath: str) -> str:
         """Gets the checksum of a file."""
         logger = woodchips.get(LOGGER_NAME)
 
         try:
-            command = ['shasum', '-a', '256', tar_filepath]
-            output = subprocess.check_output(  # nosec
-                command,
-                stdin=None,
-                stderr=None,
-                timeout=TIMEOUT,
-            )
-            checksum = output.decode().split()[0]
-            checksum_filename = output.decode().split()[1]
-            logger.debug(f'Checksum for {checksum_filename} generated successfully: {checksum}')
-        except subprocess.TimeoutExpired as error:
-            raise SystemExit(error)
-        except subprocess.CalledProcessError as error:
+            with open(Utils.get_working_dir(tar_filepath), "rb") as content:
+                checksum = hashlib.sha256(content.read()).hexdigest()
+            logger.debug(f'Checksum for {tar_filepath} generated successfully: {checksum}')
+        except Exception as error:
             raise SystemExit(error)
 
         return checksum
@@ -45,7 +37,7 @@ class Checksum:
 
         latest_release_id = latest_release['id']
 
-        with open(CHECKSUM_FILE, 'rb') as filename:
+        with open(Utils.get_working_dir(CHECKSUM_FILE), 'rb') as filename:
             checksum_file_content = filename.read()
 
         upload_url = f'https://uploads.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/{latest_release_id}/assets?name={CHECKSUM_FILE}'  # noqa

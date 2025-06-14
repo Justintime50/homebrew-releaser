@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - '.github/workflows/build.yml'
+      - 'Dockerfile'
       - '**/*.py'
     branches:
       - '**'
@@ -12,6 +13,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/build.yml'
+      - 'Dockerfile'
       - '**/*.py'
   workflow_dispatch: ~
 
@@ -49,11 +51,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'
-      - name: Build Docker image
-        run: docker build . -t justintime50/homebrew-releaser
+      - name: Build and run Docker image
+        run: |
+          docker build . -t justintime50/homebrew-releaser
+          docker run --workdir /github/workspace \
+            -e INPUT_SKIP_COMMIT=true \
+            -e INPUT_DEBUG=true \
+            -e GITHUB_REPOSITORY=justintime50/homebrew-releaser \
+            -e INPUT_HOMEBREW_OWNER=justintime50 \
+            -e INPUT_HOMEBREW_TAP=homebrew-formulas \
+            -e INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+            -e INPUT_INSTALL=virtualenv_install_with_resources \
+            -e INPUT_FORMULA_INCLUDES="include Language::Python::Virtualenv" \
+            -e INPUT_UPDATE_PYTHON_RESOURCES=true \
+            justintime50/homebrew-releaser
   coverage:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
