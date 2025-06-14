@@ -170,6 +170,9 @@ class App:
         Utils.write_file(formula_filepath, template, 'w')
 
         if UPDATE_PYTHON_RESOURCES:
+            import time
+
+            time.sleep(1000)
             logger.info('Attempting to update Python resources in the formula...')
             Formula.update_python_resources(formula_dir, formula_filename)
             if DEBUG:
