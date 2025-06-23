@@ -62,7 +62,9 @@ jobs:
             -e INPUT_HOMEBREW_TAP=homebrew-formulas \
             -e INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
             -e INPUT_INSTALL=virtualenv_install_with_resources \
+            -e INPUT_UPDATE_README_TABLE=true \
             -e INPUT_FORMULA_INCLUDES="include Language::Python::Virtualenv" \
+            -e INPUT_DEPENDS_ON='"python@3.13"' \
             -e INPUT_UPDATE_PYTHON_RESOURCES=true \
             justintime50/homebrew-releaser
   coverage:
