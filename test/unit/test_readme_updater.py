@@ -75,7 +75,7 @@ def test_format_formula_data():
     Here, we reuse our 'recorded' formulas from the test suite as the dummy formulas that may have
     been found in a user's git repo.
     """
-    formulas = ReadmeUpdater.format_formula_data('./test')
+    formulas = ReadmeUpdater.format_formula_data('test')
 
     assert len(formulas) == 16
     assert formulas[1] == {
@@ -92,7 +92,7 @@ def test_format_formula_data_error_reading_formula():
     with patch('builtins.open', mock_open()) as mock_opening:
         mock_opening.side_effect = OSError
         with pytest.raises(SystemExit) as error:
-            ReadmeUpdater.format_formula_data('./test')
+            ReadmeUpdater.format_formula_data('test')
 
     assert str(error.value) == 'There was a problem opening or reading the formula data: '
 
@@ -128,6 +128,7 @@ def test_retrieve_old_table_not_found():
     assert old_table_found is False
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 @pytest.mark.parametrize(
     'table_content',
     [
@@ -156,16 +157,17 @@ def test_retrieve_old_table(table_content):
 @patch('logging.Logger.error')
 def test_retrieve_old_table_no_readme(mock_logger):
     """Tests that we retrieve only the old table data when start and end tags exist."""
-    old_table, old_table_found = ReadmeUpdater.retrieve_old_table('./test')
+    old_table, old_table_found = ReadmeUpdater.retrieve_old_table('test')
 
     mock_logger.assert_called_once_with('Could not find a valid README in this project to update.')
     assert old_table == ''
     assert old_table_found is False
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 def test_read_current_readme_does_not_exist():
     """Tests that the file contents of a README that doesn't exist is empty."""
-    readme = ReadmeUpdater.read_current_readme('./test')
+    readme = ReadmeUpdater.read_current_readme('test')
 
     assert readme == ""
 
@@ -178,6 +180,7 @@ def test_read_current_readme():
     assert '# Homebrew Releaser' in readme
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 def test_replace_table_contents():
     """Test that we add the new README changes to git."""
     with patch('builtins.open', mock_open()):
@@ -189,6 +192,7 @@ def test_replace_table_contents():
         )
 
 
+@patch('homebrew_releaser.utils.WORKING_DIR', '')
 @patch('logging.Logger.debug')
 @patch('homebrew_releaser.git.Git.add')
 def test_replace_table_contents_no_readme(mock_git_add, mock_logger):
@@ -197,7 +201,7 @@ def test_replace_table_contents_no_readme(mock_git_add, mock_logger):
         file_content='mock file contents',
         old_table='old table contents',
         new_table='new table contents',
-        homebrew_tap='./test',
+        homebrew_tap='test',
     )
 
     mock_logger.assert_not_called()

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.1.2 (2025-06-23)
+
+- Fixes Readme Updater path to use new tmp path for formula repo
+
 ## v2.1.1 (2025-06-14)
 
 - Corrects Python references in Dockerfile

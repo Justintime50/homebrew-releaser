@@ -188,11 +188,12 @@ class ReadmeUpdater:
         """
         readme_to_open = None
         readme_filename = 'readme.md'
-        files = os.listdir(homebrew_tap)
+        tap_dir = Utils.get_working_dir(homebrew_tap)
+        files = os.listdir(tap_dir)
 
         for filename in files:
             if filename.lower() == readme_filename:
-                readme_to_open = Utils.get_working_dir(os.path.join(homebrew_tap, filename))
+                readme_to_open = os.path.join(tap_dir, filename)
                 break
 
         return readme_to_open
