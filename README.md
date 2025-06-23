@@ -170,8 +170,8 @@ jobs:
           commit_email: homebrew-releaser@example.com
 
           # Python specific variables
-          depends_on: 'python@3.13'
-          install: 'virtualenv_install_with_resources'
+          depends_on: '"python@3.13"'
+          install: virtualenv_install_with_resources
           formula_includes: 'include Language::Python::Virtualenv'
           update_python_resources: true
 ```
