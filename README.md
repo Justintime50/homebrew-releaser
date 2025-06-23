@@ -149,8 +149,11 @@ jobs:
 To release a Python package using Homebrew Releaser, one may setup their workflow like so:
 
 ```yml
+# .github/workflows/release.yml
+# Start Homebrew Releaser when a new GitHub release is created
 on:
-  push:
+  release:
+    types: [published]
 
 jobs:
   homebrew-releaser:
@@ -167,7 +170,7 @@ jobs:
           commit_email: homebrew-releaser@example.com
 
           # Python specific variables
-          depends_on: 'python@3.y'
+          depends_on: 'python@3.13'
           install: 'virtualenv_install_with_resources'
           formula_includes: 'include Language::Python::Virtualenv'
           update_python_resources: true
