@@ -76,10 +76,13 @@ def test_generate_formula():
     repository = {
         # We use a badly written description string here on purpose to test our formatting code, this includes:
         # - starting with an article
-        # - punctuation
+        # - punctuation at the end
+        # - keep punctuation in the middle
         # - trailing whitespace
         # - extra capitilization
-        'description': 'A tool to release... scripts, binaries, and executables to GitHub. ',
+        # - & should not be escaped
+        # - Non ascii character ✓
+        'description': 'A tool to release... scripts, binaries, & executables to GitHub. ✓',
         'license': LICENSE,
     }
 
@@ -114,7 +117,7 @@ def test_generate_formula():
         in formula
     )
     assert (
-        '''desc "Tool to release scripts, binaries, and executables to github"
+        '''desc "Tool to release... scripts, binaries, & executables to github"
   homepage "https://github.com/Justintime50/test-generate-formula"
   url "https://github.com/Justintime50/test-generate-formula/archive/refs/tags/v0.1.0.tar.gz"
   sha256 "0000000000000000000000000000000000000000000000000000000000000000"
@@ -909,7 +912,7 @@ def test_generate_formula_update_python_resources():
         update_resources = True
     _record_formula(FORMULA_PATH, formula_filename, formula, skip_assertions=True)
     if update_resources:
-        Formula.update_python_resources(full_formula_filename, repo_name)
+        Formula.update_python_resources(os.path.join(os.getcwd(), FORMULA_PATH), formula_filename)
     with open(full_formula_filename, 'r') as formula_file:
         formula = formula_file.read()
 

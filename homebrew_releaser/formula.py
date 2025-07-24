@@ -59,7 +59,10 @@ class Formula:
         class_name = Formula._generate_class_name(repo_name)
         license_type = repository['license'].get('spdx_id', '') if repository.get('license') else ''
         description = (
-            re.sub(r'[.!]+', '', repository.get('description', '')[:MAX_DESC_FIELD_LENGTH]).strip().capitalize()
+            re.sub(r'[^\x00-\x7F]+', '', repository.get('description', '')[:MAX_DESC_FIELD_LENGTH])
+            .strip()
+            .capitalize()
+            .rstrip('.!')
         )
 
         # If the first word of the desc is an article or the name of the formula, we cut it out per `brew audit`
@@ -130,7 +133,7 @@ class {{class_name}} < Formula
   {{{formula_includes}}}
 
   {{/ formula_includes}}
-  desc "{{description}}"
+  desc "{{{description}}}"
   homepage "https://github.com/{{owner}}/{{repo_name}}"
   url "{{tar_url}}"{{# download_strategy}}, using: {{download_strategy}}{{/ download_strategy}}
   {{# version}}

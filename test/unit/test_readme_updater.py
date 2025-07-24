@@ -80,7 +80,7 @@ def test_format_formula_data():
     assert len(formulas) == 16
     assert formulas[1] == {
         'name': 'test-generate-formula',
-        'desc': 'Tool to release scripts, binaries, and executables to github',
+        'desc': 'Tool to release... scripts, binaries, & executables to github',
         'homepage': 'https://github.com/Justintime50/test-generate-formula',
     }
 

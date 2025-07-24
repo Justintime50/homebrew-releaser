@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## v2.1.3 (2025-07-23)
+
+- Fixes `desc` field to conform to `brew audit`
+  - `desc` field no longer escapes special characters (eg: `&`, closes #61)
+  - `desc` field now discards any non ASCII characters
+  - `desc` field previously discarded any punctuation even if it was in the middle of the description. We now only discard ending punctuation
+
 ## v2.1.2 (2025-06-23)
 
 - Fixes Readme Updater path to use new tmp path for formula repo
