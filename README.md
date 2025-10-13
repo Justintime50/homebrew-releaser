@@ -5,7 +5,7 @@
 Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.
 
 [![Build](https://github.com/Justintime50/homebrew-releaser/workflows/build/badge.svg)](https://github.com/Justintime50/homebrew-releaser/actions)
-[![Coverage Status](https://coveralls.io/repos/github/Justintime50/homebrew-releaser/badge.svg?branch=main)](https://coveralls.io/github/Justintime50/homebrew-releaser?branch=main)
+[![Coverage Status](https://img.shields.io/codecov/c/github/justintime50/homebrew-releaser/config/badge)](https://app.codecov.io/github/Justintime50/homebrew-releaser)
 [![Version](https://img.shields.io/github/v/tag/justintime50/homebrew-releaser)](https://github.com/justintime50/homebrew-releaser/releases)
 [![Licence](https://img.shields.io/github/license/Justintime50/homebrew-releaser)](LICENSE)
 
@@ -170,7 +170,7 @@ jobs:
           commit_email: homebrew-releaser@example.com
 
           # Python specific variables
-          depends_on: '"python@3.13"'
+          depends_on: '"python@3.14"'
           install: virtualenv_install_with_resources
           formula_includes: 'include Language::Python::Virtualenv'
           update_python_resources: true

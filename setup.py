@@ -22,10 +22,10 @@ DEV_REQUIREMENTS = [
     'bandit == 1.8.*',
     'black == 25.*',
     'flake8 == 7.*',
-    'isort == 6.*',
-    'mypy == 1.15.*',
+    'isort == 7.*',
+    'mypy == 1.18.*',
     'pytest == 8.*',
-    'pytest-cov == 6.*',
+    'pytest-cov == 7.*',
 ]
 
 setuptools.setup(
@@ -60,5 +60,5 @@ setuptools.setup(
             'homebrew-releaser=homebrew_releaser.releaser:main',
         ]
     },
-    python_requires='==3.13.*',
+    python_requires='==3.14.*',
 )

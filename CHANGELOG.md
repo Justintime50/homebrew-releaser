@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.2.0 (2025-10-13)
+
+- Upgrades to Python 3.14
+
 ## v2.1.3 (2025-07-23)
 
 - Fixes `desc` field to conform to `brew audit`
