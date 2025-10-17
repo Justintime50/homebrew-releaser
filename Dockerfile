@@ -1,4 +1,4 @@
-FROM homebrew/brew:4.5.6
+FROM homebrew/brew:4.6.17
 
 COPY --chown=linuxbrew:linuxbrew homebrew_releaser homebrew_releaser
 COPY --chown=linuxbrew:linuxbrew setup.py setup.py
