@@ -7,7 +7,12 @@ from unittest.mock import (
 import pytest
 
 from homebrew_releaser.constants import TIMEOUT
-from homebrew_releaser.git import Git
+from homebrew_releaser.git import (
+    add_git,
+    commit_git,
+    push_git,
+    setup_git,
+)
 
 
 @patch('homebrew_releaser.utils.WORKING_DIR', '')
@@ -18,7 +23,7 @@ def test_setup(mock_subprocess):
     homebrew_owner = 'Justintime50'
     homebrew_tap = 'homebrew-formulas'
     commit_email = 'user@example.com'
-    Git.setup(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
+    setup_git(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
 
     mock_subprocess.assert_has_calls(
         [
@@ -56,7 +61,7 @@ def test_add(mock_subprocess):
     """Tests that we call the correct git add command."""
     homebrew_tap = 'homebrew-formulas'
 
-    Git.add(homebrew_tap)
+    add_git(homebrew_tap)
     mock_subprocess.assert_called_once_with(
         ['git', '-C', homebrew_tap, 'add', '.'],
         stderr=-2,
@@ -73,7 +78,7 @@ def test_commit(mock_subprocess):
     repo_name = 'mock-repo'
     version = '0.1.0'
 
-    Git.commit(homebrew_tap, repo_name, version)
+    commit_git(homebrew_tap, repo_name, version)
     mock_subprocess.assert_called_once_with(
         ['git', '-C', homebrew_tap, 'commit', '-m', f'chore: brew formula update for {repo_name} {version}'],
         stderr=-2,
@@ -90,7 +95,7 @@ def test_push(mock_subprocess):
     homebrew_tap = 'homebrew-formulas'
     homebrew_owner = 'Justintime50'
 
-    Git.push(homebrew_tap, homebrew_owner)
+    push_git(homebrew_tap, homebrew_owner)
 
     mock_subprocess.assert_called_once_with(
         [
@@ -120,7 +125,7 @@ def test_setup_called_process_error(mock_subprocess, mock_logger):
     homebrew_tap = 'homebrew-formulas'
     commit_email = 'user@example.com'
     with pytest.raises(subprocess.CalledProcessError):
-        Git.setup(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
+        setup_git(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
 
     mock_logger.assert_not_called()
 
@@ -139,6 +144,6 @@ def test_setup_exception(mock_subprocess, mock_logger):
     homebrew_tap = 'homebrew-formulas'
     commit_email = 'user@example.com'
     with pytest.raises(Exception):
-        Git.setup(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
+        setup_git(homebrew_owner, commit_email, homebrew_owner, homebrew_tap)
 
     mock_logger.assert_not_called()

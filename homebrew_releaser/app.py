@@ -28,7 +28,12 @@ from homebrew_releaser.constants import (
     VERSION,
 )
 from homebrew_releaser.formula import generate_formula_data
-from homebrew_releaser.git import Git
+from homebrew_releaser.git import (
+    add_git,
+    commit_git,
+    push_git,
+    setup_git,
+)
 from homebrew_releaser.homebrew import (
     setup_homebrew_tap,
     update_python_resources,
@@ -76,7 +81,7 @@ class App:
         App.check_required_env_variables()
 
         logger.info('Setting up git environment...')
-        Git.setup(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER, HOMEBREW_TAP)
+        setup_git(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER, HOMEBREW_TAP)
 
         logger.info(f'Collecting data about {GITHUB_REPO}...')
         repository = Utils.make_github_get_request(url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}').json()
@@ -194,8 +199,8 @@ class App:
             logger.debug('Skipping update to project README.')
 
         # Although users can skip a commit, still commit (but don't push) to dry-run the commit for debugging purposes
-        Git.add(HOMEBREW_TAP)
-        Git.commit(HOMEBREW_TAP, GITHUB_REPO, version)
+        add_git(HOMEBREW_TAP)
+        commit_git(HOMEBREW_TAP, GITHUB_REPO, version)
 
         if SKIP_COMMIT:
             logger.info(f'Skipping upload of checksum.txt to {HOMEBREW_TAP}.')
@@ -204,7 +209,7 @@ class App:
             logger.info(f'Attempting to upload checksum.txt to the latest release of {GITHUB_REPO}...')
             upload_checksum_file(latest_release)
             logger.info(f'Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...')
-            Git.push(HOMEBREW_TAP, HOMEBREW_OWNER)
+            push_git(HOMEBREW_TAP, HOMEBREW_OWNER)
             logger.info(f'Successfully released {version} of {GITHUB_REPO} to {HOMEBREW_TAP}!')
 
     @staticmethod

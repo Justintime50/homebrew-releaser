@@ -194,7 +194,7 @@ def test_replace_table_contents():
 
 @patch('homebrew_releaser.utils.WORKING_DIR', '')
 @patch('logging.Logger.debug')
-@patch('homebrew_releaser.git.Git.add')
+@patch('homebrew_releaser.app.add_git')
 def test_replace_table_contents_no_readme(mock_git_add, mock_logger):
     """Tests that we do not run through the update readme block when there is no readme."""
     ReadmeUpdater.replace_table_contents(
