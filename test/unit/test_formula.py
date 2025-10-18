@@ -4,7 +4,11 @@ from unittest.mock import patch
 
 import pytest
 
-from homebrew_releaser.formula import Formula
+from homebrew_releaser.formula import (
+    _generate_class_name,
+    generate_formula_data,
+)
+from homebrew_releaser.homebrew import update_python_resources
 
 
 FORMULA_PATH = 'test/formulas'
@@ -84,7 +88,7 @@ def test_generate_formula():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -154,7 +158,7 @@ def test_generate_formula_no_article_description():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -195,7 +199,7 @@ def test_generate_formula_formula_name_starts_description():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -234,7 +238,7 @@ def test_generate_formula_no_depends_on():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -273,7 +277,7 @@ def test_generate_formula_no_test():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -313,7 +317,7 @@ def test_generate_formula_multiline_fields():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -384,7 +388,7 @@ def test_generate_formula_complete_matrix():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -462,7 +466,7 @@ def test_generate_formula_darwin_matrix():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -522,7 +526,7 @@ def test_generate_formula_linux_matrix():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -583,7 +587,7 @@ def test_one_of_each_matrix():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -646,7 +650,7 @@ def test_generate_formula_string_false_configs():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -687,7 +691,7 @@ def test_generate_formula_empty_fields():
 
     repository = {}  # purposefully empty to test missing fields
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -731,7 +735,7 @@ def test_generate_formula_download_strategy():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -805,7 +809,7 @@ def test_generate_formula_override_version():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -843,7 +847,7 @@ def test_generate_formula_formula_includes():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=mock_repo_name,
         repository=repository,
@@ -884,7 +888,7 @@ def test_generate_formula_update_python_resources():
         'license': LICENSE,
     }
 
-    formula = Formula.generate_formula_data(
+    formula = generate_formula_data(
         owner=USERNAME,
         repo_name=repo_name,
         repository=repository,
@@ -910,7 +914,7 @@ def test_generate_formula_update_python_resources():
         update_resources = True
     _record_formula(FORMULA_PATH, formula_filename, formula, skip_assertions=True)
     if update_resources:
-        Formula.update_python_resources(os.path.join(os.getcwd(), FORMULA_PATH), formula_filename)
+        update_python_resources(os.path.join(os.getcwd(), FORMULA_PATH), formula_filename)
     with open(full_formula_filename, 'r') as formula_file:
         formula = formula_file.read()
 
@@ -932,6 +936,6 @@ def test_generate_formula_update_python_resources():
 )
 def test_generate_class_name(repo_name, expected_class_name):
     """Tests that we generate a proper Homebrew/Ruby class name for formula under various situations."""
-    class_name = Formula._generate_class_name(repo_name)
+    class_name = _generate_class_name(repo_name)
 
     assert class_name == expected_class_name

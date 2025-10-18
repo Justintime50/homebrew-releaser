@@ -19,105 +19,103 @@ from homebrew_releaser.constants import (
 )
 
 
-class Formula:
-    @staticmethod
-    def generate_formula_data(
-        owner: str,
-        repo_name: str,
-        repository: dict[str, Any],
-        checksums: list[dict[str, str]],
-        install: str,
-        tar_url: str,
-        depends_on: Optional[str] = None,
-        test: Optional[str] = None,
-        download_strategy: Optional[str] = None,
-        custom_require: Optional[str] = None,
-        formula_includes: Optional[str] = None,
-        update_python_resources: bool = False,
-        version: Optional[str] = None,
-    ) -> str:
-        """Generates the formula data for Homebrew.
+def generate_formula_data(
+    owner: str,
+    repo_name: str,
+    repository: dict[str, Any],
+    checksums: list[dict[str, str]],
+    install: str,
+    tar_url: str,
+    depends_on: Optional[str] = None,
+    test: Optional[str] = None,
+    download_strategy: Optional[str] = None,
+    custom_require: Optional[str] = None,
+    formula_includes: Optional[str] = None,
+    update_python_resources: bool = False,
+    version: Optional[str] = None,
+) -> str:
+    """Generates the formula data for Homebrew.
 
-        We attempt to ensure generated formula will pass `brew audit --strict --online` if given correct inputs:
-        - Proper Homebrew/Ruby class name
-        - 80 characters or less desc field (alphanumeric characters and does not start with
-            an article or the name of the formula)
-        - Homepage
-        - URL points to the tar file
-        - Checksum matches the url archive
-        - Proper installable binary
-        - Test is included
-        - No version attribute if Homebrew can reliably infer the version from the tar URL (GitHub tag)
-        - Enable typing
-        - Enable frozen_string_literal
-        """
-        logger = woodchips.get(LOGGER_NAME)
+    We attempt to ensure generated formula will pass `brew audit --strict --online` if given correct inputs:
+    - Proper Homebrew/Ruby class name
+    - 80 characters or less desc field (alphanumeric characters and does not start with
+        an article or the name of the formula)
+    - Homepage
+    - URL points to the tar file
+    - Checksum matches the url archive
+    - Proper installable binary
+    - Test is included
+    - No version attribute if Homebrew can reliably infer the version from the tar URL (GitHub tag)
+    - Enable typing
+    - Enable frozen_string_literal
+    """
+    logger = woodchips.get(LOGGER_NAME)
 
-        class_name = Formula._generate_class_name(repo_name)
-        license_type = repository['license'].get('spdx_id', '') if repository.get('license') else ''
-        description = (
-            re.sub(r'[^\x00-\x7F]+', '', repository.get('description', '')[:MAX_DESC_FIELD_LENGTH])
-            .strip()
-            .capitalize()
-            .rstrip('.!')
-        )
+    class_name = _generate_class_name(repo_name)
+    license_type = repository['license'].get('spdx_id', '') if repository.get('license') else ''
+    description = (
+        re.sub(r'[^\x00-\x7F]+', '', repository.get('description', '')[:MAX_DESC_FIELD_LENGTH])
+        .strip()
+        .capitalize()
+        .rstrip('.!')
+    )
 
-        # If the first word of the desc is an article or the name of the formula, we cut it out per `brew audit`
-        if description:
-            first_word_of_desc = description.split(' ', 1)
-            if first_word_of_desc[0].lower() in ARTICLES or first_word_of_desc[0].lower() == class_name.lower():
-                description = first_word_of_desc[1].strip().capitalize()
-        else:
-            description = 'NA'
+    # If the first word of the desc is an article or the name of the formula, we cut it out per `brew audit`
+    if description:
+        first_word_of_desc = description.split(' ', 1)
+        if first_word_of_desc[0].lower() in ARTICLES or first_word_of_desc[0].lower() == class_name.lower():
+            description = first_word_of_desc[1].strip().capitalize()
+    else:
+        description = 'NA'
 
-        dependencies_object: dict[str, Any] = {
-            'dependencies': [],
-        }
-        dependencies_list = dependencies_object['dependencies']
-        if depends_on:
-            dependencies = [dependency.strip() for dependency in depends_on.split('\n') if dependency]
+    dependencies_object: dict[str, Any] = {
+        'dependencies': [],
+    }
+    dependencies_list = dependencies_object['dependencies']
+    if depends_on:
+        dependencies = [dependency.strip() for dependency in depends_on.split('\n') if dependency]
 
-            # `brew audit` wants dependencies sorted
-            for dependency in sorted(dependencies):
-                dependencies_list.append({'dependency': dependency})
+        # `brew audit` wants dependencies sorted
+        for dependency in sorted(dependencies):
+            dependencies_list.append({'dependency': dependency})
 
-        darwin_amd64_url = None
-        darwin_amd64_checksum = None
-        darwin_arm64_url = None
-        darwin_arm64_checksum = None
-        linux_amd64_url = None
-        linux_amd64_checksum = None
-        linux_arm64_url = None
-        linux_arm64_checksum = None
-        for index, checksum in enumerate(checksums):
-            checksum_filename = next(iter(checksum))
-            checksum_url = checksum[checksum_filename]['url']  # type: ignore
+    darwin_amd64_url = None
+    darwin_amd64_checksum = None
+    darwin_arm64_url = None
+    darwin_arm64_checksum = None
+    linux_amd64_url = None
+    linux_amd64_checksum = None
+    linux_arm64_url = None
+    linux_arm64_checksum = None
+    for index, checksum in enumerate(checksums):
+        checksum_filename = next(iter(checksum))
+        checksum_url = checksum[checksum_filename]['url']  # type: ignore
 
-            # Autogenerated tar URL is the first one
-            if index == 0:
-                autogenerated_tar_checksum = checksum[checksum_filename]['checksum']  # type: ignore
+        # Autogenerated tar URL is the first one
+        if index == 0:
+            autogenerated_tar_checksum = checksum[checksum_filename]['checksum']  # type: ignore
 
-            if checksum_url.endswith('darwin-amd64.tar.gz') and TARGET_DARWIN_AMD64:
-                darwin_amd64_url = checksum_url
-                darwin_amd64_checksum = checksum[checksum_filename]['checksum']  # type: ignore
-            elif checksum_url.endswith('darwin-arm64.tar.gz') and TARGET_DARWIN_ARM64:
-                darwin_arm64_url = checksum_url
-                darwin_arm64_checksum = checksum[checksum_filename]['checksum']  # type: ignore
-            elif checksum_url.endswith('linux-amd64.tar.gz') and TARGET_LINUX_AMD64:
-                linux_amd64_url = checksum_url
-                linux_amd64_checksum = checksum[checksum_filename]['checksum']  # type: ignore
-            elif checksum_url.endswith('linux-arm64.tar.gz') and TARGET_LINUX_ARM64:
-                linux_arm64_url = checksum_url
-                linux_arm64_checksum = checksum[checksum_filename]['checksum']  # type: ignore
+        if checksum_url.endswith('darwin-amd64.tar.gz') and TARGET_DARWIN_AMD64:
+            darwin_amd64_url = checksum_url
+            darwin_amd64_checksum = checksum[checksum_filename]['checksum']  # type: ignore
+        elif checksum_url.endswith('darwin-arm64.tar.gz') and TARGET_DARWIN_ARM64:
+            darwin_arm64_url = checksum_url
+            darwin_arm64_checksum = checksum[checksum_filename]['checksum']  # type: ignore
+        elif checksum_url.endswith('linux-amd64.tar.gz') and TARGET_LINUX_AMD64:
+            linux_amd64_url = checksum_url
+            linux_amd64_checksum = checksum[checksum_filename]['checksum']  # type: ignore
+        elif checksum_url.endswith('linux-arm64.tar.gz') and TARGET_LINUX_ARM64:
+            linux_arm64_url = checksum_url
+            linux_arm64_checksum = checksum[checksum_filename]['checksum']  # type: ignore
 
-        # We set these so we can properly space items only if both are present
-        darwin_amd_and_arm = darwin_amd64_url and darwin_arm64_url
-        linux_amd_and_arm = linux_amd64_url and linux_arm64_url
+    # We set these so we can properly space items only if both are present
+    darwin_amd_and_arm = darwin_amd64_url and darwin_arm64_url
+    linux_amd_and_arm = linux_amd64_url and linux_arm64_url
 
-        # Ruby template data MUST remain double spaced to conform to `brew audit`.
-        # You may notice some template checks have a line break after the opening tag, this is to ensure
-        # we only add that line break when that section is present.
-        template = """# typed: true
+    # Ruby template data MUST remain double spaced to conform to `brew audit`.
+    # You may notice some template checks have a line break after the opening tag, this is to ensure
+    # we only add that line break when that section is present.
+    template = """# typed: true
 # frozen_string_literal: true
 {{# custom_require}}
 
@@ -197,77 +195,77 @@ class {{class_name}} < Formula
 end
 """
 
-        def match_indent_of(tag: str, text: str) -> str:
-            pattern = r"(?m)^(?P<indent>\s*)\{\{\{\s*" + re.escape(tag) + r"\s*\}\}\}"
-            matching_line = re.search(pattern, template)
-            indent = matching_line and matching_line['indent'] or ''
-            # Indent by the same amount as the template tag
-            indented_text = textwrap.indent(text.strip(), indent)
-            # Strip the indentation from the first line, because
-            # the template will render it indented already
-            return indented_text.lstrip()
+    def match_indent_of(tag: str, text: str) -> str:
+        pattern = r"(?m)^(?P<indent>\s*)\{\{\{\s*" + re.escape(tag) + r"\s*\}\}\}"
+        matching_line = re.search(pattern, template)
+        indent = matching_line and matching_line['indent'] or ''
+        # Indent by the same amount as the template tag
+        indented_text = textwrap.indent(text.strip(), indent)
+        # Strip the indentation from the first line, because
+        # the template will render it indented already
+        return indented_text.lstrip()
 
-        target_darwin = True if TARGET_DARWIN_AMD64 or TARGET_DARWIN_ARM64 else False
-        target_linux = True if TARGET_LINUX_AMD64 or TARGET_LINUX_ARM64 else False
+    target_darwin = True if TARGET_DARWIN_AMD64 or TARGET_DARWIN_ARM64 else False
+    target_linux = True if TARGET_LINUX_AMD64 or TARGET_LINUX_ARM64 else False
 
-        template_data = {
-            'class_name': class_name,
-            'description': description,
-            'owner': owner,
-            'repo_name': repo_name,
-            'tar_url': tar_url,
-            'autogenerated_tar_checksum': autogenerated_tar_checksum,
-            'license_type': license_type,
-            'dependencies': dependencies_list,
-            'install_instructions': match_indent_of('install_instructions', install),
-            'test_instructions': match_indent_of('test_instructions', test) if test else None,
-            'download_strategy': download_strategy,
-            'custom_require': custom_require,
-            'formula_includes': match_indent_of('formula_includes', formula_includes) if formula_includes else None,
-            'version': version,
-            'darwin_amd64_url': darwin_amd64_url,
-            'darwin_amd64_checksum': darwin_amd64_checksum,
-            'darwin_arm64_url': darwin_arm64_url,
-            'darwin_arm64_checksum': darwin_arm64_checksum,
-            'linux_amd64_url': linux_amd64_url,
-            'linux_amd64_checksum': linux_amd64_checksum,
-            'linux_arm64_url': linux_arm64_url,
-            'linux_arm64_checksum': linux_arm64_checksum,
-            'darwin_amd_and_arm': darwin_amd_and_arm,
-            'linux_amd_and_arm': linux_amd_and_arm,
-            'darwin': target_darwin,
-            'linux': target_linux,
-        }
+    template_data = {
+        'class_name': class_name,
+        'description': description,
+        'owner': owner,
+        'repo_name': repo_name,
+        'tar_url': tar_url,
+        'autogenerated_tar_checksum': autogenerated_tar_checksum,
+        'license_type': license_type,
+        'dependencies': dependencies_list,
+        'install_instructions': match_indent_of('install_instructions', install),
+        'test_instructions': match_indent_of('test_instructions', test) if test else None,
+        'download_strategy': download_strategy,
+        'custom_require': custom_require,
+        'formula_includes': match_indent_of('formula_includes', formula_includes) if formula_includes else None,
+        'version': version,
+        'darwin_amd64_url': darwin_amd64_url,
+        'darwin_amd64_checksum': darwin_amd64_checksum,
+        'darwin_arm64_url': darwin_arm64_url,
+        'darwin_arm64_checksum': darwin_arm64_checksum,
+        'linux_amd64_url': linux_amd64_url,
+        'linux_amd64_checksum': linux_amd64_checksum,
+        'linux_arm64_url': linux_arm64_url,
+        'linux_arm64_checksum': linux_arm64_checksum,
+        'darwin_amd_and_arm': darwin_amd_and_arm,
+        'linux_amd_and_arm': linux_amd_and_arm,
+        'darwin': target_darwin,
+        'linux': target_linux,
+    }
 
-        # TODO: We replace the multiple newlines here for shortcomings in the chevron template above so that
-        # `brew audit` passes correctly.
-        rendered_template = (
-            chevron.render(template=template, data=template_data)
-            .replace('\n\n\n  def install', '\n\n  def install')
-            .replace('\n\n\n  on_macos', '\n\n  on_macos')
-            .replace('\n\n\n  on_linux', '\n\n  on_linux')
-        )
+    # TODO: We replace the multiple newlines here for shortcomings in the chevron template above so that
+    # `brew audit` passes correctly.
+    rendered_template = (
+        chevron.render(template=template, data=template_data)
+        .replace('\n\n\n  def install', '\n\n  def install')
+        .replace('\n\n\n  on_macos', '\n\n  on_macos')
+        .replace('\n\n\n  on_linux', '\n\n  on_linux')
+    )
 
-        logger.info('Homebrew formula generated successfully!')
-        # If we are updating python resources, we'll log this later once resources are updated
-        if not update_python_resources:
-            logger.debug(rendered_template)
+    logger.info('Homebrew formula generated successfully!')
+    # If we are updating python resources, we'll log this later once resources are updated
+    if not update_python_resources:
+        logger.debug(rendered_template)
 
-        return rendered_template
+    return rendered_template
 
-    @staticmethod
-    def _generate_class_name(repo_name: str) -> str:
-        """Generates a Homebrew compatible formula class name.
 
-        1. Converts a repo name to a title-cased class name for Ruby.
-        2. Ensures that digits in a name do not title case the next word which is not compatible with Homebrew.
-        """
-        return re.sub(
-            r'[-_. ]+',
-            '',
-            re.sub(
-                r"\d([A-Z])",
-                lambda x: x.group(0).lower(),
-                repo_name.title(),
-            ),
-        )
+def _generate_class_name(repo_name: str) -> str:
+    """Generates a Homebrew compatible formula class name.
+
+    1. Converts a repo name to a title-cased class name for Ruby.
+    2. Ensures that digits in a name do not title case the next word which is not compatible with Homebrew.
+    """
+    return re.sub(
+        r'[-_. ]+',
+        '',
+        re.sub(
+            r"\d([A-Z])",
+            lambda x: x.group(0).lower(),
+            repo_name.title(),
+        ),
+    )

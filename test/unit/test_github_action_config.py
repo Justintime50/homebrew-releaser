@@ -15,7 +15,7 @@ from homebrew_releaser.app import App
 @patch('homebrew_releaser.git.Git.commit')
 @patch('homebrew_releaser.git.Git.push')
 @patch('homebrew_releaser.utils.Utils.write_file')
-@patch('homebrew_releaser.formula.Formula.generate_formula_data')
+@patch('homebrew_releaser.app.generate_formula_data')
 @patch('homebrew_releaser.app.calculate_checksum', return_value=('123', 'mock-repo'))
 @patch('homebrew_releaser.app.App.download_archive')
 @patch('homebrew_releaser.utils.Utils.make_github_get_request')

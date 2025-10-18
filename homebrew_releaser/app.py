@@ -27,7 +27,7 @@ from homebrew_releaser.constants import (
     UPDATE_PYTHON_RESOURCES,
     VERSION,
 )
-from homebrew_releaser.formula import Formula
+from homebrew_releaser.formula import generate_formula_data
 from homebrew_releaser.git import Git
 from homebrew_releaser.homebrew import (
     setup_homebrew_tap,
@@ -155,7 +155,7 @@ class App:
         Utils.write_file(CHECKSUM_FILE, archive_checksum_entries)
 
         logger.info(f'Generating Homebrew formula for {GITHUB_REPO}...')
-        template = Formula.generate_formula_data(
+        template = generate_formula_data(
             GITHUB_OWNER,
             GITHUB_REPO,
             repository,
