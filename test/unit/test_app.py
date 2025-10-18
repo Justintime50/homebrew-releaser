@@ -12,11 +12,11 @@ from homebrew_releaser.app import App
 @patch('homebrew_releaser.app.add_git')
 @patch('homebrew_releaser.app.commit_git')
 @patch('homebrew_releaser.app.push_git')
-@patch('homebrew_releaser.utils.Utils.write_file')
+@patch('homebrew_releaser.app.write_file')
 @patch('homebrew_releaser.app.generate_formula_data')
 @patch('homebrew_releaser.app.calculate_checksum', return_value=('123', 'mock-repo'))
 @patch('homebrew_releaser.app.App.download_archive')
-@patch('homebrew_releaser.utils.Utils.make_github_get_request')
+@patch('homebrew_releaser.app.make_github_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
 def test_run_github_action_skip_commit(
     mock_check_env_variables,
@@ -54,11 +54,11 @@ def test_run_github_action_skip_commit(
 @patch('homebrew_releaser.app.add_git')
 @patch('homebrew_releaser.app.commit_git')
 @patch('homebrew_releaser.app.push_git')
-@patch('homebrew_releaser.utils.Utils.write_file')
+@patch('homebrew_releaser.app.write_file')
 @patch('homebrew_releaser.app.generate_formula_data')
 @patch('homebrew_releaser.app.calculate_checksum', return_value=('123', 'mock-repo'))
 @patch('homebrew_releaser.app.App.download_archive')
-@patch('homebrew_releaser.utils.Utils.make_github_get_request')
+@patch('homebrew_releaser.app.make_github_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
 def test_run_github_action(
     mock_check_env_variables,
@@ -99,11 +99,11 @@ def test_run_github_action(
 @patch('homebrew_releaser.app.add_git')
 @patch('homebrew_releaser.app.commit_git')
 @patch('homebrew_releaser.app.push_git')
-@patch('homebrew_releaser.utils.Utils.write_file')
+@patch('homebrew_releaser.app.write_file')
 @patch('homebrew_releaser.app.generate_formula_data')
 @patch('homebrew_releaser.app.calculate_checksum', return_value=('123', 'mock-repo'))
 @patch('homebrew_releaser.app.App.download_archive')
-@patch('homebrew_releaser.utils.Utils.make_github_get_request')
+@patch('homebrew_releaser.app.make_github_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
 def test_run_github_action_update_readme(
     mock_check_env_variables,
@@ -145,11 +145,11 @@ def test_run_github_action_update_readme(
 @patch('homebrew_releaser.app.add_git')
 @patch('homebrew_releaser.app.commit_git')
 @patch('homebrew_releaser.app.push_git')
-@patch('homebrew_releaser.utils.Utils.write_file')
+@patch('homebrew_releaser.app.write_file')
 @patch('homebrew_releaser.app.generate_formula_data')
 @patch('homebrew_releaser.app.calculate_checksum', return_value=('123', 'mock-repo'))
 @patch('homebrew_releaser.app.App.download_archive')
-@patch('homebrew_releaser.utils.Utils.make_github_get_request')
+@patch('homebrew_releaser.app.make_github_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
 @patch('homebrew_releaser.app.update_python_resources')
 @patch('homebrew_releaser.app.setup_homebrew_tap')
@@ -198,11 +198,11 @@ def test_run_github_action_update_python_resources(
 @patch('homebrew_releaser.app.add_git')
 @patch('homebrew_releaser.app.commit_git')
 @patch('homebrew_releaser.app.push_git')
-@patch('homebrew_releaser.utils.Utils.write_file')
+@patch('homebrew_releaser.app.write_file')
 @patch('homebrew_releaser.app.generate_formula_data')
 @patch('homebrew_releaser.app.calculate_checksum', return_value=('123', 'mock-repo'))
 @patch('homebrew_releaser.app.App.download_archive')
-@patch('homebrew_releaser.utils.Utils.make_github_get_request')
+@patch('homebrew_releaser.app.make_github_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
 def test_run_github_action_target_matrix(
     mock_check_env_variables,
@@ -265,8 +265,8 @@ def test_check_required_env_variables_missing_env_variable(mock_system_exit):
     )
 
 
-@patch('homebrew_releaser.utils.Utils.write_file')
-@patch('homebrew_releaser.utils.Utils.make_github_get_request')
+@patch('homebrew_releaser.app.write_file')
+@patch('homebrew_releaser.app.make_github_get_request')
 def test_download_public_archive(mock_make_github_get_request, mock_write_file):
     url = 'https://github.com/repos/Justintime50/homebrew-releaser/archive/refs/tags/v0.1.0.tar.gz'
     App.download_archive(url, True)
@@ -275,8 +275,8 @@ def test_download_public_archive(mock_make_github_get_request, mock_write_file):
     mock_write_file.assert_called_once()  # TODO: Assert `called_with` here instead
 
 
-@patch('homebrew_releaser.utils.Utils.write_file')
-@patch('homebrew_releaser.utils.Utils.make_github_get_request')
+@patch('homebrew_releaser.app.write_file')
+@patch('homebrew_releaser.app.make_github_get_request')
 def test_download_private_archive(mock_make_github_get_request, mock_write_file):
     url = 'https://api.github.com/repos/Justintime50/homebrew-releaser/tarball/v0.1.0'
     App.download_archive(url, False)

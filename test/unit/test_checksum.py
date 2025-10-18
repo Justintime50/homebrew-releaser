@@ -30,7 +30,7 @@ def test_calculate_checksum_process_error(mock_subprocess, mock_tar_filename):
 
 
 @patch('requests.post')
-@patch('homebrew_releaser.utils.Utils.make_github_get_request')
+@patch('homebrew_releaser.utils.make_github_get_request')
 def test_upload_checksum_file(mock_make_github_get_request, mock_post_request):
     """Tests that we make the GET call to retrieve the latest release and the
     POST call to upload the checksum.txt file.
@@ -42,7 +42,7 @@ def test_upload_checksum_file(mock_make_github_get_request, mock_post_request):
 
 
 @patch('requests.post', side_effect=requests.exceptions.RequestException('mock-error'))
-@patch('homebrew_releaser.utils.Utils.make_github_get_request')
+@patch('homebrew_releaser.utils.make_github_get_request')
 def test_upload_checksum_file_error_on_upload(mock_make_github_get_request, mock_post_request):
     """Tests that we exit on error to upload checksum.txt file."""
     with patch('builtins.open', mock_open()):

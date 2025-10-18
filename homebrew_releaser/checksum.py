@@ -12,7 +12,7 @@ from homebrew_releaser.constants import (
     LOGGER_NAME,
     TIMEOUT,
 )
-from homebrew_releaser.utils import Utils
+from homebrew_releaser.utils import get_working_dir
 
 
 def calculate_checksum(tar_filepath: str) -> str:
@@ -20,7 +20,7 @@ def calculate_checksum(tar_filepath: str) -> str:
     logger = woodchips.get(LOGGER_NAME)
 
     try:
-        with open(Utils.get_working_dir(tar_filepath), "rb") as content:
+        with open(get_working_dir(tar_filepath), "rb") as content:
             checksum = hashlib.sha256(content.read()).hexdigest()
         logger.debug(f'Checksum for {tar_filepath} generated successfully: {checksum}')
     except Exception as error:
@@ -35,7 +35,7 @@ def upload_checksum_file(latest_release: dict[str, Any]):
 
     latest_release_id = latest_release['id']
 
-    with open(Utils.get_working_dir(CHECKSUM_FILE), 'rb') as filename:
+    with open(get_working_dir(CHECKSUM_FILE), 'rb') as filename:
         checksum_file_content = filename.read()
 
     upload_url = f'https://uploads.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/{latest_release_id}/assets?name={CHECKSUM_FILE}'  # noqa

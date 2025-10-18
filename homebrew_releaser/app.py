@@ -39,7 +39,12 @@ from homebrew_releaser.homebrew import (
     update_python_resources,
 )
 from homebrew_releaser.readme_updater import update_readme
-from homebrew_releaser.utils import Utils
+from homebrew_releaser.utils import (
+    get_filename_from_path,
+    get_working_dir,
+    make_github_get_request,
+    write_file,
+)
 
 
 GITHUB_BASE_URL = 'https://api.github.com'
@@ -84,8 +89,8 @@ class App:
         setup_git(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER, HOMEBREW_TAP)
 
         logger.info(f'Collecting data about {GITHUB_REPO}...')
-        repository = Utils.make_github_get_request(url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}').json()
-        latest_release = Utils.make_github_get_request(
+        repository = make_github_get_request(url=f'{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}').json()
+        latest_release = make_github_get_request(
             url=f'https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/latest'
         ).json()
         assets = latest_release['assets']
@@ -144,7 +149,7 @@ class App:
                     stream = False if archive_url.find("api.github.com") != -1 else True
                     downloaded_filename = App.download_archive(download_url, stream)
                     checksum = calculate_checksum(downloaded_filename)
-                    archive_filename = Utils.get_filename_from_path(archive_url)
+                    archive_filename = get_filename_from_path(archive_url)
                     archive_checksum_entries += f'{checksum} {archive_filename}\n'
                     checksums.append(
                         {
@@ -157,7 +162,7 @@ class App:
                     # We break here so we don't include duplicate checksums for the auto generated URLs
                     break
 
-        Utils.write_file(CHECKSUM_FILE, archive_checksum_entries)
+        write_file(CHECKSUM_FILE, archive_checksum_entries)
 
         logger.info(f'Generating Homebrew formula for {GITHUB_REPO}...')
         template = generate_formula_data(
@@ -177,9 +182,9 @@ class App:
         )
 
         formula_filename = f'{repository["name"]}.rb'
-        formula_dir = Utils.get_working_dir(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER))
+        formula_dir = get_working_dir(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER))
         formula_filepath = os.path.join(formula_dir, formula_filename)
-        Utils.write_file(formula_filepath, template, 'w')
+        write_file(formula_filepath, template, 'w')
 
         if UPDATE_PYTHON_RESOURCES:
             logger.info('Attempting to update Python resources in the formula...')
@@ -245,12 +250,12 @@ class App:
     @staticmethod
     def download_archive(url: str, stream: Optional[bool] = False) -> str:
         """Gets an archive (eg: zip, tar) from GitHub and saves it locally."""
-        response = Utils.make_github_get_request(
+        response = make_github_get_request(
             url=url,
             stream=stream,
         )
-        filename = Utils.get_filename_from_path(url)
-        Utils.write_file(filename, response.content, 'wb')
+        filename = get_filename_from_path(url)
+        write_file(filename, response.content, 'wb')
 
         return filename
 
