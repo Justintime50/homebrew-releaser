@@ -25,7 +25,7 @@ jobs:
       - uses: extractions/setup-just@v2
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.14'
+          python-version: '3.13'
       - run: just install lint
   test:
     runs-on: ubuntu-latest
@@ -34,7 +34,7 @@ jobs:
       - uses: extractions/setup-just@v2
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.14'
+          python-version: '3.13'
       - run: just install coverage
   brew-audit:
     runs-on: ubuntu-latest
@@ -64,7 +64,7 @@ jobs:
             -e INPUT_INSTALL=virtualenv_install_with_resources \
             -e INPUT_UPDATE_README_TABLE=true \
             -e INPUT_FORMULA_INCLUDES="include Language::Python::Virtualenv" \
-            -e INPUT_DEPENDS_ON='"python@3.14"' \
+            -e INPUT_DEPENDS_ON='"python@3.13"' \
             -e INPUT_UPDATE_PYTHON_RESOURCES=true \
             justintime50/homebrew-releaser
   coverage:
@@ -75,7 +75,7 @@ jobs:
       - uses: extractions/setup-just@v2
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.14'
+          python-version: '3.13'
       - run: just install coverage
       - uses: codecov/codecov-action@v5
         with:
