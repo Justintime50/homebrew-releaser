@@ -1,7 +1,5 @@
 import inspect
 import os
-import shutil
-import subprocess  # nosec B404
 from unittest.mock import patch
 
 import pytest
@@ -937,25 +935,3 @@ def test_generate_class_name(repo_name, expected_class_name):
     class_name = Formula._generate_class_name(repo_name)
 
     assert class_name == expected_class_name
-
-
-@patch('shutil.which', return_value='/usr/local/bin/brew')
-@patch(
-    'subprocess.check_output',
-    side_effect=subprocess.CalledProcessError(cmd='subprocess.check_output', returncode=1),
-)
-def test_update_python_resources_error(mock_subprocess, mock_which):
-    FORMULA_PATH = '/homebrew-formulas/Formula'
-    formula_name = 'test-formula.rb'
-
-    with pytest.raises(SystemExit):
-        Formula.update_python_resources(FORMULA_PATH, formula_name)
-
-    brew_path = shutil.which('brew')
-    mock_subprocess.assert_called_once_with(
-        f'cd {FORMULA_PATH} && {brew_path} update-python-resources {formula_name}',
-        stderr=subprocess.STDOUT,
-        text=True,
-        timeout=300,
-        shell=True,
-    )

@@ -151,8 +151,10 @@ def test_run_github_action_update_readme(
 @patch('homebrew_releaser.app.App.download_archive')
 @patch('homebrew_releaser.utils.Utils.make_github_get_request')
 @patch('homebrew_releaser.app.App.check_required_env_variables')
-@patch('homebrew_releaser.formula.Formula.update_python_resources')
+@patch('homebrew_releaser.app.update_python_resources')
+@patch('homebrew_releaser.app.setup_homebrew_tap')
 def test_run_github_action_update_python_resources(
+    mock_setup_homebrew_tap,
     mock_update_python_resources,
     mock_check_env_variables,
     mock_make_github_get_request,
@@ -182,6 +184,7 @@ def test_run_github_action_update_python_resources(
     mock_commit_formula.assert_called_once()
     mock_push_formula.assert_called_once()
     mock_update_python_resources.assert_called_once()
+    mock_setup_homebrew_tap.assert_called_once()
 
 
 @patch('homebrew_releaser.app.HOMEBREW_TAP', '123')

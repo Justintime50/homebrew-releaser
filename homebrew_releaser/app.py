@@ -26,6 +26,10 @@ from homebrew_releaser.constants import (
 )
 from homebrew_releaser.formula import Formula
 from homebrew_releaser.git import Git
+from homebrew_releaser.homebrew import (
+    setup_homebrew_tap,
+    update_python_resources,
+)
 from homebrew_releaser.readme_updater import ReadmeUpdater
 from homebrew_releaser.utils import Utils
 
@@ -171,7 +175,8 @@ class App:
 
         if UPDATE_PYTHON_RESOURCES:
             logger.info('Attempting to update Python resources in the formula...')
-            Formula.update_python_resources(formula_dir, formula_filename)
+            setup_homebrew_tap(HOMEBREW_OWNER, HOMEBREW_TAP, formula_dir)
+            update_python_resources(formula_dir, formula_filename)
             if DEBUG:
                 with open(formula_filepath, 'r') as formula_file:
                     formula_content = formula_file.read()

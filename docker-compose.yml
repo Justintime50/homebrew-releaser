@@ -6,11 +6,11 @@ services:
     working_dir: /github/workspace
     environment:
       # Env vars that should be `false` should be left empty
-      - GITHUB_REPOSITORY=username/repo
+      - GITHUB_REPOSITORY=justintime50/homebrew-releaser
       - INPUT_SKIP_COMMIT=true
-      - INPUT_UPDATE_README_TABLE=false
+      - INPUT_UPDATE_README_TABLE=
       - INPUT_DEBUG=true
-      - INPUT_HOMEBREW_OWNER=username
+      - INPUT_HOMEBREW_OWNER=justintime50
       - INPUT_HOMEBREW_TAP=homebrew-formulas
       - INPUT_FORMULA_FOLDER=Formula
       - INPUT_GITHUB_TOKEN=123...
@@ -22,7 +22,7 @@ services:
       - INPUT_DOWNLOAD_STRATEGY=
       - INPUT_CUSTOM_REQUIRE=
       - INPUT_FORMULA_INCLUDES=
-      - INPUT_UPDATE_PYTHON_RESOURCES=false
+      - INPUT_UPDATE_PYTHON_RESOURCES=
       - INPUT_TARGET_DARWIN_AMD64=
       - INPUT_TARGET_DARWIN_ARM64=
       - INPUT_TARGET_LINUX_AMD64=

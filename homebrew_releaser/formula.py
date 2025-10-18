@@ -1,6 +1,4 @@
 import re
-import shutil
-import subprocess  # nosec B404
 import textwrap
 from typing import (
     Any,
@@ -18,7 +16,6 @@ from homebrew_releaser.constants import (
     TARGET_DARWIN_ARM64,
     TARGET_LINUX_AMD64,
     TARGET_LINUX_ARM64,
-    TIMEOUT,
 )
 
 
@@ -274,28 +271,3 @@ end
                 repo_name.title(),
             ),
         )
-
-    @staticmethod
-    def update_python_resources(formula_dir: str, formula_filename: str) -> None:
-        """Runs brew update-python-resources on the formula to add Python resources."""
-        logger = woodchips.get(LOGGER_NAME)
-
-        brew_path = shutil.which('brew')
-        if not brew_path:
-            raise SystemExit("brew not found in PATH")
-
-        try:
-            subprocess.check_output(
-                f'cd {formula_dir} && {brew_path} update-python-resources {formula_filename}',
-                stderr=subprocess.STDOUT,
-                text=True,
-                timeout=TIMEOUT,
-                shell=True,  # nosec
-            )
-            logger.info('Updated Python resources successfully.')
-        except subprocess.TimeoutExpired:
-            raise SystemExit('Timed out updating Python resources')
-        except subprocess.CalledProcessError as e:
-            error_output = e.output if hasattr(e, "output") else ""
-
-            raise SystemExit(f"An error occurred while updating Python resources: {error_output}")

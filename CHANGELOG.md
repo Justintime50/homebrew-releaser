@@ -1,8 +1,10 @@
 # CHANGELOG
 
-## v2.2.0 (2025-10-13)
+## Next Release
 
-- Upgrades to Python 3.14
+- Corrects broken brew path to Python (closes #64)
+- Properly creates a local tap to link local changes to appease `brew update-python-resources`
+- Disables brew updates, analytics, install cleanup, and hints for less noisy and faster builds
 
 ## v2.1.3 (2025-07-23)
 
