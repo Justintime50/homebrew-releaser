@@ -2,7 +2,12 @@ from unittest.mock import patch
 
 import pytest
 
-from homebrew_releaser.app import App
+from homebrew_releaser.app import (
+    _check_required_env_variables,
+    _download_archive,
+    _setup_logger,
+    run_github_action,
+)
 
 
 @patch('homebrew_releaser.app.SKIP_COMMIT', True)
@@ -15,9 +20,9 @@ from homebrew_releaser.app import App
 @patch('homebrew_releaser.app.write_file')
 @patch('homebrew_releaser.app.generate_formula_data')
 @patch('homebrew_releaser.app.calculate_checksum', return_value=('123', 'mock-repo'))
-@patch('homebrew_releaser.app.App.download_archive')
+@patch('homebrew_releaser.app._download_archive')
 @patch('homebrew_releaser.app.make_github_get_request')
-@patch('homebrew_releaser.app.App.check_required_env_variables')
+@patch('homebrew_releaser.app._check_required_env_variables')
 def test_run_github_action_skip_commit(
     mock_check_env_variables,
     mock_make_github_get_request,
@@ -31,7 +36,7 @@ def test_run_github_action_skip_commit(
     mock_setup_git,
     mock_logger,
 ):
-    App.run_github_action()
+    run_github_action()
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
@@ -57,9 +62,9 @@ def test_run_github_action_skip_commit(
 @patch('homebrew_releaser.app.write_file')
 @patch('homebrew_releaser.app.generate_formula_data')
 @patch('homebrew_releaser.app.calculate_checksum', return_value=('123', 'mock-repo'))
-@patch('homebrew_releaser.app.App.download_archive')
+@patch('homebrew_releaser.app._download_archive')
 @patch('homebrew_releaser.app.make_github_get_request')
-@patch('homebrew_releaser.app.App.check_required_env_variables')
+@patch('homebrew_releaser.app._check_required_env_variables')
 def test_run_github_action(
     mock_check_env_variables,
     mock_make_github_get_request,
@@ -74,7 +79,7 @@ def test_run_github_action(
     mock_logger,
     mock_upload_checksum_file,
 ):
-    App.run_github_action()
+    run_github_action()
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
@@ -102,9 +107,9 @@ def test_run_github_action(
 @patch('homebrew_releaser.app.write_file')
 @patch('homebrew_releaser.app.generate_formula_data')
 @patch('homebrew_releaser.app.calculate_checksum', return_value=('123', 'mock-repo'))
-@patch('homebrew_releaser.app.App.download_archive')
+@patch('homebrew_releaser.app._download_archive')
 @patch('homebrew_releaser.app.make_github_get_request')
-@patch('homebrew_releaser.app.App.check_required_env_variables')
+@patch('homebrew_releaser.app._check_required_env_variables')
 def test_run_github_action_update_readme(
     mock_check_env_variables,
     mock_make_github_get_request,
@@ -120,7 +125,7 @@ def test_run_github_action_update_readme(
     mock_upload_checksum_file,
     mock_update_readme,
 ):
-    App.run_github_action()
+    run_github_action()
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
@@ -148,9 +153,9 @@ def test_run_github_action_update_readme(
 @patch('homebrew_releaser.app.write_file')
 @patch('homebrew_releaser.app.generate_formula_data')
 @patch('homebrew_releaser.app.calculate_checksum', return_value=('123', 'mock-repo'))
-@patch('homebrew_releaser.app.App.download_archive')
+@patch('homebrew_releaser.app._download_archive')
 @patch('homebrew_releaser.app.make_github_get_request')
-@patch('homebrew_releaser.app.App.check_required_env_variables')
+@patch('homebrew_releaser.app._check_required_env_variables')
 @patch('homebrew_releaser.app.update_python_resources')
 @patch('homebrew_releaser.app.setup_homebrew_tap')
 def test_run_github_action_update_python_resources(
@@ -169,7 +174,7 @@ def test_run_github_action_update_python_resources(
     mock_logger,
     mock_upload_checksum_file,
 ):
-    App.run_github_action()
+    run_github_action()
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
@@ -201,9 +206,9 @@ def test_run_github_action_update_python_resources(
 @patch('homebrew_releaser.app.write_file')
 @patch('homebrew_releaser.app.generate_formula_data')
 @patch('homebrew_releaser.app.calculate_checksum', return_value=('123', 'mock-repo'))
-@patch('homebrew_releaser.app.App.download_archive')
+@patch('homebrew_releaser.app._download_archive')
 @patch('homebrew_releaser.app.make_github_get_request')
-@patch('homebrew_releaser.app.App.check_required_env_variables')
+@patch('homebrew_releaser.app._check_required_env_variables')
 def test_run_github_action_target_matrix(
     mock_check_env_variables,
     mock_make_github_get_request,
@@ -219,7 +224,7 @@ def test_run_github_action_target_matrix(
     mock_upload_checksum_file,
 ):
     """Tests that we append checksum URLs to the list when the user passes matrix targets."""
-    App.run_github_action()
+    run_github_action()
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
@@ -237,7 +242,7 @@ def test_run_github_action_target_matrix(
 
 @patch('woodchips.Logger')
 def test_setup_logger(mock_logger):
-    App.setup_logger()
+    _setup_logger()
 
     mock_logger.assert_called_once()
 
@@ -248,7 +253,7 @@ def test_setup_logger(mock_logger):
 @patch('homebrew_releaser.app.INSTALL', 'bin.install "src/my-script.sh" => "my-script"')
 @patch('sys.exit')
 def test_check_required_env_variables(mock_system_exit):
-    App.check_required_env_variables()
+    _check_required_env_variables()
 
     mock_system_exit.assert_not_called()
 
@@ -256,7 +261,7 @@ def test_check_required_env_variables(mock_system_exit):
 @patch('sys.exit')
 def test_check_required_env_variables_missing_env_variable(mock_system_exit):
     with pytest.raises(SystemExit) as error:
-        App.check_required_env_variables()
+        _check_required_env_variables()
         mock_system_exit.assert_called_once()
 
     assert (
@@ -269,7 +274,7 @@ def test_check_required_env_variables_missing_env_variable(mock_system_exit):
 @patch('homebrew_releaser.app.make_github_get_request')
 def test_download_public_archive(mock_make_github_get_request, mock_write_file):
     url = 'https://github.com/repos/Justintime50/homebrew-releaser/archive/refs/tags/v0.1.0.tar.gz'
-    App.download_archive(url, True)
+    _download_archive(url, True)
 
     mock_make_github_get_request.assert_called_once_with(url=url, stream=True)
     mock_write_file.assert_called_once()  # TODO: Assert `called_with` here instead
@@ -279,7 +284,8 @@ def test_download_public_archive(mock_make_github_get_request, mock_write_file):
 @patch('homebrew_releaser.app.make_github_get_request')
 def test_download_private_archive(mock_make_github_get_request, mock_write_file):
     url = 'https://api.github.com/repos/Justintime50/homebrew-releaser/tarball/v0.1.0'
-    App.download_archive(url, False)
+    _download_archive(url, False)
 
     mock_make_github_get_request.assert_called_once_with(url=url, stream=False)
+    mock_write_file.assert_called_once()  # TODO: Assert `called_with` here instead
     mock_write_file.assert_called_once()  # TODO: Assert `called_with` here instead

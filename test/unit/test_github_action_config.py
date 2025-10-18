@@ -1,7 +1,7 @@
 import os
 from unittest.mock import patch
 
-from homebrew_releaser.app import App
+from homebrew_releaser.app import run_github_action
 
 
 @patch.dict(os.environ, {'INPUT_SKIP_COMMIT': 'false'})
@@ -17,9 +17,9 @@ from homebrew_releaser.app import App
 @patch('homebrew_releaser.app.write_file')
 @patch('homebrew_releaser.app.generate_formula_data')
 @patch('homebrew_releaser.app.calculate_checksum', return_value=('123', 'mock-repo'))
-@patch('homebrew_releaser.app.App.download_archive')
+@patch('homebrew_releaser.app._download_archive')
 @patch('homebrew_releaser.app.make_github_get_request')
-@patch('homebrew_releaser.app.App.check_required_env_variables')
+@patch('homebrew_releaser.app._check_required_env_variables')
 def test_run_github_action_string_false_config(
     mock_check_env_variables,
     mock_make_github_get_request,
@@ -35,7 +35,7 @@ def test_run_github_action_string_false_config(
     mock_upload_checksum_file,
     mock_update_readme,
 ):
-    App.run_github_action()
+    run_github_action()
 
     # Check that string false works by running git operations
     mock_add_formula.assert_called_once()
