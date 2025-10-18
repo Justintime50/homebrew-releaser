@@ -4,7 +4,10 @@ from typing import Optional
 import woodchips
 
 from homebrew_releaser._version import __version__
-from homebrew_releaser.checksum import Checksum
+from homebrew_releaser.checksum import (
+    calculate_checksum,
+    upload_checksum_file,
+)
 from homebrew_releaser.constants import (
     CHECKSUM_FILE,
     CUSTOM_REQUIRE,
@@ -135,7 +138,7 @@ class App:
                     # For REST API requests, we should not stream archive file, but it is fine for browser URLs
                     stream = False if archive_url.find("api.github.com") != -1 else True
                     downloaded_filename = App.download_archive(download_url, stream)
-                    checksum = Checksum.calculate_checksum(downloaded_filename)
+                    checksum = calculate_checksum(downloaded_filename)
                     archive_filename = Utils.get_filename_from_path(archive_url)
                     archive_checksum_entries += f'{checksum} {archive_filename}\n'
                     checksums.append(
@@ -199,7 +202,7 @@ class App:
             logger.info(f'Skipping push to {HOMEBREW_TAP}.')
         else:
             logger.info(f'Attempting to upload checksum.txt to the latest release of {GITHUB_REPO}...')
-            Checksum.upload_checksum_file(latest_release)
+            upload_checksum_file(latest_release)
             logger.info(f'Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...')
             Git.push(HOMEBREW_TAP, HOMEBREW_OWNER)
             logger.info(f'Successfully released {version} of {GITHUB_REPO} to {HOMEBREW_TAP}!')

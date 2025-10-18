@@ -7,13 +7,16 @@ from unittest.mock import (
 import pytest
 import requests
 
-from homebrew_releaser.checksum import Checksum
+from homebrew_releaser.checksum import (
+    calculate_checksum,
+    upload_checksum_file,
+)
 
 
 @patch('homebrew_releaser.utils.WORKING_DIR', '')
 def test_calculate_checksum():
     """Tests that we can get the checksum of a file (we use one that will never change)."""
-    checksum = Checksum.calculate_checksum('homebrew_releaser/__init__.py')
+    checksum = calculate_checksum('homebrew_releaser/__init__.py')
 
     assert checksum == 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
 
@@ -23,7 +26,7 @@ def test_calculate_checksum():
 )
 def test_calculate_checksum_process_error(mock_subprocess, mock_tar_filename):
     with pytest.raises(SystemExit):
-        Checksum.calculate_checksum(mock_tar_filename)
+        calculate_checksum(mock_tar_filename)
 
 
 @patch('requests.post')
@@ -33,7 +36,7 @@ def test_upload_checksum_file(mock_make_github_get_request, mock_post_request):
     POST call to upload the checksum.txt file.
     """
     with patch('builtins.open', mock_open()):
-        Checksum.upload_checksum_file({'id': 1, 'tag_name': 'v1.0.0'})
+        upload_checksum_file({'id': 1, 'tag_name': 'v1.0.0'})
 
         mock_post_request.assert_called_once()
 
@@ -44,7 +47,7 @@ def test_upload_checksum_file_error_on_upload(mock_make_github_get_request, mock
     """Tests that we exit on error to upload checksum.txt file."""
     with patch('builtins.open', mock_open()):
         with pytest.raises(SystemExit) as error:
-            Checksum.upload_checksum_file({'id': 1, 'tag_name': 'v1.0.0'})
+            upload_checksum_file({'id': 1, 'tag_name': 'v1.0.0'})
 
             mock_post_request.assert_called_once()
 
