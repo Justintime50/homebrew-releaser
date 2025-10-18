@@ -38,7 +38,7 @@ from homebrew_releaser.homebrew import (
     setup_homebrew_tap,
     update_python_resources,
 )
-from homebrew_releaser.readme_updater import ReadmeUpdater
+from homebrew_releaser.readme_updater import update_readme
 from homebrew_releaser.utils import Utils
 
 
@@ -194,7 +194,7 @@ class App:
 
         if UPDATE_README_TABLE:
             logger.info('Attempting to update the README\'s project table...')
-            ReadmeUpdater.update_readme(HOMEBREW_TAP)
+            update_readme(HOMEBREW_TAP)
         else:
             logger.debug('Skipping update to project README.')
 

@@ -92,7 +92,7 @@ def test_run_github_action(
 
 @patch('homebrew_releaser.app.HOMEBREW_TAP', '123')
 @patch('homebrew_releaser.app.UPDATE_README_TABLE', True)
-@patch('homebrew_releaser.readme_updater.ReadmeUpdater.update_readme')
+@patch('homebrew_releaser.app.update_readme')
 @patch('homebrew_releaser.app.upload_checksum_file')
 @patch('woodchips.get')
 @patch('homebrew_releaser.app.setup_git')

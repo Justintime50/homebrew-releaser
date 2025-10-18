@@ -6,7 +6,7 @@ from homebrew_releaser.app import App
 
 @patch.dict(os.environ, {'INPUT_SKIP_COMMIT': 'false'})
 @patch.dict(os.environ, {'INPUT_SKIP_COMMIT': 'false'})
-@patch('homebrew_releaser.readme_updater.ReadmeUpdater.update_readme')
+@patch('homebrew_releaser.app.update_readme')
 @patch('homebrew_releaser.app.upload_checksum_file')
 @patch('homebrew_releaser.app.HOMEBREW_TAP', '123')
 @patch('woodchips.get')
