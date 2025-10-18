@@ -18,7 +18,7 @@ def make_github_get_request(url: str, stream: Optional[bool] = False) -> request
 
     headers = GITHUB_HEADERS.copy()
     if stream:
-        headers['Accept'] = 'application/octet-stream'
+        headers["Accept"] = "application/octet-stream"
 
     try:
         response = requests.get(
@@ -29,28 +29,28 @@ def make_github_get_request(url: str, stream: Optional[bool] = False) -> request
             timeout=TIMEOUT,
         )
         response.raise_for_status()
-        logger.debug(f'HTTP GET request made successfully to {url}.')
+        logger.debug(f"HTTP GET request made successfully to {url}.")
     except Exception as error:
         raise SystemExit(error)
 
     return response
 
 
-def write_file(file_path: str, content: str | bytes, mode: str = 'w'):
+def write_file(file_path: str, content: str | bytes, mode: str = "w"):
     """Writes content to a file."""
     logger = woodchips.get(LOGGER_NAME)
 
     try:
         with open(get_working_dir(file_path), mode) as f:
             f.write(content)
-        logger.debug(f'{file_path} written successfully.')
+        logger.debug(f"{file_path} written successfully.")
     except Exception as error:
         raise SystemExit(error)
 
 
 def get_filename_from_path(path: str) -> str:
     """Gets the last part of a path (the filename)."""
-    return path.rsplit('/', 1)[1]
+    return path.rsplit("/", 1)[1]
 
 
 def get_working_dir(additional_path: str) -> str:

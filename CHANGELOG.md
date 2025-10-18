@@ -1,10 +1,11 @@
 # CHANGELOG
 
-## Next Release
+## v2.2.0 (2025-10-17)
 
 - Corrects broken brew path to Python (closes #64)
 - Properly creates a local tap to link local changes to appease `brew update-python-resources`
 - Disables brew updates, analytics, install cleanup, and hints for less noisy and faster builds
+- De-classes the entire app leaning into functional programming (since all methods were static anyway)
 
 ## v2.1.3 (2025-07-23)
 

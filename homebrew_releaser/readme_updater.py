@@ -16,8 +16,8 @@ from homebrew_releaser.constants import (
 from homebrew_releaser.utils import get_working_dir
 
 
-TABLE_START_TAG = '<!-- project_table_start -->'
-TABLE_END_TAG = '<!-- project_table_end -->'
+TABLE_START_TAG = "<!-- project_table_start -->"
+TABLE_END_TAG = "<!-- project_table_end -->"
 
 
 def update_readme(homebrew_tap: str):
@@ -43,42 +43,42 @@ def _format_formula_data(homebrew_tap: str) -> list[dict[str, Any]]:
     formulas = []
     files = os.listdir(homebrew_tap_path)
 
-    if not any([file.endswith('.rb') for file in files]):
+    if not any([file.endswith(".rb") for file in files]):
         raise SystemExit('No Ruby files found in the "formula_folder" provided.')
 
     try:
         for filename in sorted(files):
-            with open(os.path.join(homebrew_tap_path, filename), 'r') as formula:
+            with open(os.path.join(homebrew_tap_path, filename), "r") as formula:
                 # Set empty defaults
-                final_name = ''
-                final_desc = ''
-                final_homepage = ''
+                final_name = ""
+                final_desc = ""
+                final_homepage = ""
 
                 for line in formula:
-                    if line.strip().startswith('class'):
+                    if line.strip().startswith("class"):
                         name_line = line.split()
                         name_pieces = []
-                        name_pieces = re.findall('[A-Z][^A-Z]*', name_line[1])
-                        formatted_name = ''
+                        name_pieces = re.findall("[A-Z][^A-Z]*", name_line[1])
+                        formatted_name = ""
 
                         for piece in name_pieces:
                             if piece != name_pieces[-1]:
-                                formatted_name += f'{piece}-'
+                                formatted_name += f"{piece}-"
                             else:
-                                formatted_name += f'{piece}'
+                                formatted_name += f"{piece}"
                             final_name = formatted_name.lower()
-                    if line.strip().startswith('desc'):
-                        final_desc = line.strip().replace('desc ', '').replace('"', '')
-                    if line.strip().startswith('homepage'):
-                        final_homepage = line.strip().replace('homepage ', '').replace('"', '')
+                    if line.strip().startswith("desc"):
+                        final_desc = line.strip().replace("desc ", "").replace('"', "")
+                    if line.strip().startswith("homepage"):
+                        final_homepage = line.strip().replace("homepage ", "").replace('"', "")
                 formula_data = {
-                    'name': final_name,
-                    'desc': final_desc,
-                    'homepage': final_homepage,
+                    "name": final_name,
+                    "desc": final_desc,
+                    "homepage": final_homepage,
                 }
                 formulas.append(formula_data)
     except Exception as error:
-        raise SystemExit(f'There was a problem opening or reading the formula data: {error}')
+        raise SystemExit(f"There was a problem opening or reading the formula data: {error}")
 
     return formulas
 
@@ -87,14 +87,14 @@ def _generate_table(formulas: list[dict[str, Any]]) -> str:
     """Generates a pretty table which will be used in the README file."""
     logger = woodchips.get(LOGGER_NAME)
 
-    headers = ['Project', 'Description', 'Install']
+    headers = ["Project", "Description", "Install"]
     rows = []
 
     for formula in formulas:
         rows.append(
             [
                 f'[{formula["name"]}]({formula.get("homepage")})',
-                formula.get('desc'),
+                formula.get("desc"),
                 f'`brew install {formula["name"]}`',
             ]
         )
@@ -102,10 +102,10 @@ def _generate_table(formulas: list[dict[str, Any]]) -> str:
     table = pretty_tables.create(
         headers=headers,
         rows=rows,
-        empty_cell_placeholder='NA',
+        empty_cell_placeholder="NA",
     )
 
-    final_table = TABLE_START_TAG + '\n' + table + '\n' + TABLE_END_TAG + '\n'
+    final_table = TABLE_START_TAG + "\n" + table + "\n" + TABLE_END_TAG + "\n"
 
     logger.debug(final_table)
 
@@ -120,10 +120,10 @@ def _retrieve_old_table(homebrew_tap: str) -> Tuple[str, bool]:
     old_table_found = False
     table_start_found = False
     table_end_found = False
-    old_table = ''
+    old_table = ""
 
     if readme:
-        with open(get_working_dir(readme), 'r') as readme_contents:
+        with open(get_working_dir(readme), "r") as readme_contents:
             for line in readme_contents:
                 normalized_line = line.strip().lower()
                 if normalized_line == TABLE_START_TAG:
@@ -141,10 +141,10 @@ def _retrieve_old_table(homebrew_tap: str) -> Tuple[str, bool]:
 
         if old_table_found is False:
             # If we can't find both start/end tags, reset the table so we don't blow away unassociated README data
-            old_table = ''
-            logger.error('Could not find both start and end tags for project table in README.')
+            old_table = ""
+            logger.error("Could not find both start and end tags for project table in README.")
     else:
-        logger.error('Could not find a valid README in this project to update.')
+        logger.error("Could not find a valid README in this project to update.")
 
     return old_table, old_table_found
 
@@ -157,9 +157,9 @@ def _read_current_readme(homebrew_tap: str) -> str:
     file_content = ""
 
     if readme:
-        with open(get_working_dir(readme), 'r') as readme_contents:
+        with open(get_working_dir(readme), "r") as readme_contents:
             file_content = readme_contents.read()
-        logger.debug(f'{readme} read successfully.')
+        logger.debug(f"{readme} read successfully.")
 
     return file_content
 
@@ -173,9 +173,9 @@ def _replace_table_contents(file_content: str, old_table: str, new_table: str, h
     readme = _does_readme_exist(homebrew_tap)
 
     if readme:
-        with open(get_working_dir(readme), 'w') as readme_contents:
+        with open(get_working_dir(readme), "w") as readme_contents:
             readme_contents.write(file_content.replace(old_table, new_table))
-        logger.debug(f'{readme} table updated successfully.')
+        logger.debug(f"{readme} table updated successfully.")
 
 
 def _does_readme_exist(homebrew_tap: str) -> Optional[str]:
@@ -185,7 +185,7 @@ def _does_readme_exist(homebrew_tap: str) -> Optional[str]:
     2. Reside in the root of a project
     """
     readme_to_open = None
-    readme_filename = 'readme.md'
+    readme_filename = "readme.md"
     tap_dir = get_working_dir(homebrew_tap)
     files = os.listdir(tap_dir)
 

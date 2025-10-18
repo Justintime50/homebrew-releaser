@@ -13,19 +13,19 @@ def update_python_resources(formula_dir: str, formula_filename: str) -> None:
     """Runs brew update-python-resources on the formula to add Python resources."""
     logger = woodchips.get(LOGGER_NAME)
 
-    brew_path = shutil.which('brew')
+    brew_path = shutil.which("brew")
 
     try:
         subprocess.check_output(
-            f'cd {formula_dir} && {brew_path} update-python-resources {formula_filename}',
+            f"cd {formula_dir} && {brew_path} update-python-resources {formula_filename}",
             stderr=subprocess.STDOUT,
             text=True,
             timeout=TIMEOUT,
             shell=True,  # nosec
         )
-        logger.info('Updated Python resources successfully.')
+        logger.info("Updated Python resources successfully.")
     except subprocess.TimeoutExpired:
-        raise SystemExit('Timed out updating Python resources')
+        raise SystemExit("Timed out updating Python resources")
     except subprocess.CalledProcessError as e:
         error_output = e.output if hasattr(e, "output") else ""
 
@@ -36,19 +36,19 @@ def setup_homebrew_tap(homebrew_owner: str, homebrew_tap: str, formula_dir: str)
     """Sets up the Homebrew tap."""
     logger = woodchips.get(LOGGER_NAME)
 
-    brew_path = shutil.which('brew')
+    brew_path = shutil.which("brew")
 
     try:
         subprocess.check_output(
-            f'{brew_path} tap {homebrew_owner}/{homebrew_tap} {formula_dir}/../',
+            f"{brew_path} tap {homebrew_owner}/{homebrew_tap} {formula_dir}/../",
             stderr=subprocess.STDOUT,
             text=True,
             timeout=TIMEOUT,
             shell=True,  # nosec
         )
-        logger.info('Set up Homebrew tap successfully.')
+        logger.info("Set up Homebrew tap successfully.")
     except subprocess.TimeoutExpired:
-        raise SystemExit('Timed out setting up Homebrew tap')
+        raise SystemExit("Timed out setting up Homebrew tap")
     except subprocess.CalledProcessError as e:
         error_output = e.output if hasattr(e, "output") else ""
 
