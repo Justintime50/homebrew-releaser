@@ -5,7 +5,7 @@
 Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.
 
 [![Build](https://github.com/Justintime50/homebrew-releaser/workflows/build/badge.svg)](https://github.com/Justintime50/homebrew-releaser/actions)
-[![Coverage Status](https://img.shields.io/codecov/c/github/justintime50/homebrew-releaser/config/badge)](https://app.codecov.io/github/Justintime50/homebrew-releaser)
+[![Coverage Status](https://img.shields.io/codecov/c/github/justintime50/homebrew-releaser)](https://app.codecov.io/github/Justintime50/homebrew-releaser)
 [![Version](https://img.shields.io/github/v/tag/justintime50/homebrew-releaser)](https://github.com/justintime50/homebrew-releaser/releases)
 [![Licence](https://img.shields.io/github/license/Justintime50/homebrew-releaser)](LICENSE)
 
