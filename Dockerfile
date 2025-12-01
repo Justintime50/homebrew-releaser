@@ -7,7 +7,7 @@ ENV PATH="/home/linuxbrew/.linuxbrew/opt/python@3.13/libexec/bin:${PATH}" \
     HOMEBREW_NO_ANALYTICS=1
 
 COPY --chown=linuxbrew:linuxbrew homebrew_releaser homebrew_releaser
-COPY --chown=linuxbrew:linuxbrew setup.py setup.py
+COPY --chown=linuxbrew:linuxbrew pyproject.toml pyproject.toml 
 
 RUN brew install python@3.13 \
     && python3 -m venv /home/linuxbrew/venv \
