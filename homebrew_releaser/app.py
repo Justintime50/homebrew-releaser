@@ -94,7 +94,7 @@ def run_github_action():
     assets = latest_release["assets"]
     version = VERSION or latest_release["tag_name"]
     version_no_v = version.lstrip("v")
-    logger.info(f"Latest release ({version}) successfully identified!")
+    logger.info(f"Latest release ({version}) successfully identified.")
 
     logger.info("Generating tar archive checksum(s)...")
     archive_urls = []
@@ -185,8 +185,8 @@ def run_github_action():
     write_file(formula_filepath, template, "w")
 
     if UPDATE_PYTHON_RESOURCES:
-        logger.info("Attempting to update Python resources in the formula...")
         setup_homebrew_tap(HOMEBREW_OWNER, HOMEBREW_TAP, formula_dir)
+        logger.info("Attempting to update Python resources in the formula...")
         update_python_resources(formula_dir, formula_filename)
         if DEBUG:
             with open(formula_filepath, "r") as formula_file:
@@ -213,7 +213,7 @@ def run_github_action():
         upload_checksum_file(latest_release)
         logger.info(f"Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...")
         push_git(HOMEBREW_TAP, HOMEBREW_OWNER)
-        logger.info(f"Successfully released {version} of {GITHUB_REPO} to {HOMEBREW_TAP}!")
+        logger.info(f"Successfully released {version} of {GITHUB_REPO} to {HOMEBREW_TAP}.")
 
 
 def _setup_logger():

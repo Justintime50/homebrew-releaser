@@ -246,7 +246,7 @@ end
         .replace("\n\n\n  on_linux", "\n\n  on_linux")
     )
 
-    logger.info("Homebrew formula generated successfully!")
+    logger.info("Homebrew formula generated successfully.")
     # If we are updating python resources, we'll log this later once resources are updated
     if not update_python_resources:
         logger.debug(rendered_template)

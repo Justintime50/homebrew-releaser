@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v2.2.1 (2025-12-01)
+
+- Corrects the order and punctuation of various log messages
+
 ## v2.2.0 (2025-10-17)
 
 - Corrects broken brew path to Python (closes #64)
