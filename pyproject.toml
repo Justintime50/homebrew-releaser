@@ -1,3 +1,42 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "homebrew-releaser"
+description = "Release scripts, binaries, and executables directly to Homebrew via GitHub Actions."
+dynamic = ["version"]
+readme = "README.md"
+requires-python = "==3.13.*"
+license = { text = "MIT" }
+authors = [{ name = "Justintime50" }]
+urls = { Homepage = "http://github.com/Justintime50/homebrew-releaser" }
+scripts = { homebrew-releaser = "homebrew_releaser.releaser:main" }
+dependencies = [
+    "chevron == 0.14.*",
+    "pretty-tables == 2.*",
+    "requests == 2.*",
+    "woodchips == 1.*",
+]
+optional-dependencies = { dev = [
+    "bandit == 1.8.*",
+    "black == 25.*",
+    "flake8 == 7.*",
+    "isort == 7.*",
+    "mypy == 1.18.*",
+    "pytest == 8.*",
+    "pytest-cov == 7.*",
+] }
+
+[tool.setuptools.dynamic]
+version = { attr = "homebrew_releaser._version.__version__" }
+
+[tool.setuptools.packages.find]
+exclude = ["examples", "test"]
+
+[tool.setuptools.package-data]
+homebrew_releaser = ["py.typed"]
+
 [tool.black]
 line-length = 120
 
