@@ -1,6 +1,7 @@
 FROM python:3.13-slim
 
 ENV DEBIAN_FRONTEND=noninteractive \
+    NONINTERACTIVE=1 \
     HOMEBREW_NO_AUTO_UPDATE=1 \
     HOMEBREW_NO_INSTALL_CLEANUP=1 \
     HOMEBREW_NO_ENV_HINTS=1 \
@@ -11,7 +12,10 @@ RUN apt-get update && \
         build-essential curl git ca-certificates procps bash && \
     rm -rf /var/lib/apt/lists/*
 
-RUN curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | bash
+RUN useradd -m linuxbrew
+
+RUN curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | \
+    su - linuxbrew -c "NONINTERACTIVE=1 /bin/bash"
 
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
 
