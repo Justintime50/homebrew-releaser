@@ -5,7 +5,9 @@ ENV DEBIAN_FRONTEND=noninteractive \
     HOMEBREW_NO_AUTO_UPDATE=1 \
     HOMEBREW_NO_INSTALL_CLEANUP=1 \
     HOMEBREW_NO_ENV_HINTS=1 \
-    HOMEBREW_NO_ANALYTICS=1
+    HOMEBREW_NO_ANALYTICS=1 \
+    LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
 
 RUN \
     # Setup system dependencies
@@ -16,16 +18,16 @@ RUN \
     # Setup Homebrew
     useradd -m linuxbrew && \
     curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | \
-        su - linuxbrew -c "NONINTERACTIVE=1 /bin/bash" && \
-    chgrp -R root /home/linuxbrew/.linuxbrew && \
-    chmod -R g+rX /home/linuxbrew/.linuxbrew;
+        su - linuxbrew -c "NONINTERACTIVE=1 /bin/bash"
 
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
 
 COPY pyproject.toml .
 COPY homebrew_releaser homebrew_releaser
 
-RUN python3 -m venv /venv \
-    && venv/bin/pip install .
+# Upgrade pip/setuptools/wheel first to avoid hangs
+RUN python3 -m pip install --upgrade pip setuptools wheel && \
+    python3 -m venv /venv && \
+    venv/bin/pip install .
 
 ENTRYPOINT ["venv/bin/python3", "homebrew_releaser/app.py"]
