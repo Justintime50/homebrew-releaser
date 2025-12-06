@@ -15,7 +15,8 @@ RUN apt-get update && \
 RUN useradd -m linuxbrew
 
 RUN curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | \
-    su - linuxbrew -c "NONINTERACTIVE=1 /bin/bash"
+    su - linuxbrew -c "NONINTERACTIVE=1 /bin/bash" \
+    chmod -R o+rX /home/linuxbrew/.linuxbrew
 
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
 
