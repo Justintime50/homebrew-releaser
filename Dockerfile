@@ -7,16 +7,18 @@ ENV DEBIAN_FRONTEND=noninteractive \
     HOMEBREW_NO_ENV_HINTS=1 \
     HOMEBREW_NO_ANALYTICS=1
 
-RUN apt-get update && \
+RUN \
+    # Setup system dependencies
+    apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential curl git ca-certificates procps bash && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN useradd -m linuxbrew
-
-RUN curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | \
-    su - linuxbrew -c "NONINTERACTIVE=1 /bin/bash" \
-    chmod -R o+rX /home/linuxbrew/.linuxbrew
+    rm -rf /var/lib/apt/lists/* && \
+    # Setup Homebrew
+    useradd -m linuxbrew && \
+    curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | \
+        su - linuxbrew -c "NONINTERACTIVE=1 /bin/bash" && \
+    chgrp -R root /home/linuxbrew/.linuxbrew && \
+    chmod -R g+rX /home/linuxbrew/.linuxbrew;
 
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
 
