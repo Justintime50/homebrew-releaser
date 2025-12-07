@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## Next Release
+
+> TODO: Make the 1st half of the Dockerfile its own image to speed up runs!
+
+- Overhauls Docker image used for faster releasing runs, much smaller image size, and better control and maintainability
+  - Switches from official Brew image to stable debian
+  - Installs Homebrew manually
+  - Installs Python from Homebrew
+- Bumps Python to v3.14
+- Bump Homebrew to v5
+- No longer uses `/tmp`, stores everything in the WORKDIR
+- Always runs `brew tap` on your tap (needed for `brew update-python-resources`, also serves as a pre-run validation your tap is valid)
+- Homebrew version prints in output
+
 ## v2.2.1 (2025-12-01)
 
 - Corrects the order and punctuation of various log messages

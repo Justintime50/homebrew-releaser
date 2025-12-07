@@ -7,7 +7,7 @@ name = "homebrew-releaser"
 description = "Release scripts, binaries, and executables directly to Homebrew via GitHub Actions."
 dynamic = ["version"]
 readme = "README.md"
-requires-python = "==3.13.*"
+requires-python = "==3.14.*"
 license = { text = "MIT" }
 authors = [{ name = "Justintime50" }]
 urls = { Homepage = "http://github.com/Justintime50/homebrew-releaser" }

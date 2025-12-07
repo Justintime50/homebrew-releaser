@@ -12,7 +12,6 @@ from homebrew_releaser.constants import (
     CHECKSUM_FILE,
     CUSTOM_REQUIRE,
     DOWNLOAD_STRATEGY,
-    FORMULA_FOLDER,
     FORMULA_INCLUDES,
     GITHUB_OWNER,
     GITHUB_REPO,
@@ -31,17 +30,18 @@ from homebrew_releaser.formula import generate_formula_data
 from homebrew_releaser.git import (
     add_git,
     commit_git,
+    copy_to_git,
     push_git,
     setup_git,
 )
 from homebrew_releaser.homebrew import (
+    get_homebrew_version,
     setup_homebrew_tap,
     update_python_resources,
 )
 from homebrew_releaser.readme_updater import update_readme
 from homebrew_releaser.utils import (
     get_filename_from_path,
-    get_working_dir,
     make_github_get_request,
     write_file,
 )
@@ -51,7 +51,7 @@ GITHUB_BASE_URL = "https://api.github.com"
 
 # Required GitHub Action env variables from user
 INSTALL = os.getenv("INPUT_INSTALL")
-HOMEBREW_OWNER = os.getenv("INPUT_HOMEBREW_OWNER")
+HOMEBREW_OWNER = os.getenv("INPUT_HOMEBREW_OWNER").lower()
 
 # Optional GitHub Action env variables from user
 COMMIT_OWNER = os.getenv("INPUT_COMMIT_OWNER", "homebrew-releaser")
@@ -81,10 +81,15 @@ def run_github_action():
     logger = woodchips.get(LOGGER_NAME)
 
     logger.info(f"Starting Homebrew Releaser v{__version__}...")
+    homebrew_version = get_homebrew_version()
+    logger.info(f"Using {homebrew_version}.")
     _check_required_env_variables()
 
     logger.info("Setting up git environment...")
     setup_git(COMMIT_OWNER, COMMIT_EMAIL, HOMEBREW_OWNER, HOMEBREW_TAP)
+
+    logger.info("Setting up Homebrew tap...")
+    setup_homebrew_tap(HOMEBREW_OWNER, HOMEBREW_TAP)
 
     logger.info(f"Collecting data about {GITHUB_REPO}...")
     repository = make_github_get_request(url=f"{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}").json()
@@ -180,12 +185,11 @@ def run_github_action():
     )
 
     formula_filename = f'{repository["name"]}.rb'
-    formula_dir = get_working_dir(os.path.join(HOMEBREW_TAP, FORMULA_FOLDER))
+    formula_dir = f"/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/{HOMEBREW_OWNER}/{HOMEBREW_TAP}"
     formula_filepath = os.path.join(formula_dir, formula_filename)
     write_file(formula_filepath, template, "w")
 
     if UPDATE_PYTHON_RESOURCES:
-        setup_homebrew_tap(HOMEBREW_OWNER, HOMEBREW_TAP, formula_dir)
         logger.info("Attempting to update Python resources in the formula...")
         update_python_resources(formula_dir, formula_filename)
         if DEBUG:
@@ -202,6 +206,7 @@ def run_github_action():
         logger.debug("Skipping update to project README.")
 
     # Although users can skip a commit, still commit (but don't push) to dry-run the commit for debugging purposes
+    copy_to_git(formula_filepath, HOMEBREW_TAP)
     add_git(HOMEBREW_TAP)
     commit_git(HOMEBREW_TAP, GITHUB_REPO, version)
 
