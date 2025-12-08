@@ -1,11 +1,9 @@
 # CHANGELOG
 
-## Next Release
+## v3.0.0-rc1 (2025-12-07)
 
-> TODO: Make the 1st half of the Dockerfile its own image to speed up runs!
-
-- Overhauls Docker image used for faster releasing runs, much smaller image size, and better control and maintainability
-  - Switches from official Brew image to stable debian
+- Overhauls Docker image used by pre-building the image and referencing it so we don't need to rebuild a large container each time. This leads to faster releasing runs, much smaller image size, and better control and maintainability
+  - Switches from official Brew image to stable debian (1.4gb -> ~40mb)
   - Installs Homebrew manually
   - Installs Python from Homebrew
 - Bumps Python to v3.14

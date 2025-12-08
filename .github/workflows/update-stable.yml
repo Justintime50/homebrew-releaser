@@ -1,4 +1,4 @@
-name: release
+name: update-stable
 
 on:
   release:
@@ -6,10 +6,10 @@ on:
   workflow_dispatch: ~
 
 jobs:
-  release:
+  update-stable:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: '0'
       - name: Update stable git tag
@@ -18,4 +18,4 @@ jobs:
           git push origin --delete $STABLE_TAG
           git push origin $STABLE_TAG
         env:
-          STABLE_TAG: v2
+          STABLE_TAG: v3
