@@ -199,18 +199,20 @@ docker compose up -d --build
 Releasing Homebrew Releaser takes a few steps, unfortunately to ensure 0 downtime of end-users using the action, it is a manual process:
 
 ```sh
-# 1. Login to Docker if needed
+# 1. Make all code changes including updating `_version.py`
+
+# 2. Login to Docker if needed
 docker login
 
-# 2. Enable buildx in Docker if not already enabled
+# 3. Enable buildx in Docker if not already enabled
 docker buildx create --use
 
-# 3. Build and push the Homebrew Releaser Docker image and push it to Docker registry
+# 4. Build and push the Homebrew Releaser Docker image and push it to Docker registry
 docker buildx build --platform linux/amd64 -t justintime50/homebrew-releaser:3.0.1 --push .
 
-# 4. Update the image version in `action.yml`
-# 5. Push the code to GitHub
-# 6. Create a `Release` on GitHub matching the version pushed so GitHub Actions marketplace picks it up
+# 5. Update the image version in `action.yml`
+# 6. Push the code to GitHub
+# 7. Create a `Release` on GitHub matching the version pushed so GitHub Actions marketplace picks it up
 ```
 
 By following these steps, we push the pre-built Docker image to Docker Hub, we then push our source code to GitHub, we then publish the new version of the Action which references the updated pre-built Docker image (dramatically improves performance by using a pre-built image instead of rebuilding on every run). Users will then either use the stable (eg: v3) tag or an explicit commit hash or version.

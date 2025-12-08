@@ -72,7 +72,7 @@ inputs:
     required: false
 runs:
   using: docker
-  image: docker://justintime50/homebrew-releaser:v3.0.0
+  image: docker://justintime50/homebrew-releaser:3.0.0
   args:
     - ${{ inputs.homebrew_owner }}
     - ${{ inputs.homebrew_tap }}

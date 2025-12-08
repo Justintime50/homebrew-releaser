@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v3.0.0-rc2 (2025-12-07)
+
+- Update Docker image action reference
+
 ## v3.0.0-rc1 (2025-12-07)
 
 - Completely overhauls the Docker image
