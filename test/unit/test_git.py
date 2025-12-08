@@ -10,6 +10,7 @@ from homebrew_releaser.constants import TIMEOUT
 from homebrew_releaser.git import (
     add_git,
     commit_git,
+    copy_formula_file_to_git,
     push_git,
     setup_git,
 )
@@ -52,6 +53,22 @@ def test_setup(mock_subprocess):
                 timeout=300,
             ),
         ]
+    )
+
+
+@patch("homebrew_releaser.utils.WORKING_DIR", "")
+@patch("subprocess.check_output")
+def test_copy_formula_file_to_git(mock_subprocess):
+    """Tests that we call the correct git add command."""
+    formula_filepath = "/path/to/formula.rb"
+    homebrew_tap = "homebrew-formulas"
+
+    copy_formula_file_to_git(formula_filepath, homebrew_tap)
+    mock_subprocess.assert_called_once_with(
+        ["cp", "/path/to/formula.rb", "homebrew-formulas"],
+        stderr=-2,
+        text=True,
+        timeout=TIMEOUT,
     )
 
 

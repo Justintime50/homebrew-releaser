@@ -11,9 +11,12 @@ from homebrew_releaser.app import (
 
 
 @patch("homebrew_releaser.app.SKIP_COMMIT", True)
+@patch("homebrew_releaser.app.HOMEBREW_OWNER", "Justintime50")
 @patch("homebrew_releaser.app.HOMEBREW_TAP", "123")
 @patch("woodchips.get")
+@patch("homebrew_releaser.app.setup_homebrew_tap")
 @patch("homebrew_releaser.app.setup_git")
+@patch("homebrew_releaser.app.copy_formula_file_to_git")
 @patch("homebrew_releaser.app.add_git")
 @patch("homebrew_releaser.app.commit_git")
 @patch("homebrew_releaser.app.push_git")
@@ -33,7 +36,9 @@ def test_run_github_action_skip_commit(
     mock_push_formula,
     mock_commit_formula,
     mock_add_formula,
+    mock_copy_formula_file_to_git,
     mock_setup_git,
+    mock_setup_homebrew_tap,
     mock_logger,
 ):
     run_github_action()
@@ -46,6 +51,7 @@ def test_run_github_action_skip_commit(
     mock_calculate_checksum.call_count == 2
     mock_generate_formula.assert_called_once()
     mock_write_file.call_count == 2
+    mock_setup_homebrew_tap.assert_called_once()
     mock_setup_git.assert_called_once()
     mock_add_formula.assert_called_once()
     mock_commit_formula.assert_called_once()
@@ -53,9 +59,12 @@ def test_run_github_action_skip_commit(
 
 
 @patch("homebrew_releaser.app.HOMEBREW_TAP", "123")
+@patch("homebrew_releaser.app.HOMEBREW_OWNER", "Justintime50")
 @patch("homebrew_releaser.app.upload_checksum_file")
 @patch("woodchips.get")
+@patch("homebrew_releaser.app.setup_homebrew_tap")
 @patch("homebrew_releaser.app.setup_git")
+@patch("homebrew_releaser.app.copy_formula_file_to_git")
 @patch("homebrew_releaser.app.add_git")
 @patch("homebrew_releaser.app.commit_git")
 @patch("homebrew_releaser.app.push_git")
@@ -75,7 +84,9 @@ def test_run_github_action(
     mock_push_formula,
     mock_commit_formula,
     mock_add_formula,
+    mock_copy_formula_file_to_git,
     mock_setup_git,
+    mock_setup_homebrew_tap,
     mock_logger,
     mock_upload_checksum_file,
 ):
@@ -89,7 +100,9 @@ def test_run_github_action(
     mock_calculate_checksum.call_count == 2
     mock_generate_formula.assert_called_once()
     mock_write_file.call_count == 2
+    mock_setup_homebrew_tap.assert_called_once()
     mock_setup_git.assert_called_once()
+    mock_copy_formula_file_to_git.assert_called_once()
     mock_add_formula.assert_called_once()
     mock_commit_formula.assert_called_once()
     mock_push_formula.assert_called_once()
@@ -100,7 +113,9 @@ def test_run_github_action(
 @patch("homebrew_releaser.app.update_readme")
 @patch("homebrew_releaser.app.upload_checksum_file")
 @patch("woodchips.get")
+@patch("homebrew_releaser.app.setup_homebrew_tap")
 @patch("homebrew_releaser.app.setup_git")
+@patch("homebrew_releaser.app.copy_formula_file_to_git")
 @patch("homebrew_releaser.app.add_git")
 @patch("homebrew_releaser.app.commit_git")
 @patch("homebrew_releaser.app.push_git")
@@ -120,7 +135,9 @@ def test_run_github_action_update_readme(
     mock_push_formula,
     mock_commit_formula,
     mock_add_formula,
+    mock_copy_formula_file_to_git,
     mock_setup_git,
+    mock_setup_homebrew_tap,
     mock_logger,
     mock_upload_checksum_file,
     mock_update_readme,
@@ -135,6 +152,7 @@ def test_run_github_action_update_readme(
     mock_calculate_checksum.call_count == 2
     mock_generate_formula.assert_called_once()
     mock_write_file.call_count == 2
+    mock_setup_homebrew_tap.assert_called_once()
     mock_setup_git.assert_called_once()
     mock_add_formula.assert_called_once()
     mock_commit_formula.assert_called_once()
@@ -147,6 +165,7 @@ def test_run_github_action_update_readme(
 @patch("homebrew_releaser.app.upload_checksum_file")
 @patch("woodchips.get")
 @patch("homebrew_releaser.app.setup_git")
+@patch("homebrew_releaser.app.copy_formula_file_to_git")
 @patch("homebrew_releaser.app.add_git")
 @patch("homebrew_releaser.app.commit_git")
 @patch("homebrew_releaser.app.push_git")
@@ -170,6 +189,7 @@ def test_run_github_action_update_python_resources(
     mock_push_formula,
     mock_commit_formula,
     mock_add_formula,
+    mock_copy_formula_file_to_git,
     mock_setup_git,
     mock_logger,
     mock_upload_checksum_file,
@@ -199,7 +219,9 @@ def test_run_github_action_update_python_resources(
 @patch("homebrew_releaser.app.TARGET_LINUX_ARM64", True)
 @patch("homebrew_releaser.app.upload_checksum_file")
 @patch("woodchips.get")
+@patch("homebrew_releaser.app.setup_homebrew_tap")
 @patch("homebrew_releaser.app.setup_git")
+@patch("homebrew_releaser.app.copy_formula_file_to_git")
 @patch("homebrew_releaser.app.add_git")
 @patch("homebrew_releaser.app.commit_git")
 @patch("homebrew_releaser.app.push_git")
@@ -219,7 +241,9 @@ def test_run_github_action_target_matrix(
     mock_push_formula,
     mock_commit_formula,
     mock_add_formula,
+    mock_copy_formula_file_to_git,
     mock_setup_git,
+    mock_setup_homebrew_tap,
     mock_logger,
     mock_upload_checksum_file,
 ):
@@ -234,7 +258,9 @@ def test_run_github_action_target_matrix(
     mock_calculate_checksum.call_count == 2
     mock_generate_formula.assert_called_once()
     mock_write_file.call_count == 2
+    mock_setup_homebrew_tap.assert_called_once()
     mock_setup_git.assert_called_once()
+    mock_copy_formula_file_to_git.assert_called_once()
     mock_add_formula.assert_called_once()
     mock_commit_formula.assert_called_once()
     mock_push_formula.assert_called_once()

@@ -5,12 +5,13 @@ from homebrew_releaser.app import run_github_action
 
 
 @patch.dict(os.environ, {"INPUT_SKIP_COMMIT": "false"})
-@patch.dict(os.environ, {"INPUT_SKIP_COMMIT": "false"})
+@patch("homebrew_releaser.app.HOMEBREW_OWNER", "Justintime50")
+@patch("homebrew_releaser.app.HOMEBREW_TAP", "homebrew-formulas")
 @patch("homebrew_releaser.app.update_readme")
 @patch("homebrew_releaser.app.upload_checksum_file")
-@patch("homebrew_releaser.app.HOMEBREW_TAP", "123")
 @patch("woodchips.get")
 @patch("homebrew_releaser.app.setup_git")
+@patch("homebrew_releaser.app.copy_formula_file_to_git")
 @patch("homebrew_releaser.app.add_git")
 @patch("homebrew_releaser.app.commit_git")
 @patch("homebrew_releaser.app.push_git")
@@ -30,6 +31,7 @@ def test_run_github_action_string_false_config(
     mock_push_formula,
     mock_commit_formula,
     mock_add_formula,
+    mock_copy_formula_file_to_git,
     mock_setup_git,
     mock_logger,
     mock_upload_checksum_file,
@@ -38,6 +40,7 @@ def test_run_github_action_string_false_config(
     run_github_action()
 
     # Check that string false works by running git operations
+    mock_copy_formula_file_to_git.assert_called_once()
     mock_add_formula.assert_called_once()
     mock_commit_formula.assert_called_once()
     mock_push_formula.assert_called_once()

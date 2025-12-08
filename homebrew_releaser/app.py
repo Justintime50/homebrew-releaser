@@ -30,7 +30,7 @@ from homebrew_releaser.formula import generate_formula_data
 from homebrew_releaser.git import (
     add_git,
     commit_git,
-    copy_to_git,
+    copy_formula_file_to_git,
     push_git,
     setup_git,
 )
@@ -206,7 +206,7 @@ def run_github_action():
         logger.debug("Skipping update to project README.")
 
     # Although users can skip a commit, still commit (but don't push) to dry-run the commit for debugging purposes
-    copy_to_git(formula_filepath, HOMEBREW_TAP)
+    copy_formula_file_to_git(formula_filepath, HOMEBREW_TAP)
     add_git(HOMEBREW_TAP)
     commit_git(HOMEBREW_TAP, GITHUB_REPO, version)
 

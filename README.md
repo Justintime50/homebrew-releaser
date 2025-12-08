@@ -183,10 +183,6 @@ jobs:
 just --list
 ```
 
-### Docker & GitHub Actions Setup
-
-We have to play a balancing game of using Homebrew (cannot be root) and writing various files to use Homebrew Releaser (must be root or have write access), to get around this we setup and install everything using a `linuxbrew` user and directory but then everything afterwards (git clone, writing files, etc) occur inside of `/tmp`. This is an unfortunate but required path to take since using the official Python Docker image won't let us use Brew and have write access while using the Brew image gets us Homebrew but we cannot write in the normal directory. Thus we hack it a bit and just play inside of `/tmp`.
-
 ### Run Manually via Docker
 
 Homebrew Releaser does not clean up artifacts after completing since the temporary Docker image on GitHub Actions will be discarded anyway.
