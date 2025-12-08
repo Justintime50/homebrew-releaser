@@ -1,78 +1,78 @@
-name: "Homebrew Releaser"
-description: "Release scripts, binaries, and executables directly to Homebrew via GitHub Actions."
+name: 'Homebrew Releaser'
+description: 'Release scripts, binaries, and executables directly to Homebrew via GitHub Actions.'
 branding:
-  icon: "package"
-  color: "orange"
+  icon: 'package'
+  color: 'orange'
 inputs:
   homebrew_owner:
-    description: "The name of the homebrew tap owner to publish your formula to as it appears on GitHub."
+    description: 'The name of the homebrew tap owner to publish your formula to as it appears on GitHub.'
     required: true
   homebrew_tap:
-    description: "The name of the homebrew tap to publish your formula to as it appears on GitHub."
+    description: 'The name of the homebrew tap to publish your formula to as it appears on GitHub.'
     required: true
   formula_folder:
-    description: "The name of the folder in your homebrew tap where formula will be committed to."
+    description: 'The name of the folder in your homebrew tap where formula will be committed to.'
     required: true
-    default: "Formula"
+    default: 'Formula'
   github_token:
-    description: "The GitHub Token (saved as a repo secret) that has `repo` permissions for the homebrew tap you want to release to."
+    description: 'The GitHub Token (saved as a repo secret) that has `repo` permissions for the homebrew tap you want to release to.'
     required: true
   commit_owner:
-    description: "Git author info used to commit to the homebrew tap."
+    description: 'Git author info used to commit to the homebrew tap.'
     required: false
-    default: "homebrew-releaser@example.com"
+    default: 'homebrew-releaser@example.com'
   commit_email:
-    description: "Git author info used to commit to the homebrew tap."
+    description: 'Git author info used to commit to the homebrew tap.'
     required: false
-    default: "homebrew-releaser@example.com"
+    default: 'homebrew-releaser@example.com'
   depends_on:
-    description: "Custom dependencies in case other formulas are needed to build the current one (can be multiline)."
+    description: 'Custom dependencies in case other formulas are needed to build the current one (can be multiline).'
     required: false
   install:
-    description: "Custom install command for your formula."
+    description: 'Custom install command for your formula.'
     required: true
   test:
-    description: "Custom test command for your formula so you can run `brew test`."
+    description: 'Custom test command for your formula so you can run `brew test`.'
     required: false
   download_strategy:
-    description: "The Homebrew download strategy to use for formulas."
+    description: 'The Homebrew download strategy to use for formulas.'
     required: false
   custom_require:
-    description: "Allows you to add a custom require_relative at the top of the formula template."
+    description: 'Allows you to add a custom require_relative at the top of the formula template.'
     required: false
   formula_includes:
-    description: "Allows you to add custom includes inside the formula class, before dependencies and install blocks."
+    description: 'Allows you to add custom includes inside the formula class, before dependencies and install blocks.'
     required: false
   update_python_resources:
     description: "Run 'brew update-python-resources' on the formula to add Python resources."
     required: false
   version:
-    description: "Override the automatically detected version of a formula with an explicit value."
+    description: 'Override the automatically detected version of a formula with an explicit value.'
     required: false
   target_darwin_amd64:
-    description: "Add a custom URL/checksum target for AMD64 Darwin builds."
+    description: 'Add a custom URL/checksum target for AMD64 Darwin builds.'
     required: false
   target_darwin_arm64:
-    description: "Add a custom URL/checksum target for ARM64 Darwin builds."
+    description: 'Add a custom URL/checksum target for ARM64 Darwin builds.'
     required: false
   target_linux_amd64:
-    description: "Add a custom URL/checksum target for AMD64 Linux builds."
+    description: 'Add a custom URL/checksum target for AMD64 Linux builds.'
     required: false
   target_linux_arm64:
-    description: "Add a custom URL/checksum target for ARM64 Linux builds."
+    description: 'Add a custom URL/checksum target for ARM64 Linux builds.'
     required: false
   update_readme_table:
     description: "Update your homebrew tap's README with a table of all projects in the tap."
     required: false
   skip_commit:
-    description: "Skips committing the generated formula to a homebrew tap (useful for local testing)."
+    description: 'Skips committing the generated formula to a homebrew tap (useful for local testing).'
     required: false
   debug:
-    description: "Logs debugging info to console."
+    description: 'Logs debugging info to console.'
     required: false
 runs:
-  using: "docker"
-  image: "Dockerfile"
+  using: docker
+  image: docker://justintime50/homebrew-releaser:v3.0.0
   args:
     - ${{ inputs.homebrew_owner }}
     - ${{ inputs.homebrew_tap }}

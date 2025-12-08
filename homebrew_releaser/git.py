@@ -12,8 +12,7 @@ from homebrew_releaser.utils import get_working_dir
 
 
 def setup_git(commit_owner: str, commit_email: str, homebrew_owner: str, homebrew_tap: str):
-    """Sets up the git environment we'll need to commit our changes to the
-    homebrew tap.
+    """Sets up the git environment we'll need to commit our changes to the homebrew tap.
 
     1) Clone the Homebrew tap repo
     2) Navigate to the repo on disk
@@ -39,14 +38,21 @@ def setup_git(commit_owner: str, commit_email: str, homebrew_owner: str, homebre
     logger.debug("Git environment setup successfully.")
 
 
+def copy_formula_file_to_git(formula_filepath: str, homebrew_tap: str):
+    """Copies the formula file from the official homebrew tap to the source code homebrew tap."""
+    command = ["cp", formula_filepath, get_working_dir(homebrew_tap)]
+    _run_git_subprocess(command, "Formula file moved to git repo successfully.")
+
+
 def add_git(homebrew_tap: str):
-    """Adds assets to a git commit."""
+    """Adds git assets to a git commit."""
+    # We add everything here because we updated the formula file and optionally the README
     command = ["git", "-C", get_working_dir(homebrew_tap), "add", "."]
     _run_git_subprocess(command, "Assets added to git commit successfully.")
 
 
 def commit_git(homebrew_tap: str, repo_name: str, version: str):
-    """Commits assets to the Homebrew tap (repo)."""
+    """Commits git assets to the Homebrew tap repo."""
     # fmt: off
     command = ['git', '-C', get_working_dir(homebrew_tap), 'commit', '-m', f'chore: brew formula update for {repo_name} {version}']  # noqa
     # fmt: on
@@ -54,7 +60,7 @@ def commit_git(homebrew_tap: str, repo_name: str, version: str):
 
 
 def push_git(homebrew_tap: str, homebrew_owner: str):
-    """Pushes assets to the remote Homebrew tap (repo)."""
+    """Pushes git assets to the remote Homebrew tap repo."""
     # fmt: off
     command = ['git', '-C', get_working_dir(homebrew_tap), 'push', f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git']  # noqa
     # fmt: on

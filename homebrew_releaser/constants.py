@@ -4,7 +4,7 @@ import os
 # User Input
 FORMULA_FOLDER = os.getenv("INPUT_FORMULA_FOLDER", "Formula")
 GITHUB_TOKEN = os.getenv("INPUT_GITHUB_TOKEN")
-HOMEBREW_TAP = os.getenv("INPUT_HOMEBREW_TAP")
+HOMEBREW_TAP = os.getenv("INPUT_HOMEBREW_TAP", "").lower()
 SKIP_COMMIT = (
     os.getenv("INPUT_SKIP_COMMIT", False) if os.getenv("INPUT_SKIP_COMMIT") != "false" else False
 )  # Must check for string `false` since GitHub Actions passes the bool as a string
@@ -27,7 +27,7 @@ GITHUB_HEADERS = {
     "Authorization": f"Bearer {GITHUB_TOKEN}",
 }
 CHECKSUM_FILE = "checksum.txt"
-WORKING_DIR = "/tmp/homebrew-releaser"  # nosec
+WORKING_DIR = "/app"  # nosec
 
 # Formula Constants
 ARTICLES = {

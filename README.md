@@ -26,7 +26,8 @@ When you cut a new release when using this GitHub Action, Homebrew Releaser will
 - The Homebrew formula filename will match the github repo name.
 - It is **highly** recommended to enable debug mode and skip the commit on the first run through to ensure you have configured your workflow correctly and that the generated formula looks the way you want.
 - Homebrew Releaser is **not** compatible with monorepos.
-- Every precaution will be made to ensure that major releases of this action remain compatible (eg: every release of this action rebuilds and packages the current major release such as `v2` as a convenience to users). If you value stability over convenience, it's highly recommended to pin a specific version or commit hash of this action when using it (eg: `v2.0.1`)
+- Every precaution will be made to ensure that major releases of this action remain compatible (eg: every release of this action rebuilds and packages the current major release such as `v3` as a convenience to users). If you value stability over convenience, it's highly recommended to pin a specific version or commit hash of this action when using it (eg: `v2.0.1`).
+  - Because we pre-build and pin the Docker image used instead of referencing a local Dockerfile, you **cannot** use the `latest` version/tag of this action and expect it to reflect the latest changes.
 
 ### GitHub Actions YAML
 
@@ -45,7 +46,7 @@ jobs:
     name: homebrew-releaser
     steps:
       - name: Release project to Homebrew tap
-        uses: Justintime50/homebrew-releaser@v2
+        uses: Justintime50/homebrew-releaser@v3
         with:
           # The name of the homebrew tap to publish your formula to as it appears on GitHub.
           # Required - strings
@@ -161,7 +162,7 @@ jobs:
     name: homebrew-releaser
     steps:
       - name: Release my project to my Homebrew tap
-        uses: Justintime50/homebrew-releaser@v2
+        uses: Justintime50/homebrew-releaser@v3
         with:
           homebrew_owner: Justintime50
           homebrew_tap: homebrew-formulas
@@ -183,10 +184,6 @@ jobs:
 just --list
 ```
 
-### Docker & GitHub Actions Setup
-
-We have to play a balancing game of using Homebrew (cannot be root) and writing various files to use Homebrew Releaser (must be root or have write access), to get around this we setup and install everything using a `linuxbrew` user and directory but then everything afterwards (git clone, writing files, etc) occur inside of `/tmp`. This is an unfortunate but required path to take since using the official Python Docker image won't let us use Brew and have write access while using the Brew image gets us Homebrew but we cannot write in the normal directory. Thus we hack it a bit and just play inside of `/tmp`.
-
 ### Run Manually via Docker
 
 Homebrew Releaser does not clean up artifacts after completing since the temporary Docker image on GitHub Actions will be discarded anyway.
@@ -196,3 +193,24 @@ Homebrew Releaser does not clean up artifacts after completing since the tempora
 ```sh
 docker compose up -d --build
 ```
+
+### Releasing
+
+Releasing Homebrew Releaser takes a few steps, unfortunately to ensure 0 downtime of end-users using the action, it is a manual process:
+
+```sh
+# 1. Login to Docker if needed
+docker login
+
+# 2. Enable buildx in Docker if not already enabled
+docker buildx create --use
+
+# 3. Build and push the Homebrew Releaser Docker image and push it to Docker registry
+docker buildx build --platform linux/amd64 -t justintime50/homebrew-releaser:3.0.1 --push .
+
+# 4. Update the image version in `action.yml`
+# 5. Push the code to GitHub
+# 6. Create a `Release` on GitHub matching the version pushed so GitHub Actions marketplace picks it up
+```
+
+By following these steps, we push the pre-built Docker image to Docker Hub, we then push our source code to GitHub, we then publish the new version of the Action which references the updated pre-built Docker image (dramatically improves performance by using a pre-built image instead of rebuilding on every run). Users will then either use the stable (eg: v3) tag or an explicit commit hash or version.
