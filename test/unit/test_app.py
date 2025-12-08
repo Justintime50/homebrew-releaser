@@ -14,6 +14,7 @@ from homebrew_releaser.app import (
 @patch("homebrew_releaser.app.HOMEBREW_OWNER", "Justintime50")
 @patch("homebrew_releaser.app.HOMEBREW_TAP", "123")
 @patch("woodchips.get")
+@patch("homebrew_releaser.app.get_homebrew_version")
 @patch("homebrew_releaser.app.setup_homebrew_tap")
 @patch("homebrew_releaser.app.setup_git")
 @patch("homebrew_releaser.app.copy_formula_file_to_git")
@@ -39,12 +40,14 @@ def test_run_github_action_skip_commit(
     mock_copy_formula_file_to_git,
     mock_setup_git,
     mock_setup_homebrew_tap,
+    mock_get_homebrew_version,
     mock_logger,
 ):
     run_github_action()
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
+    mock_get_homebrew_version.assert_called()
     mock_check_env_variables.assert_called_once()
     assert mock_make_github_get_request.call_count == 2
     mock_download_archive.call_count == 2
@@ -62,6 +65,7 @@ def test_run_github_action_skip_commit(
 @patch("homebrew_releaser.app.HOMEBREW_OWNER", "Justintime50")
 @patch("homebrew_releaser.app.upload_checksum_file")
 @patch("woodchips.get")
+@patch("homebrew_releaser.app.get_homebrew_version")
 @patch("homebrew_releaser.app.setup_homebrew_tap")
 @patch("homebrew_releaser.app.setup_git")
 @patch("homebrew_releaser.app.copy_formula_file_to_git")
@@ -87,6 +91,7 @@ def test_run_github_action(
     mock_copy_formula_file_to_git,
     mock_setup_git,
     mock_setup_homebrew_tap,
+    mock_get_homebrew_version,
     mock_logger,
     mock_upload_checksum_file,
 ):
@@ -94,6 +99,7 @@ def test_run_github_action(
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
+    mock_get_homebrew_version.assert_called()
     mock_check_env_variables.assert_called_once()
     assert mock_make_github_get_request.call_count == 2
     mock_download_archive.call_count == 2
@@ -113,6 +119,7 @@ def test_run_github_action(
 @patch("homebrew_releaser.app.update_readme")
 @patch("homebrew_releaser.app.upload_checksum_file")
 @patch("woodchips.get")
+@patch("homebrew_releaser.app.get_homebrew_version")
 @patch("homebrew_releaser.app.setup_homebrew_tap")
 @patch("homebrew_releaser.app.setup_git")
 @patch("homebrew_releaser.app.copy_formula_file_to_git")
@@ -138,6 +145,7 @@ def test_run_github_action_update_readme(
     mock_copy_formula_file_to_git,
     mock_setup_git,
     mock_setup_homebrew_tap,
+    mock_get_homebrew_version,
     mock_logger,
     mock_upload_checksum_file,
     mock_update_readme,
@@ -146,6 +154,7 @@ def test_run_github_action_update_readme(
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
+    mock_get_homebrew_version.assert_called()
     mock_check_env_variables.assert_called_once()
     assert mock_make_github_get_request.call_count == 2
     mock_download_archive.call_count == 2
@@ -164,6 +173,7 @@ def test_run_github_action_update_readme(
 @patch("homebrew_releaser.app.UPDATE_PYTHON_RESOURCES", True)
 @patch("homebrew_releaser.app.upload_checksum_file")
 @patch("woodchips.get")
+@patch("homebrew_releaser.app.get_homebrew_version")
 @patch("homebrew_releaser.app.setup_git")
 @patch("homebrew_releaser.app.copy_formula_file_to_git")
 @patch("homebrew_releaser.app.add_git")
@@ -191,6 +201,7 @@ def test_run_github_action_update_python_resources(
     mock_add_formula,
     mock_copy_formula_file_to_git,
     mock_setup_git,
+    mock_get_homebrew_version,
     mock_logger,
     mock_upload_checksum_file,
 ):
@@ -198,6 +209,7 @@ def test_run_github_action_update_python_resources(
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
+    mock_get_homebrew_version.assert_called()
     mock_check_env_variables.assert_called_once()
     assert mock_make_github_get_request.call_count == 2
     mock_download_archive.call_count == 2
@@ -219,6 +231,7 @@ def test_run_github_action_update_python_resources(
 @patch("homebrew_releaser.app.TARGET_LINUX_ARM64", True)
 @patch("homebrew_releaser.app.upload_checksum_file")
 @patch("woodchips.get")
+@patch("homebrew_releaser.app.get_homebrew_version")
 @patch("homebrew_releaser.app.setup_homebrew_tap")
 @patch("homebrew_releaser.app.setup_git")
 @patch("homebrew_releaser.app.copy_formula_file_to_git")
@@ -244,6 +257,7 @@ def test_run_github_action_target_matrix(
     mock_copy_formula_file_to_git,
     mock_setup_git,
     mock_setup_homebrew_tap,
+    mock_get_homebrew_version,
     mock_logger,
     mock_upload_checksum_file,
 ):
@@ -252,6 +266,7 @@ def test_run_github_action_target_matrix(
 
     # TODO: Assert these `called_with` eventually
     mock_logger.assert_called()
+    mock_get_homebrew_version.assert_called()
     mock_check_env_variables.assert_called_once()
     assert mock_make_github_get_request.call_count == 2
     mock_download_archive.call_count == 2

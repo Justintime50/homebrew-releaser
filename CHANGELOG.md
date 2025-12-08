@@ -2,13 +2,14 @@
 
 ## v3.0.0-rc1 (2025-12-07)
 
-- Overhauls Docker image used by pre-building the image and referencing it so we don't need to rebuild a large container each time. This leads to faster releasing runs, much smaller image size, and better control and maintainability
-  - Switches from official Brew image to stable debian (1.4gb -> ~40mb)
-  - Installs Homebrew manually
-  - Installs Python from Homebrew
-- Bumps Python to v3.14
-- Bump Homebrew to v5
-- No longer uses `/tmp`, stores everything in the WORKDIR
+- Completely overhauls the Docker image
+  - Pre-builds the image and references instead of rebuilding on each run. This leads to faster releasing runs, much smaller image size (1.5gb+ -> ~500mb), and better control and maintainability
+  - Switches from official Brew image to stable debian
+    - Installs Homebrew manually
+    - Installs Python from Homebrew
+- Bumps Python from v3.13 to v3.14
+- Bump Homebrew from v4 to v5
+- No longer uses `/tmp`, stores everything in `/app`
 - Always runs `brew tap` on your tap (needed for `brew update-python-resources`, also serves as a pre-run validation your tap is valid)
 - Homebrew version prints in output
 - Bumps dependencies
