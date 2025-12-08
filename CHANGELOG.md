@@ -13,6 +13,7 @@
 - No longer uses `/tmp`, stores everything in the WORKDIR
 - Always runs `brew tap` on your tap (needed for `brew update-python-resources`, also serves as a pre-run validation your tap is valid)
 - Homebrew version prints in output
+- Bumps dependencies
 
 ## v2.2.1 (2025-12-01)
 

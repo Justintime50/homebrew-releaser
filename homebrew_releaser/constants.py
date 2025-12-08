@@ -4,7 +4,7 @@ import os
 # User Input
 FORMULA_FOLDER = os.getenv("INPUT_FORMULA_FOLDER", "Formula")
 GITHUB_TOKEN = os.getenv("INPUT_GITHUB_TOKEN")
-HOMEBREW_TAP = os.getenv("INPUT_HOMEBREW_TAP").lower()
+HOMEBREW_TAP = os.getenv("INPUT_HOMEBREW_TAP", "").lower()
 SKIP_COMMIT = (
     os.getenv("INPUT_SKIP_COMMIT", False) if os.getenv("INPUT_SKIP_COMMIT") != "false" else False
 )  # Must check for string `false` since GitHub Actions passes the bool as a string

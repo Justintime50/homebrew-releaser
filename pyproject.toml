@@ -14,17 +14,18 @@ urls = { Homepage = "http://github.com/Justintime50/homebrew-releaser" }
 scripts = { homebrew-releaser = "homebrew_releaser.releaser:main" }
 dependencies = [
     "chevron == 0.14.*",
-    "pretty-tables == 2.*",
+    "pretty-tables == 4.*",
     "requests == 2.*",
-    "woodchips == 1.*",
+    "woodchips == 2.*",
 ]
 optional-dependencies = { dev = [
-    "bandit == 1.8.*",
+    "bandit == 1.9.*",
     "black == 25.*",
     "flake8 == 7.*",
+    "Flake8-pyproject == 1.2.*",
     "isort == 7.*",
-    "mypy == 1.18.*",
-    "pytest == 8.*",
+    "mypy == 1.19.*",
+    "pytest == 9.*",
     "pytest-cov == 7.*",
 ] }
 
@@ -53,3 +54,7 @@ use_parentheses = true
 
 [tool.mypy]
 disable_error_code = "import-untyped"
+
+[tool.flake8]
+max-line-length = 120
+extend-ignore = "E203"

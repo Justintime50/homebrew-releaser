@@ -51,7 +51,7 @@ GITHUB_BASE_URL = "https://api.github.com"
 
 # Required GitHub Action env variables from user
 INSTALL = os.getenv("INPUT_INSTALL")
-HOMEBREW_OWNER = os.getenv("INPUT_HOMEBREW_OWNER").lower()
+HOMEBREW_OWNER = os.getenv("INPUT_HOMEBREW_OWNER", "").lower()
 
 # Optional GitHub Action env variables from user
 COMMIT_OWNER = os.getenv("INPUT_COMMIT_OWNER", "homebrew-releaser")
