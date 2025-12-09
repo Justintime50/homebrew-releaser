@@ -2,10 +2,12 @@ FROM debian:stable-slim
 
 WORKDIR /app
 
-ENV HOMEBREW_NO_AUTO_UPDATE=1 \
+ENV HOMEBREW_CACHE=/tmp/homebrew-cache \
+    HOMEBREW_NO_AUTO_UPDATE=1 \
     HOMEBREW_NO_INSTALL_CLEANUP=1 \
     HOMEBREW_NO_ENV_HINTS=1 \
-    HOMEBREW_NO_ANALYTICS=1
+    HOMEBREW_NO_ANALYTICS=1 \
+    PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
 
 RUN \
     # Setup system dependencies
@@ -21,8 +23,6 @@ RUN \
     chown linuxbrew:linuxbrew /app
 
 USER linuxbrew
-
-ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
 
 RUN brew install python@3.14
 

@@ -1,22 +1,26 @@
 # CHANGELOG
 
+## v3.0.0 (2025-12-08)
+
+- Completely overhauls the Docker image
+  - Pre-builds the image and references instead of rebuilding on each run. This leads to faster releasing runs (~30s-60s down from ~120s-200s), much smaller image size (~500mb down from ~1.5gb), and better control and maintainability
+  - Switches from official Brew image to stable debian
+    - Installs Homebrew manually
+    - Installs Python from Homebrew
+- Bumps Python from v3.13 to v3.14
+- Bump Homebrew from v4 to v5
+- No longer uses `/tmp`, stores everything in `/app` (except the Homebrew cache dir)
+- Always runs `brew tap` on your tap (needed for `brew update-python-resources`, also serves as a pre-run validation)
+- Prints Homebrew version in output
+- Bumps dependencies
+
 ## v3.0.0-rc2 (2025-12-07)
 
 - Update Docker image action reference
 
 ## v3.0.0-rc1 (2025-12-07)
 
-- Completely overhauls the Docker image
-  - Pre-builds the image and references instead of rebuilding on each run. This leads to faster releasing runs, much smaller image size (1.5gb+ -> ~500mb), and better control and maintainability
-  - Switches from official Brew image to stable debian
-    - Installs Homebrew manually
-    - Installs Python from Homebrew
-- Bumps Python from v3.13 to v3.14
-- Bump Homebrew from v4 to v5
-- No longer uses `/tmp`, stores everything in `/app`
-- Always runs `brew tap` on your tap (needed for `brew update-python-resources`, also serves as a pre-run validation your tap is valid)
-- Homebrew version prints in output
-- Bumps dependencies
+- See v3.0.0 for release notes
 
 ## v2.2.1 (2025-12-01)
 
