@@ -53,6 +53,6 @@ def get_filename_from_path(path: str) -> str:
     return path.rsplit("/", 1)[1]
 
 
-def get_working_dir(additional_path: str) -> str:
+def get_working_dir(*additional_path: str) -> str:
     """Gets the working directory."""
-    return os.path.join(WORKING_DIR, additional_path)
+    return os.path.join(WORKING_DIR, *additional_path)

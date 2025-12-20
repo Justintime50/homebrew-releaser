@@ -4,6 +4,7 @@ from typing import Optional
 import woodchips
 
 from homebrew_releaser.constants import (
+    FORMULA_FOLDER,
     GITHUB_TOKEN,
     LOGGER_NAME,
     TIMEOUT,
@@ -40,7 +41,7 @@ def setup_git(commit_owner: str, commit_email: str, homebrew_owner: str, homebre
 
 def copy_formula_file_to_git(formula_filepath: str, homebrew_tap: str):
     """Copies the formula file from the official homebrew tap to the source code homebrew tap."""
-    command = ["cp", formula_filepath, get_working_dir(homebrew_tap)]
+    command = ["cp", formula_filepath, get_working_dir(homebrew_tap, FORMULA_FOLDER)]
     _run_git_subprocess(command, "Formula file moved to git repo successfully.")
 
 
