@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v3.0.1 (2025-12-20)
+
+- Fixes incorrect path when copying generated formula back into tap
+
 ## v3.0.0 (2025-12-08)
 
 - Completely overhauls the Docker image
