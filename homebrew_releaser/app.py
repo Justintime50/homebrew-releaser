@@ -185,7 +185,9 @@ def run_github_action():
     )
 
     formula_filename = f'{repository["name"]}.rb'
-    formula_dir = f"/home/linuxbrew/.linuxbrew/Homebrew/Library/Taps/{HOMEBREW_OWNER}/{HOMEBREW_TAP}"
+    formula_dir = os.path.join(
+        "home", "linuxbrew", ".linuxbrew", "Homebrew", "Library", "Taps", HOMEBREW_OWNER, HOMEBREW_TAP
+    )
     formula_filepath = os.path.join(formula_dir, formula_filename)
     write_file(formula_filepath, template, "w")
 
