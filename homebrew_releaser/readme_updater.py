@@ -13,7 +13,7 @@ from homebrew_releaser.constants import (
     FORMULA_FOLDER,
     LOGGER_NAME,
 )
-from homebrew_releaser.utils import get_working_dir
+from homebrew_releaser.utils import build_dir_path
 
 
 TABLE_START_TAG = "<!-- project_table_start -->"
@@ -39,16 +39,15 @@ def _format_formula_data(homebrew_tap: str) -> list[dict[str, Any]]:
     """Retrieve the name, description, and homepage from each
     Ruby formula file in the homebrew tap repo.
     """
-    homebrew_tap_path = get_working_dir(os.path.join(homebrew_tap, FORMULA_FOLDER))
     formulas = []
-    files = os.listdir(homebrew_tap_path)
+    files = os.listdir(build_dir_path(homebrew_tap, FORMULA_FOLDER))
 
     if not any([file.endswith(".rb") for file in files]):
         raise SystemExit('No Ruby files found in the "formula_folder" provided.')
 
     try:
         for filename in sorted(files):
-            with open(os.path.join(homebrew_tap_path, filename), "r") as formula:
+            with open(build_dir_path(homebrew_tap, FORMULA_FOLDER, filename), "r") as formula:
                 # Set empty defaults
                 final_name = ""
                 final_desc = ""
@@ -123,7 +122,7 @@ def _retrieve_old_table(homebrew_tap: str) -> Tuple[str, bool]:
     old_table = ""
 
     if readme:
-        with open(get_working_dir(readme), "r") as readme_contents:
+        with open(build_dir_path(readme), "r") as readme_contents:
             for line in readme_contents:
                 normalized_line = line.strip().lower()
                 if normalized_line == TABLE_START_TAG:
@@ -157,7 +156,7 @@ def _read_current_readme(homebrew_tap: str) -> str:
     file_content = ""
 
     if readme:
-        with open(get_working_dir(readme), "r") as readme_contents:
+        with open(build_dir_path(readme), "r") as readme_contents:
             file_content = readme_contents.read()
         logger.debug(f"{readme} read successfully.")
 
@@ -173,7 +172,7 @@ def _replace_table_contents(file_content: str, old_table: str, new_table: str, h
     readme = _does_readme_exist(homebrew_tap)
 
     if readme:
-        with open(get_working_dir(readme), "w") as readme_contents:
+        with open(build_dir_path(readme), "w") as readme_contents:
             readme_contents.write(file_content.replace(old_table, new_table))
         logger.debug(f"{readme} table updated successfully.")
 
@@ -186,12 +185,11 @@ def _does_readme_exist(homebrew_tap: str) -> Optional[str]:
     """
     readme_to_open = None
     readme_filename = "readme.md"
-    tap_dir = get_working_dir(homebrew_tap)
-    files = os.listdir(tap_dir)
+    files = os.listdir(build_dir_path(homebrew_tap))
 
     for filename in files:
         if filename.lower() == readme_filename:
-            readme_to_open = os.path.join(tap_dir, filename)
+            readme_to_open = build_dir_path(homebrew_tap, filename)
             break
 
     return readme_to_open

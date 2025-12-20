@@ -41,7 +41,7 @@ def write_file(file_path: str, content: str | bytes, mode: str = "w"):
     logger = woodchips.get(LOGGER_NAME)
 
     try:
-        with open(get_working_dir(file_path), mode) as f:
+        with open(build_dir_path(file_path), mode) as f:
             f.write(content)
         logger.debug(f"{file_path} written successfully.")
     except Exception as error:
@@ -53,6 +53,6 @@ def get_filename_from_path(path: str) -> str:
     return path.rsplit("/", 1)[1]
 
 
-def get_working_dir(additional_path: str) -> str:
-    """Gets the working directory."""
-    return os.path.join(WORKING_DIR, additional_path)
+def build_dir_path(*paths: str) -> str:
+    """Builds a directory path relative to the working directory."""
+    return os.path.join(WORKING_DIR, *paths)
