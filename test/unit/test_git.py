@@ -65,7 +65,7 @@ def test_copy_formula_file_to_git(mock_subprocess):
 
     copy_formula_file_to_git(formula_filepath, homebrew_tap)
     mock_subprocess.assert_called_once_with(
-        ["cp", "/path/to/formula.rb", "homebrew-formulas"],
+        ["cp", "/path/to/formula.rb", "homebrew-formulas/Formula"],
         stderr=-2,
         text=True,
         timeout=TIMEOUT,
