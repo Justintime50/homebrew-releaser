@@ -27,7 +27,7 @@ GITHUB_HEADERS = {
     "Authorization": f"Bearer {GITHUB_TOKEN}",
 }
 CHECKSUM_FILE = "checksum.txt"
-WORKING_DIR = "app"
+WORKING_DIR = os.path.join(os.sep, "app")
 
 # Formula Constants
 ARTICLES = {

@@ -20,16 +20,15 @@ RUN \
     curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | \
         su - linuxbrew -c "NONINTERACTIVE=1 /bin/bash" && \
     su - linuxbrew -c "git -C /home/linuxbrew/.linuxbrew/Homebrew checkout 5.0.4" && \
-    chown linuxbrew:linuxbrew /app
+    chown -R linuxbrew:linuxbrew /app
 
 USER linuxbrew
-
-RUN brew install python@3.14
 
 COPY pyproject.toml .
 COPY homebrew_releaser homebrew_releaser
 
-RUN python3 -m venv venv && \
+RUN brew install python@3.14 && \
+    python3 -m venv venv && \
     venv/bin/pip install .
 
 ENTRYPOINT ["/app/venv/bin/python", "/app/homebrew_releaser/app.py"]
