@@ -72,12 +72,15 @@ def run_github_action():
     """Runs the complete GitHub Action workflow.
 
     1. Setup logging
-    2. Grab the details about the tap
-    3. Download the archive(s)
-    4. Generate checksum(s)
-    5. Generate the new formula
-    6. Update README table (optional)
-    7. Add, commit, and push updated formula to GitHub
+    2. Setup git environment
+    3. Setup Homebrew tap
+    4. Grab the details about the tap
+    5. Download the archive(s)
+    6. Generate checksum(s)
+    7. Generate the new formula
+    8. Update README table (optional)
+    9. Add, commit, and push updated formula to GitHub
+    10. Upload checksum.txt to latest release (optional)
     """
     _setup_logger()
     logger = woodchips.get(LOGGER_NAME)
@@ -189,7 +192,9 @@ def run_github_action():
 
     formula_filename = f'{repository["name"]}.rb'
     formula_dir = os.path.join(
-        os.path.expanduser("~"),  # Linuxbrew home directory
+        os.sep,
+        "home",
+        "linuxbrew",
         ".linuxbrew",
         "Homebrew",
         "Library",
