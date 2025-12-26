@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Next Release
+
+- Creates formula folder if it doesn't exist yet
+
 ## v3.0.1 (2025-12-20)
 
 - Fixes incorrect path when copying generated formula back into tap

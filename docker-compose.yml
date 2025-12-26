@@ -6,16 +6,16 @@ services:
     working_dir: /github/workspace
     environment:
       # Env vars that should be `false` should be left empty
-      - GITHUB_REPOSITORY=justintime50/github-archive
-      - INPUT_SKIP_COMMIT=true
+      - GITHUB_REPOSITORY=justintime50/github-actions-test
+      - INPUT_SKIP_COMMIT=
       - INPUT_UPDATE_README_TABLE=
       - INPUT_DEBUG=true
       - INPUT_HOMEBREW_OWNER=justintime50
-      - INPUT_HOMEBREW_TAP=homebrew-formulas
+      - INPUT_HOMEBREW_TAP=homebrew-test
       - INPUT_FORMULA_FOLDER=Formula
       - INPUT_GITHUB_TOKEN=
-      - INPUT_COMMIT_OWNER=username
-      - INPUT_COMMIT_EMAIL=userid+username@users.noreply.github.com
+      - INPUT_COMMIT_OWNER=justintime50
+      - INPUT_COMMIT_EMAIL=39606064+Justintime50@users.noreply.github.com
       - INPUT_DEPENDS_ON="python@3.14"
       - INPUT_INSTALL=virtualenv_install_with_resources
       - INPUT_TEST=assert_match "github-archive \#{version}", shell_output("#{bin}/github-archive --version")

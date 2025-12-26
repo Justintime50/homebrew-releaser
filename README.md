@@ -48,7 +48,7 @@ jobs:
       - name: Release project to Homebrew tap
         uses: Justintime50/homebrew-releaser@v3
         with:
-          # The name of the homebrew tap to publish your formula to as it appears on GitHub.
+          # The name of the homebrew tap to publish your formula to as it appears on GitHub (Homebrew taps must start with `homebrew-`).
           # Required - strings
           homebrew_owner: Justintime50
           homebrew_tap: homebrew-formulas

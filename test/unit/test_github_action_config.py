@@ -12,6 +12,7 @@ from homebrew_releaser.app import run_github_action
 @patch("woodchips.get")
 @patch("homebrew_releaser.app.get_homebrew_version")
 @patch("homebrew_releaser.app.setup_homebrew_tap")
+@patch("homebrew_releaser.app.make_formula_folder")
 @patch("homebrew_releaser.app.setup_git")
 @patch("homebrew_releaser.app.copy_formula_file_to_git")
 @patch("homebrew_releaser.app.add_git")
@@ -36,6 +37,7 @@ def test_run_github_action_string_false_config(
     mock_copy_formula_file_to_git,
     mock_setup_git,
     mock_setup_homebrew_tap,
+    mock_make_formula_folder,
     mock_get_homebrew_version,
     mock_logger,
     mock_upload_checksum_file,

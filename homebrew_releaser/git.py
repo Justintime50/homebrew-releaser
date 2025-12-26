@@ -1,3 +1,4 @@
+import os
 import subprocess  # nosec
 from typing import Optional
 
@@ -37,6 +38,14 @@ def setup_git(commit_owner: str, commit_email: str, homebrew_owner: str, homebre
         _run_git_subprocess(command)
 
     logger.debug("Git environment setup successfully.")
+
+
+def make_formula_folder(homebrew_tap: str):
+    """Makes the formula folder in the git repo if it does not already exist."""
+    formula_folder_path = build_dir_path(homebrew_tap, FORMULA_FOLDER)
+
+    if not os.path.exists(formula_folder_path):
+        os.makedirs(formula_folder_path)
 
 
 def copy_formula_file_to_git(formula_filepath: str, homebrew_tap: str):

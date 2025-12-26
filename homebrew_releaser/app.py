@@ -31,6 +31,7 @@ from homebrew_releaser.git import (
     add_git,
     commit_git,
     copy_formula_file_to_git,
+    make_formula_folder,
     push_git,
     setup_git,
 )
@@ -90,6 +91,7 @@ def run_github_action():
 
     logger.info("Setting up Homebrew tap...")
     setup_homebrew_tap(HOMEBREW_OWNER, HOMEBREW_TAP)
+    make_formula_folder(HOMEBREW_TAP)
 
     logger.info(f"Collecting data about {GITHUB_REPO}...")
     repository = make_github_get_request(url=f"{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}").json()
