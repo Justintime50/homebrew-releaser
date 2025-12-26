@@ -48,7 +48,7 @@ jobs:
             -e GITHUB_REPOSITORY=justintime50/github-actions-test \
             -e INPUT_HOMEBREW_OWNER=justintime50 \
             -e INPUT_HOMEBREW_TAP=homebrew-test \
-            -e INPUT_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} \
+            -e INPUT_GITHUB_TOKEN=${{ secrets.HOMEBREW_GITHUB_TOKEN }} \
             -e INPUT_COMMIT_OWNER=justintime50 \
             -e INPUT_COMMIT_EMAIL=39606064+Justintime50@users.noreply.github.com \
             -e INPUT_INSTALL=virtualenv_install_with_resources \
