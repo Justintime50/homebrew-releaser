@@ -49,7 +49,7 @@ def test_make_github_get_request_stream(mock_request):
 @patch("requests.get", side_effect=requests.exceptions.RequestException("mock-error"))
 def test_make_github_get_request_exception(mock_request):
     url = "https://api.github.com/repos/Justintime50/homebrew-releaser"
-    with pytest.raises(SystemExit) as error:
+    with pytest.raises(requests.exceptions.RequestException) as error:
         make_github_get_request(url=url)
 
     assert "mock-error" == str(error.value)
@@ -63,7 +63,7 @@ def test_write_file():
 def test_write_file_exception():
     with patch("builtins.open", mock_open()) as mock_open_file:
         mock_open_file.side_effect = Exception
-        with pytest.raises(SystemExit):
+        with pytest.raises(Exception):
             write_file("mock-file", "mock-content", mode="w")
 
 

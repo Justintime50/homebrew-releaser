@@ -81,18 +81,11 @@ def _run_git_subprocess(command: list[str], debug_message: Optional[str] = None)
     """Runs a git subprocess."""
     logger = woodchips.get(LOGGER_NAME)
 
-    try:
-        subprocess.check_output(  # nosec
-            command,
-            stderr=subprocess.STDOUT,
-            text=True,
-            timeout=TIMEOUT,
-        )
-        if debug_message:
-            logger.debug(debug_message)
-    except subprocess.CalledProcessError as error:
-        logger.critical(error.output)
-        raise
-    except Exception as error:
-        logger.critical(error)
-        raise
+    subprocess.check_output(  # nosec
+        command,
+        stderr=subprocess.STDOUT,
+        text=True,
+        timeout=TIMEOUT,
+    )
+    if debug_message:
+        logger.debug(debug_message)

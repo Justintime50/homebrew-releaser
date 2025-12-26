@@ -25,7 +25,7 @@ def test_calculate_checksum():
     "subprocess.check_output", side_effect=subprocess.CalledProcessError(returncode=1, cmd="subprocess.check_output")
 )
 def test_calculate_checksum_process_error(mock_subprocess, mock_tar_filename):
-    with pytest.raises(SystemExit):
+    with pytest.raises(FileNotFoundError):
         calculate_checksum(mock_tar_filename)
 
 
@@ -46,7 +46,7 @@ def test_upload_checksum_file(mock_make_github_get_request, mock_post_request):
 def test_upload_checksum_file_error_on_upload(mock_make_github_get_request, mock_post_request):
     """Tests that we exit on error to upload checksum.txt file."""
     with patch("builtins.open", mock_open()):
-        with pytest.raises(SystemExit) as error:
+        with pytest.raises(requests.exceptions.RequestException) as error:
             upload_checksum_file({"id": 1, "tag_name": "v1.0.0"})
 
             mock_post_request.assert_called_once()

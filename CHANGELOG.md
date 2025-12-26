@@ -1,9 +1,9 @@
 # CHANGELOG
 
-## Next Release
+## v3.1.0 (2025-12-26)
 
-- Changes order of git push and checksum upload operations essentially making any checksum upload failures decoupled from the ability to actually release. Any failures with checksum upload will occur after formula update pushes
 - Adds `skip_checksum` parameter which skips uploading the checksum file for all release assets to the latest release. Useful if you generate your own checksums or already had a checksum file since we cannot overwrite an existing checksum file without deleting the previous one
+- Changes order of git push and checksum upload operations essentially making any checksum upload failures decoupled from the ability to actually release. Any failures with checksum upload will occur after formula update pushes
 - Creates formula folder if it doesn't exist yet
 - Fixes the formula dir path (regression introduced in v3.0.1, closes #67)
 

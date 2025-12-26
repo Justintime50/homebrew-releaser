@@ -20,18 +20,15 @@ def make_github_get_request(url: str, stream: Optional[bool] = False) -> request
     if stream:
         headers["Accept"] = "application/octet-stream"
 
-    try:
-        response = requests.get(
-            url,
-            headers=headers,
-            allow_redirects=True,  # We need to allow redirects to reach various GitHub resources
-            stream=stream,
-            timeout=TIMEOUT,
-        )
-        response.raise_for_status()
-        logger.debug(f"HTTP GET request made successfully to {url}.")
-    except Exception as error:
-        raise SystemExit(error)
+    response = requests.get(
+        url,
+        headers=headers,
+        allow_redirects=True,  # We need to allow redirects to reach various GitHub resources
+        stream=stream,
+        timeout=TIMEOUT,
+    )
+    response.raise_for_status()
+    logger.debug(f"HTTP GET request made successfully to {url}.")
 
     return response
 
@@ -40,12 +37,9 @@ def write_file(file_path: str, content: str | bytes, mode: str = "w"):
     """Writes content to a file."""
     logger = woodchips.get(LOGGER_NAME)
 
-    try:
-        with open(build_dir_path(file_path), mode) as f:
-            f.write(content)
-        logger.debug(f"{file_path} written successfully.")
-    except Exception as error:
-        raise SystemExit(error)
+    with open(build_dir_path(file_path), mode) as f:
+        f.write(content)
+    logger.debug(f"{file_path} written successfully.")
 
 
 def get_filename_from_path(path: str) -> str:

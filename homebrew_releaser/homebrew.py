@@ -24,8 +24,6 @@ def update_python_resources(formula_dir: str, formula_filename: str) -> None:
             shell=True,  # nosec
         )
         logger.info("Updated Python resources successfully.")
-    except subprocess.TimeoutExpired:
-        raise SystemExit("Timed out updating Python resources")
     except subprocess.CalledProcessError as e:
         error_output = e.output if hasattr(e, "output") else ""
 
@@ -47,8 +45,6 @@ def setup_homebrew_tap(homebrew_owner: str, homebrew_tap: str) -> None:
             shell=True,  # nosec
         )
         logger.info("Set up Homebrew tap successfully.")
-    except subprocess.TimeoutExpired:
-        raise SystemExit("Timed out setting up Homebrew tap")
     except subprocess.CalledProcessError as e:
         error_output = e.output if hasattr(e, "output") else ""
 
@@ -67,8 +63,6 @@ def get_homebrew_version() -> str:
             timeout=TIMEOUT,
             shell=True,  # nosec
         )
-    except subprocess.TimeoutExpired:
-        raise SystemExit("Timed out getting Homebrew version")
     except subprocess.CalledProcessError as e:
         error_output = e.output if hasattr(e, "output") else ""
 
