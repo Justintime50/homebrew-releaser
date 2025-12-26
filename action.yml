@@ -67,6 +67,9 @@ inputs:
   skip_commit:
     description: 'Skips committing the generated formula to a homebrew tap (useful for local testing).'
     required: false
+  skip_checksum:
+    description: 'Skips uploading the checksum file for release assets to the release.'
+    required: false
   debug:
     description: 'Logs debugging info to console.'
     required: false
@@ -94,4 +97,5 @@ runs:
     - ${{ inputs.target_linux_arm64 }}
     - ${{ inputs.update_readme_table }}
     - ${{ inputs.skip_commit }}
+    - ${{ inputs.skip_checksum }}
     - ${{ inputs.debug }}

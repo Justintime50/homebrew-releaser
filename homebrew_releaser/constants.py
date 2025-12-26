@@ -8,6 +8,9 @@ HOMEBREW_TAP = os.getenv("INPUT_HOMEBREW_TAP", "").lower()
 SKIP_COMMIT = (
     os.getenv("INPUT_SKIP_COMMIT", False) if os.getenv("INPUT_SKIP_COMMIT") != "false" else False
 )  # Must check for string `false` since GitHub Actions passes the bool as a string
+SKIP_CHECKSUM = (
+    os.getenv("INPUT_SKIP_CHECKSUM", False) if os.getenv("INPUT_SKIP_CHECKSUM") != "false" else False
+)  # Must check for string `false` since GitHub Actions passes the bool as a string
 DOWNLOAD_STRATEGY = os.getenv("INPUT_DOWNLOAD_STRATEGY")
 CUSTOM_REQUIRE = os.getenv("INPUT_CUSTOM_REQUIRE")
 FORMULA_INCLUDES = os.getenv("INPUT_FORMULA_INCLUDES")

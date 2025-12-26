@@ -10,7 +10,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: extractions/setup-just@v3
       - uses: actions/setup-python@v6
         with:
@@ -19,7 +19,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: extractions/setup-just@v3
       - uses: actions/setup-python@v6
         with:
@@ -28,7 +28,7 @@ jobs:
   brew-audit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: extractions/setup-just@v3
       - uses: Homebrew/actions/setup-homebrew@master
       # These Homebrew packages are needed since we have them as fake dependencies for some test output
@@ -39,7 +39,7 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Build and run Docker image
         run: |
           docker build . -t justintime50/homebrew-releaser
@@ -56,12 +56,13 @@ jobs:
             -e INPUT_FORMULA_INCLUDES="include Language::Python::Virtualenv" \
             -e INPUT_DEPENDS_ON='"python@3.14"' \
             -e INPUT_UPDATE_PYTHON_RESOURCES=true \
+            -e INPUT_SKIP_CHECKSUM=true \
             justintime50/homebrew-releaser
   coverage:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: extractions/setup-just@v3
       - uses: actions/setup-python@v6
         with:

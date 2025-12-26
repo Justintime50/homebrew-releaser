@@ -18,6 +18,7 @@ from homebrew_releaser.constants import (
     GITHUB_TOKEN,
     HOMEBREW_TAP,
     LOGGER_NAME,
+    SKIP_CHECKSUM,
     SKIP_COMMIT,
     TARGET_DARWIN_AMD64,
     TARGET_DARWIN_ARM64,
@@ -221,13 +222,16 @@ def run_github_action():
     commit_git(HOMEBREW_TAP, GITHUB_REPO, version)
 
     if SKIP_COMMIT:
-        logger.info(f"Skipping upload of checksum.txt to {HOMEBREW_TAP}.")
         logger.info(f"Skipping push to {HOMEBREW_TAP}.")
+        logger.info(f"Skipping upload of checksum.txt to {HOMEBREW_TAP}.")
     else:
-        logger.info(f"Attempting to upload checksum.txt to the latest release of {GITHUB_REPO}...")
-        upload_checksum_file(latest_release)
         logger.info(f"Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...")
         push_git(HOMEBREW_TAP, HOMEBREW_OWNER)
+        if SKIP_CHECKSUM:
+            logger.info(f"Skipping upload of checksum.txt to {HOMEBREW_TAP}.")
+        else:
+            logger.info(f"Attempting to upload checksum.txt to the latest release of {GITHUB_REPO}...")
+            upload_checksum_file(latest_release)
         logger.info(f"Successfully released {version} of {GITHUB_REPO} to {HOMEBREW_TAP}.")
 
 

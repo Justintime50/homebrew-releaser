@@ -140,6 +140,10 @@ jobs:
           # Default is shown - boolean
           skip_commit: false
 
+          # Skips uploading the checksum file for release assets to the release.
+          # Default is shown - boolean
+          skip_checksum: false
+
           # Logs debugging info to console.
           # Default is shown - boolean
           debug: false
