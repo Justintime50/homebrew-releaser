@@ -2,7 +2,7 @@
 
 ## Next Release
 
-- Adds `custom_tarball` parameter, allowing you to bundle your distributable assets however you'd like
+- Adds `custom_tarball` parameter, allowing you to bundle your distributable assets however you'd like (closes #63)
 - Optimizes how asset URL selection occurs when downloading assets to generate checksums for
 
 ## v3.1.0 (2025-12-26)
