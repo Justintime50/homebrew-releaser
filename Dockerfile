@@ -19,7 +19,7 @@ RUN \
     useradd -m linuxbrew && \
     curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | \
         su - linuxbrew -c "NONINTERACTIVE=1 /bin/bash" && \
-    su - linuxbrew -c "git -C /home/linuxbrew/.linuxbrew/Homebrew checkout 5.0.4" && \
+    su - linuxbrew -c "git -C /home/linuxbrew/.linuxbrew/Homebrew checkout 5.0.9" && \
     chown -R linuxbrew:linuxbrew /app
 
 USER linuxbrew
