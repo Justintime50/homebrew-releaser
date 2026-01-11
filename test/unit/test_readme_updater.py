@@ -85,7 +85,7 @@ def test_format_formula_data():
     """
     formulas = _format_formula_data("test")
 
-    assert len(formulas) == 16
+    assert len(formulas) == 17
     assert formulas[1] == {
         "name": "test-generate-formula",
         "desc": "Tool to release... scripts, binaries, & executables to github",

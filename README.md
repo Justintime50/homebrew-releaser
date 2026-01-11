@@ -33,6 +33,43 @@ When you cut a new release when using this GitHub Action, Homebrew Releaser will
 
 After you release a project on GitHub, Homebrew Releaser can publish that release to a personal Homebrew tap by updating the project description, version, tar archive url, license, checksum, installation and testing command, and any other required info so you don't have to. You can check the [Homebrew documentation on taps](https://docs.brew.sh/How-to-Create-and-Maintain-a-Tap) and the [formula cookbook](https://docs.brew.sh/Formula-Cookbook) for more details on setting up a Homebrew formula or tap.
 
+#### Minimal Setup
+
+The following is the bare minimum set of parameters required to run Homebrew Releaser (some defaults are assumed):
+
+```yml
+# .github/workflows/release.yml
+# Start Homebrew Releaser when a new GitHub release is created
+on:
+  release:
+    types: [published]
+
+jobs:
+  homebrew-releaser:
+    runs-on: ubuntu-latest
+    name: homebrew-releaser
+    steps:
+      - name: Release project to Homebrew tap
+        uses: Justintime50/homebrew-releaser@v3
+        with:
+          # The name of the homebrew tap to publish your formula to as it appears on GitHub (Homebrew taps must start with `homebrew-`).
+          # Required - strings
+          homebrew_owner: Justintime50
+          homebrew_tap: homebrew-formulas
+
+          # The Personal Access Token (saved as a repo secret) that has `repo` permissions for the repo running the action AND Homebrew tap you want to release to.
+          # Required - string
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+
+          # Install command for your formula.
+          # Required - string
+          install: 'bin.install "src/my-script.sh" => "my-script"'
+```
+
+#### Complete List of Parameters
+
+The following is the complete list of parameters that are usable with Homebrew Releaser:
+
 ```yml
 # .github/workflows/release.yml
 # Start Homebrew Releaser when a new GitHub release is created
@@ -109,7 +146,7 @@ jobs:
 
           # Adds URL and checksum targets for different OS and architecture pairs. Using this option assumes 
           # a tar archive exists on your GitHub repo with the following URL pattern (this cannot be customized):
-          # https://github.com/{GITHUB_OWNER}/{REPO_NAME}/releases/download/{TAG}/{REPO_NAME}-{VERSION}-{OPERATING_SYSTEM}-{ARCHITECTURE}.tar.gz'
+          # https://github.com/{github_owner}/{repo_name}/releases/download/{tag}/{repo_name}-{version}-{operating_system}-{architecture}.tar.gz'
           # Darwin AMD pre-existing path example: https://github.com/justintime50/myrepo/releases/download/v1.2.0/myrepo-1.2.0-darwin-amd64.tar.gz
           # Linux ARM pre-existing path example: https://github.com/justintime50/myrepo/releases/download/v1.2.0/myrepo-1.2.0-linux-arm64.tar.gz
           # Optional - booleans
@@ -117,6 +154,13 @@ jobs:
           target_darwin_arm64: false
           target_linux_amd64: true
           target_linux_arm64: false
+
+          # Use a custom tarball on your release instead of the auto generated or templated arch URLs listed above.
+          # NOTE: Although you can use whatever packaging and naming conventions you want, Homebrew Releaser will look
+          # for your tarball at the following URL: https://github.com/{user}/{repo}/releases/download/{release_name}/{custom_tarball}.tar.gz
+          # Custom tarball pre-existing path example: https://github.com/justintime50/myrepo/releases/download/v1.2.0/v1.2.0.tar.gz
+          # Optional - string
+          custom_tarball: v1.2.0
 
           # Update your homebrew tap's README with a table of all projects in the tap.
           # This is done by pulling the information from all your formula.rb files - eg:
@@ -149,7 +193,7 @@ jobs:
           debug: false
 ```
 
-#### Python
+#### Python Formula
 
 To release a Python package using Homebrew Releaser, one may setup their workflow like so:
 

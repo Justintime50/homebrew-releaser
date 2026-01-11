@@ -61,6 +61,9 @@ inputs:
   target_linux_arm64:
     description: 'Add a custom URL/checksum target for ARM64 Linux builds.'
     required: false
+  custom_tarball:
+    description: 'Use a custom tarball on your release instead of the auto generated or templated arch URLs listed above.'
+    required: false
   update_readme_table:
     description: "Update your homebrew tap's README with a table of all projects in the tap."
     required: false
@@ -95,6 +98,7 @@ runs:
     - ${{ inputs.target_darwin_arm64 }}
     - ${{ inputs.target_linux_amd64 }}
     - ${{ inputs.target_linux_arm64 }}
+    - ${{ inputs.custom_tarball }}
     - ${{ inputs.update_readme_table }}
     - ${{ inputs.skip_commit }}
     - ${{ inputs.skip_checksum }}

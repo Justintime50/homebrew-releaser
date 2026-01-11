@@ -11,6 +11,7 @@ from homebrew_releaser.checksum import (
 from homebrew_releaser.constants import (
     CHECKSUM_FILE,
     CUSTOM_REQUIRE,
+    CUSTOM_TARBALL,
     DOWNLOAD_STRATEGY,
     FORMULA_INCLUDES,
     GITHUB_OWNER,
@@ -115,16 +116,16 @@ def run_github_action():
     if repository["private"]:
         logger.debug("Repository is private. Using auto-generated release tarball and zipball REST API endpoints.")
         archive_base_url = f"{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}"
-        auto_generated_release_tar = f"{archive_base_url}/tarball/{version}"
-        auto_generated_release_zip = f"{archive_base_url}/zipball/{version}"
+        auto_generated_release_tar_url = f"{archive_base_url}/tarball/{version}"
+        auto_generated_release_zip_url = f"{archive_base_url}/zipball/{version}"
     else:
         logger.debug("Repository is public. Using auto-generated release tarball and zipball public URLs.")
         archive_base_url = f"https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/refs/tags/{version}"
-        auto_generated_release_tar = f"{archive_base_url}.tar.gz"
-        auto_generated_release_zip = f"{archive_base_url}.zip"
+        auto_generated_release_tar_url = f"{archive_base_url}.tar.gz"
+        auto_generated_release_zip_url = f"{archive_base_url}.zip"
 
-    archive_urls.append(auto_generated_release_tar)
-    archive_urls.append(auto_generated_release_zip)
+    archive_urls.append(auto_generated_release_tar_url)
+    archive_urls.append(auto_generated_release_zip_url)
 
     target_browser_download_base_url = (
         f"https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}"
@@ -138,38 +139,42 @@ def run_github_action():
     if TARGET_LINUX_ARM64:
         archive_urls.append(f"{target_browser_download_base_url}-linux-arm64.tar.gz")
 
+    custom_tarball_url = None
+    if CUSTOM_TARBALL:
+        custom_tarball_url = (
+            f"https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{CUSTOM_TARBALL}.tar.gz"
+        )
+        logger.debug(
+            f"Using the following custom tarball URL instead of auto-generated tarball URL: {custom_tarball_url}"
+        )
+        archive_urls.append(custom_tarball_url)
+
     checksums = []
     for archive_url in archive_urls:
-        if not assets:
-            assets = [0]  # Populate `assets` so that if we don't have any, we can use the auto generated checksums
-        for asset in assets:
-            # Download the asset url so private repos work but use the brower URL for name and path in formula
-            if archive_url == auto_generated_release_tar or archive_url == auto_generated_release_zip:
-                download_url = archive_url
-            else:
-                download_url = asset["url"]
+        if repository["private"]:
+            # For private repos, use asset["url"] if available, otherwise use archive_url
+            matching_asset = next(
+                (asset for asset in assets if asset and asset.get("browser_download_url") == archive_url), None
+            )
+            download_url = matching_asset["url"] if matching_asset else archive_url
+            stream = False
+        else:
+            # For public repos, always use browser URLs
+            download_url = archive_url
+            stream = True
 
-            if (
-                archive_url == auto_generated_release_tar
-                or archive_url == auto_generated_release_zip
-                or archive_url == asset["browser_download_url"]
-            ):
-                # For REST API requests, we should not stream archive file, but it is fine for browser URLs
-                stream = False if archive_url.find("api.github.com") != -1 else True
-                downloaded_filename = _download_archive(download_url, stream)
-                checksum = calculate_checksum(downloaded_filename)
-                archive_filename = get_filename_from_path(archive_url)
-                archive_checksum_entries += f"{checksum} {archive_filename}\n"
-                checksums.append(
-                    {
-                        archive_filename: {
-                            "checksum": checksum,
-                            "url": archive_url,
-                        }
-                    },
-                )
-                # We break here so we don't include duplicate checksums for the auto generated URLs
-                break
+        downloaded_filename = _download_archive(download_url, stream)
+        checksum = calculate_checksum(downloaded_filename)
+        archive_filename = get_filename_from_path(archive_url)
+        archive_checksum_entries += f"{checksum} {archive_filename}\n"
+        checksums.append(
+            {
+                archive_filename: {
+                    "checksum": checksum,
+                    "url": archive_url,
+                }
+            }
+        )
 
     write_file(CHECKSUM_FILE, archive_checksum_entries)
 
@@ -180,7 +185,7 @@ def run_github_action():
         repository,
         checksums,
         INSTALL,
-        auto_generated_release_tar,
+        custom_tarball_url or auto_generated_release_tar_url,
         DEPENDS_ON,
         TEST,
         DOWNLOAD_STRATEGY,

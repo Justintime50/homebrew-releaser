@@ -97,7 +97,7 @@ def test_generate_formula():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -167,7 +167,7 @@ def test_generate_formula_no_article_description():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -208,7 +208,7 @@ def test_generate_formula_formula_name_starts_description():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -247,7 +247,7 @@ def test_generate_formula_no_depends_on():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -286,7 +286,7 @@ def test_generate_formula_no_test():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -326,7 +326,7 @@ def test_generate_formula_multiline_fields():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -596,7 +596,7 @@ def test_one_of_each_matrix():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             },
@@ -659,7 +659,7 @@ def test_generate_formula_string_false_configs():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -700,7 +700,7 @@ def test_generate_formula_empty_fields():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -744,7 +744,7 @@ def test_generate_formula_download_strategy():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             },
@@ -818,7 +818,7 @@ def test_generate_formula_override_version():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -856,7 +856,7 @@ def test_generate_formula_formula_includes():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/releases/download/{VERSION}/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -939,3 +939,41 @@ def test_generate_class_name(repo_name, expected_class_name):
     class_name = _generate_class_name(repo_name)
 
     assert class_name == expected_class_name
+
+
+@patch("homebrew_releaser.formula.CUSTOM_TARBALL", "custom_tarball")
+def test_generate_formula_custom_tarball():
+    """Tests that we generate the formula content correctly (when the custom_tarball param is used).
+
+    NOTE: See docstring in `_record_formula` for more details on how recording formulas works.
+    """
+    formula_filename = f"{inspect.stack()[0][3]}.rb"
+    mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
+    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/download/v0.1.0/custom_tarball.tar.gz"
+
+    repository = {
+        "description": DESCRIPTION,
+        "license": LICENSE,
+    }
+
+    formula = generate_formula_data(
+        owner=USERNAME,
+        repo_name=mock_repo_name,
+        repository=repository,
+        checksums=[
+            {
+                f"{mock_repo_name}.tar.gz": {
+                    "checksum": CHECKSUM,
+                    "url": (
+                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                    ),
+                },
+            }
+        ],
+        install=INSTALL,
+        tar_url=mock_tar_url,
+    )
+
+    _record_formula(FORMULA_PATH, formula_filename, formula)
+
+    assert "custom_tarball" in formula

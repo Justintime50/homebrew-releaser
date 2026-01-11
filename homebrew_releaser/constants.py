@@ -58,3 +58,4 @@ TARGET_LINUX_AMD64 = (
 TARGET_LINUX_ARM64 = (
     os.getenv("INPUT_TARGET_LINUX_ARM64", False) if os.getenv("INPUT_TARGET_LINUX_ARM64") != "false" else False
 )  # Must check for string `false` since GitHub Actions passes the bool as a string
+CUSTOM_TARBALL = os.getenv("INPUT_CUSTOM_TARBALL")

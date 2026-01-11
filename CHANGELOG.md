@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## Next Release
+
+- Adds `custom_tarball` parameter, allowing you to bundle your distributable assets however you'd like
+- Optimizes how asset URL selection occurs when downloading assets to generate checksums for
+
 ## v3.1.0 (2025-12-26)
 
 - Adds `skip_checksum` parameter which skips uploading the checksum file for all release assets to the latest release. Useful if you generate your own checksums or already had a checksum file since we cannot overwrite an existing checksum file without deleting the previous one
