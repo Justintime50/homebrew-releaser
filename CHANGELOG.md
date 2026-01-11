@@ -6,6 +6,11 @@
 - Adds `branch` parameter, allowing you to push the formula file to any branch you'd like (closes #62)
 - Homebrew Releaser now warns instead of raising an exception and exiting with a failure if the `git commit` operation is unsuccessful due to "nothing to commit". This is useful if you want to test back to back releases or need to recreate a release but the underlying assets have not changed (closes #69)
 - Existing `checksum.txt` files on the latest release now warn if they exist instead of exiting with a stacktrace
+- Action now fails gracefully for non-critical warnings, ensuring the release succeeds first prior to raising warnings to the user. This both no longer blocks releases while surfacing warnings to users that may have previously gone unnoticed. These (current) warnings may include (closes #68):
+  - An existing checksum file on the latest release (we do not override it)
+  - "Nothing to commit", when the formula file existing is the same as the newly generated one
+  - Missing start/end README table tags when using table updater
+  - Missing/invalid README file when using table updater
 - Optimizes how asset URL selection occurs when downloading assets to generate checksums for
 - Makes `formula_folder` optional as we always had a default of `Formula`, now allows users to omit its inclusion in their yaml
 - Bumps Homebrew to v5.0.9

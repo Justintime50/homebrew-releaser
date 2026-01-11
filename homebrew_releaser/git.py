@@ -9,6 +9,7 @@ from homebrew_releaser.constants import (
     GITHUB_TOKEN,
     LOGGER_NAME,
     TIMEOUT,
+    non_critical_warnings,
 )
 from homebrew_releaser.utils import build_dir_path
 
@@ -71,7 +72,9 @@ def commit_git(homebrew_tap: str, repo_name: str, version: str):
         _run_git_subprocess(command, "Assets committed successfully.")
     except subprocess.CalledProcessError as e:
         if "nothing to commit" in e.output:
-            logger.warning("No changes to commit.")
+            message = "No changes to commit."
+            logger.warning(message)
+            non_critical_warnings.append(message)
         else:
             raise
 

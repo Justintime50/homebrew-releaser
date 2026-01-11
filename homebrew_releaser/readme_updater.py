@@ -12,6 +12,7 @@ import woodchips
 from homebrew_releaser.constants import (
     FORMULA_FOLDER,
     LOGGER_NAME,
+    non_critical_warnings,
 )
 from homebrew_releaser.utils import build_dir_path
 
@@ -141,9 +142,14 @@ def _retrieve_old_table(homebrew_tap: str) -> Tuple[str, bool]:
         if old_table_found is False:
             # If we can't find both start/end tags, reset the table so we don't blow away unassociated README data
             old_table = ""
-            logger.warning("Could not find both start and end tags for project table in README.")
+            message = "Could not find both start and end tags for project table in README."
+            logger.warning(message)
+            non_critical_warnings.append(message)
+
     else:
-        logger.warning("Could not find a valid README in this project to update.")
+        message = "Could not find a valid README in this project to update."
+        logger.warning(message)
+        non_critical_warnings.append(message)
 
     return old_table, old_table_found
 

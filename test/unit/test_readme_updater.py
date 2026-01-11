@@ -163,7 +163,7 @@ def test_retrieve_old_table(table_content):
 
 
 @patch("homebrew_releaser.utils.WORKING_DIR", "")
-@patch("logging.Logger.error")
+@patch("logging.Logger.warning")
 def test_retrieve_old_table_no_readme(mock_logger):
     """Tests that we retrieve only the old table data when start and end tags exist."""
     old_table, old_table_found = _retrieve_old_table("test")

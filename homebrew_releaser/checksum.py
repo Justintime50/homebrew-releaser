@@ -11,6 +11,7 @@ from homebrew_releaser.constants import (
     GITHUB_REPO,
     LOGGER_NAME,
     TIMEOUT,
+    non_critical_warnings,
 )
 from homebrew_releaser.utils import build_dir_path
 
@@ -50,6 +51,8 @@ def upload_checksum_file(latest_release: dict[str, Any]) -> None:
         logger.info(f"checksum.txt uploaded successfully to {GITHUB_REPO}.")
     except requests.HTTPError:
         if response.status_code == 422 and "already_exists" in response.text:
-            logger.warning("checksum.txt already exists in the latest release.")
+            message = "checksum.txt already exists in the latest release."
+            logger.warning(message)
+            non_critical_warnings.append(message)
             return None
         raise

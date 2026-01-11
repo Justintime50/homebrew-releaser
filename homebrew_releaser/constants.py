@@ -1,6 +1,9 @@
 import os
 
 
+# Global variables
+non_critical_warnings: list[str] = []
+
 # GitHub Action Parameters
 HOMEBREW_OWNER = os.getenv("INPUT_HOMEBREW_OWNER", "").lower()
 HOMEBREW_TAP = os.getenv("INPUT_HOMEBREW_TAP", "").lower()

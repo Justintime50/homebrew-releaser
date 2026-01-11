@@ -1,3 +1,5 @@
+import os
+import subprocess
 from unittest.mock import patch
 
 import pytest
@@ -122,6 +124,57 @@ def test_run_github_action(
     mock_add_formula.assert_called_once()
     mock_commit_formula.assert_called_once()
     mock_push_formula.assert_called_once()
+
+
+@patch.dict(os.environ, {"INPUT_SKIP_COMMIT": "false"})
+@patch("homebrew_releaser.app.HOMEBREW_TAP", "123")
+@patch("homebrew_releaser.app.HOMEBREW_OWNER", "Justintime50")
+@patch("homebrew_releaser.app.update_readme")
+@patch("homebrew_releaser.app.upload_checksum_file")
+@patch("woodchips.get")
+@patch("homebrew_releaser.app.get_homebrew_version")
+@patch("homebrew_releaser.app.setup_homebrew_tap")
+@patch("homebrew_releaser.app.make_formula_folder")
+@patch("homebrew_releaser.app.setup_git")
+@patch("homebrew_releaser.app.copy_formula_file_to_git")
+@patch("homebrew_releaser.app.add_git")
+@patch("homebrew_releaser.app.commit_git")
+@patch("homebrew_releaser.app.push_git")
+@patch("homebrew_releaser.app.write_file")
+@patch("homebrew_releaser.app.generate_formula_data")
+@patch("homebrew_releaser.app.calculate_checksum", return_value=("123", "mock-repo"))
+@patch("homebrew_releaser.app._download_archive")
+@patch("homebrew_releaser.app.make_github_get_request")
+@patch("homebrew_releaser.app._check_required_env_variables")
+def test_run_github_action_string_false_config(
+    mock_check_env_variables,
+    mock_make_github_get_request,
+    mock_download_archive,
+    mock_calculate_checksum,
+    mock_generate_formula,
+    mock_write_file,
+    mock_push_formula,
+    mock_commit_formula,
+    mock_add_formula,
+    mock_copy_formula_file_to_git,
+    mock_setup_git,
+    mock_make_formula_folder,
+    mock_setup_homebrew_tap,
+    mock_get_homebrew_version,
+    mock_logger,
+    mock_upload_checksum_file,
+    mock_update_readme,
+):
+    run_github_action()
+
+    # Check that string false works by running git operations
+    mock_copy_formula_file_to_git.assert_called_once()
+    mock_add_formula.assert_called_once()
+    mock_commit_formula.assert_called_once()
+    mock_push_formula.assert_called_once()
+
+    # Check that we don't update the README with a string false
+    mock_update_readme.assert_not_called()
 
 
 @patch("homebrew_releaser.app.HOMEBREW_TAP", "123")
@@ -350,3 +403,57 @@ def test_download_private_archive(mock_make_github_get_request, mock_write_file)
     mock_make_github_get_request.assert_called_once_with(url=url, stream=False)
     mock_write_file.assert_called_once()  # TODO: Assert `called_with` here instead
     mock_write_file.assert_called_once()  # TODO: Assert `called_with` here instead
+
+
+@patch("homebrew_releaser.app.HOMEBREW_TAP", "123")
+@patch("homebrew_releaser.app.UPDATE_PYTHON_RESOURCES", True)
+@patch("sys.exit")
+@patch("homebrew_releaser.app.upload_checksum_file")
+@patch("woodchips.get")
+@patch("homebrew_releaser.app.get_homebrew_version")
+@patch("homebrew_releaser.app.setup_homebrew_tap")
+@patch("homebrew_releaser.app.make_formula_folder")
+@patch("homebrew_releaser.app.setup_git")
+@patch("homebrew_releaser.app.copy_formula_file_to_git")
+@patch("homebrew_releaser.app.add_git")
+@patch("homebrew_releaser.app.push_git")
+@patch("homebrew_releaser.app.write_file")
+@patch("homebrew_releaser.app.generate_formula_data")
+@patch("homebrew_releaser.app.calculate_checksum", return_value=("123", "mock-repo"))
+@patch("homebrew_releaser.app._download_archive")
+@patch("homebrew_releaser.app.make_github_get_request")
+@patch("homebrew_releaser.app._check_required_env_variables")
+@patch("homebrew_releaser.app.update_python_resources")
+def test_non_critical_warnings_raised(
+    mock_update_python_resources,
+    mock_check_env_variables,
+    mock_make_github_get_request,
+    mock_download_archive,
+    mock_calculate_checksum,
+    mock_generate_formula,
+    mock_write_file,
+    mock_push_formula,
+    mock_add_formula,
+    mock_copy_formula_file_to_git,
+    mock_setup_git,
+    mock_make_formula_folder,
+    mock_setup_homebrew_tap,
+    mock_get_homebrew_version,
+    mock_logger,
+    mock_upload_checksum_file,
+    mock_system_exit,
+):
+
+    with patch("homebrew_releaser.git._run_git_subprocess") as mock_run_git_subprocess:
+        mock_run_git_subprocess.side_effect = subprocess.CalledProcessError(
+            returncode=1, cmd=["git", "commit"], output="nothing to commit"
+        )
+
+        with pytest.raises(SystemExit) as error:
+            run_github_action()
+            mock_system_exit.assert_called_once()
+
+        assert str(error.value) == (
+            "Your release most likely succeeded (check logs above); "
+            "however, we are failing the build to surface these non-critical warnings to you."
+        )

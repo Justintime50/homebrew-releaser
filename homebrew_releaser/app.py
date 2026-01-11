@@ -38,6 +38,7 @@ from homebrew_releaser.constants import (
     UPDATE_PYTHON_RESOURCES,
     UPDATE_README_TABLE,
     VERSION,
+    non_critical_warnings,
 )
 from homebrew_releaser.formula import generate_formula_data
 from homebrew_releaser.git import (
@@ -74,6 +75,7 @@ def run_github_action():
     8. Update README table (optional)
     9. Add, commit, and push updated formula to GitHub
     10. Upload checksum.txt to latest release (optional)
+    11. Raise non-critical warnings at the end so release succeeds but users are aware
     """
     _setup_logger()
     logger = woodchips.get(LOGGER_NAME)
@@ -236,6 +238,14 @@ def run_github_action():
             logger.info(f"Attempting to upload checksum.txt to the latest release of {GITHUB_REPO}...")
             upload_checksum_file(latest_release)
         logger.info(f"Successfully released {version} of {GITHUB_REPO} to {HOMEBREW_TAP}.")
+
+    if non_critical_warnings:
+        logger.info("The following non-critical warnings were raised during execution:")
+        for i, warning in enumerate(non_critical_warnings):
+            logger.warning(f"{i+1}. {warning}")
+        raise SystemExit(
+            "Your release most likely succeeded (check logs above); however, we are failing the build to surface these non-critical warnings to you."  # noqa
+        )
 
 
 def _setup_logger():
