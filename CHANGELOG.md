@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Next Release
+## v3.2.0 (2026-01-11)
 
 - Adds `custom_tarball` parameter, allowing you to bundle your distributable assets however you'd like (closes #63)
 - Adds `branch` parameter, allowing you to push the formula file to any branch you'd like (closes #62)
