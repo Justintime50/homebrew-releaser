@@ -141,9 +141,9 @@ def _retrieve_old_table(homebrew_tap: str) -> Tuple[str, bool]:
         if old_table_found is False:
             # If we can't find both start/end tags, reset the table so we don't blow away unassociated README data
             old_table = ""
-            logger.error("Could not find both start and end tags for project table in README.")
+            logger.warning("Could not find both start and end tags for project table in README.")
     else:
-        logger.error("Could not find a valid README in this project to update.")
+        logger.warning("Could not find a valid README in this project to update.")
 
     return old_table, old_table_found
 

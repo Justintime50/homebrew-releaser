@@ -26,7 +26,7 @@ def calculate_checksum(tar_filepath: str) -> str:
     return checksum
 
 
-def upload_checksum_file(latest_release: dict[str, Any]):
+def upload_checksum_file(latest_release: dict[str, Any]) -> None:
     """Uploads a `checksum.txt` file to the latest release of the repo."""
     logger = woodchips.get(LOGGER_NAME)
 
@@ -39,11 +39,17 @@ def upload_checksum_file(latest_release: dict[str, Any]):
     headers = GITHUB_HEADERS.copy()
     headers["Content-Type"] = "text/plain"
 
-    response = requests.post(
-        upload_url,
-        headers=headers,
-        data=checksum_file_content,
-        timeout=TIMEOUT,
-    )
-    response.raise_for_status()
-    logger.info(f"checksum.txt uploaded successfully to {GITHUB_REPO}.")
+    try:
+        response = requests.post(
+            upload_url,
+            headers=headers,
+            data=checksum_file_content,
+            timeout=TIMEOUT,
+        )
+        response.raise_for_status()
+        logger.info(f"checksum.txt uploaded successfully to {GITHUB_REPO}.")
+    except requests.HTTPError:
+        if response.status_code == 422 and "already_exists" in response.text:
+            logger.warning("checksum.txt already exists in the latest release.")
+            return None
+        raise
