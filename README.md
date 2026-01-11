@@ -94,6 +94,10 @@ jobs:
           # Default is shown - string
           formula_folder: Formula
 
+          # The branch to push your formula file to (if not used, the branch will be your repo's default branch).
+          # Optional - string
+          branch: bump_foo_to_v2
+
           # The Personal Access Token (saved as a repo secret) that has `repo` permissions for the repo running the action AND Homebrew tap you want to release to.
           # Required - string
           github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}

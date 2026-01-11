@@ -9,6 +9,7 @@ from homebrew_releaser.checksum import (
     upload_checksum_file,
 )
 from homebrew_releaser.constants import (
+    BRANCH,
     CHECKSUM_FILE,
     COMMIT_EMAIL,
     COMMIT_OWNER,
@@ -228,7 +229,7 @@ def run_github_action():
         logger.info(f"Skipping upload of checksum.txt to {HOMEBREW_TAP}.")
     else:
         logger.info(f"Attempting to release {version} of {GITHUB_REPO} to {HOMEBREW_TAP}...")
-        push_git(HOMEBREW_TAP, HOMEBREW_OWNER)
+        push_git(HOMEBREW_TAP, HOMEBREW_OWNER, BRANCH)
         if SKIP_CHECKSUM:
             logger.info(f"Skipping upload of checksum.txt to {HOMEBREW_TAP}.")
         else:

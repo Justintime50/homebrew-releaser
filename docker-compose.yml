@@ -7,12 +7,10 @@ services:
     environment:
       # Env vars that should be `false` should be left empty
       - GITHUB_REPOSITORY=justintime50/github-actions-test
-      - INPUT_SKIP_COMMIT=
-      - INPUT_UPDATE_README_TABLE=
-      - INPUT_DEBUG=true
       - INPUT_HOMEBREW_OWNER=justintime50
       - INPUT_HOMEBREW_TAP=homebrew-test
       - INPUT_FORMULA_FOLDER=Formula
+      - INPUT_BRANCH=
       - INPUT_GITHUB_TOKEN=
       - INPUT_COMMIT_OWNER=justintime50
       - INPUT_COMMIT_EMAIL=39606064+Justintime50@users.noreply.github.com
@@ -23,9 +21,13 @@ services:
       - INPUT_CUSTOM_REQUIRE=
       - INPUT_FORMULA_INCLUDES='include Language::Python::Virtualenv'
       - INPUT_UPDATE_PYTHON_RESOURCES=true
+      - INPUT_VERSION=
       - INPUT_TARGET_DARWIN_AMD64=
       - INPUT_TARGET_DARWIN_ARM64=
       - INPUT_TARGET_LINUX_AMD64=
       - INPUT_TARGET_LINUX_ARM64=
       - INPUT_CUSTOM_TARBALL=
+      - INPUT_UPDATE_README_TABLE=
+      - INPUT_SKIP_COMMIT=
       - INPUT_SKIP_CHECKSUM=
+      - INPUT_DEBUG=true

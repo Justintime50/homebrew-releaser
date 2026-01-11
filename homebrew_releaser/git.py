@@ -76,10 +76,13 @@ def commit_git(homebrew_tap: str, repo_name: str, version: str):
             raise
 
 
-def push_git(homebrew_tap: str, homebrew_owner: str):
+def push_git(homebrew_tap: str, homebrew_owner: str, branch: Optional[str] = None):
     """Pushes git assets to the remote Homebrew tap repo."""
     # fmt: off
-    command = ['git', '-C', build_dir_path(homebrew_tap), 'push', f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git']  # noqa
+    if branch:
+        command = ['git', '-C', build_dir_path(homebrew_tap), 'push', f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git', f"HEAD:{branch}"]  # noqa
+    else:
+        command = ['git', '-C', build_dir_path(homebrew_tap), 'push', f'https://x-access-token:{GITHUB_TOKEN}@github.com/{homebrew_owner}/{homebrew_tap}.git']  # noqa
     # fmt: on
     _run_git_subprocess(command, f"Assets pushed successfully to {homebrew_tap}.")
 

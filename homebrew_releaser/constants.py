@@ -5,6 +5,7 @@ import os
 HOMEBREW_OWNER = os.getenv("INPUT_HOMEBREW_OWNER", "").lower()
 HOMEBREW_TAP = os.getenv("INPUT_HOMEBREW_TAP", "").lower()
 FORMULA_FOLDER = os.getenv("INPUT_FORMULA_FOLDER", "Formula")
+BRANCH = os.getenv("INPUT_BRANCH")
 GITHUB_TOKEN = os.getenv("INPUT_GITHUB_TOKEN")
 COMMIT_OWNER = os.getenv("INPUT_COMMIT_OWNER", "homebrew-releaser")
 COMMIT_EMAIL = os.getenv("INPUT_COMMIT_EMAIL", "homebrew-releaser@example.com")

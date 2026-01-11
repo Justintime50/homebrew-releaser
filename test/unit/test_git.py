@@ -154,6 +154,31 @@ def test_push(mock_subprocess):
     )
 
 
+@patch("homebrew_releaser.utils.WORKING_DIR", "")
+@patch("homebrew_releaser.git.GITHUB_TOKEN", "123")
+@patch("subprocess.check_output")
+def test_push_with_branch(mock_subprocess):
+    """Tests that we call the correct git push command."""
+    homebrew_tap = "homebrew-formulas"
+    homebrew_owner = "Justintime50"
+
+    push_git(homebrew_tap, homebrew_owner, "test")
+
+    mock_subprocess.assert_called_once_with(
+        [
+            "git",
+            "-C",
+            homebrew_tap,
+            "push",
+            f"https://x-access-token:123@github.com/{homebrew_owner}/{homebrew_tap}.git",
+            "HEAD:test",
+        ],
+        stderr=-2,
+        text=True,
+        timeout=TIMEOUT,
+    )
+
+
 @patch("logging.Logger.debug")
 @patch(
     "subprocess.check_output",
