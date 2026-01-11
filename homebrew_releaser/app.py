@@ -227,6 +227,7 @@ def run_github_action():
         logger.debug("Skipping update to project README.")
 
     # Although users can skip a commit, still commit (but don't push) to dry-run the commit for debugging purposes
+    logger.info("Preparing git commit...")
     copy_formula_file_to_git(formula_filepath, HOMEBREW_TAP)
     add_git(HOMEBREW_TAP)
     commit_git(HOMEBREW_TAP, GITHUB_REPO, version)

@@ -105,6 +105,32 @@ def test_commit(mock_subprocess):
 
 
 @patch("homebrew_releaser.utils.WORKING_DIR", "")
+@patch("logging.Logger.warning")
+@patch("subprocess.check_output")
+def test_nothing_to_commit(mock_subprocess, mock_logger):
+    """Tests that we call the correct git commit command."""
+    homebrew_tap = "homebrew-formulas"
+    repo_name = "mock-repo"
+    version = "0.1.0"
+
+    error = subprocess.CalledProcessError(
+        returncode=1,
+        cmd=["git", "-C", homebrew_tap, "commit", "-m", f"chore: brew formula update for {repo_name} {version}"],
+        output="On branch main\nnothing to commit, working tree clean\n",
+    )
+    mock_subprocess.side_effect = error
+
+    commit_git(homebrew_tap, repo_name, version)
+    mock_subprocess.assert_called_once_with(
+        ["git", "-C", homebrew_tap, "commit", "-m", f"chore: brew formula update for {repo_name} {version}"],
+        stderr=-2,
+        text=True,
+        timeout=TIMEOUT,
+    )
+    mock_logger.assert_called_once_with("No changes to commit.")
+
+
+@patch("homebrew_releaser.utils.WORKING_DIR", "")
 @patch("homebrew_releaser.git.GITHUB_TOKEN", "123")
 @patch("subprocess.check_output")
 def test_push(mock_subprocess):

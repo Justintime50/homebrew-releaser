@@ -63,10 +63,17 @@ def add_git(homebrew_tap: str):
 
 def commit_git(homebrew_tap: str, repo_name: str, version: str):
     """Commits git assets to the Homebrew tap repo."""
+    logger = woodchips.get(LOGGER_NAME)
     # fmt: off
     command = ['git', '-C', build_dir_path(homebrew_tap), 'commit', '-m', f'chore: brew formula update for {repo_name} {version}']  # noqa
     # fmt: on
-    _run_git_subprocess(command, "Assets committed successfully.")
+    try:
+        _run_git_subprocess(command, "Assets committed successfully.")
+    except subprocess.CalledProcessError as e:
+        if "nothing to commit" in e.output:
+            logger.warning("No changes to commit.")
+        else:
+            raise
 
 
 def push_git(homebrew_tap: str, homebrew_owner: str):
