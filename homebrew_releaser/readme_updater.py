@@ -93,9 +93,9 @@ def _generate_table(formulas: list[dict[str, Any]]) -> str:
     for formula in formulas:
         rows.append(
             [
-                f'[{formula["name"]}]({formula.get("homepage")})',
+                f"[{formula['name']}]({formula.get('homepage')})",
                 formula.get("desc"),
-                f'`brew install {formula["name"]}`',
+                f"`brew install {formula['name']}`",
             ]
         )
 

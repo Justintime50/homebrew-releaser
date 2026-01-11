@@ -21,14 +21,6 @@ audit:
 bandit:
     {{VIRTUAL_BIN}}/bandit -r {{PROJECT_NAME}}/
 
-# Runs the Black Python formatter against the project
-black:
-    {{VIRTUAL_BIN}}/black {{PROJECT_NAME}}/ {{TEST_DIR}}/
-
-# Checks if the project is formatted correctly against the Black rules
-black-check:
-    {{VIRTUAL_BIN}}/black {{PROJECT_NAME}}/ {{TEST_DIR}}/ --check
-
 # Test the project and generate an HTML coverage report
 coverage:
     {{VIRTUAL_BIN}}/pytest --cov={{PROJECT_NAME}} --cov-branch --cov-report=html --cov-report=lcov --cov-report=term-missing --cov-fail-under=90
@@ -39,27 +31,18 @@ clean:
     find . -name '*.pyc' -delete
 
 # Lints the project
-lint: black-check isort-check flake8 mypy bandit
+lint:
+    {{VIRTUAL_BIN}}/ruff check {{PROJECT_NAME}}/ {{TEST_DIR}}/
 
 # Fixes lint issues
-lint-fix: black isort
+lint-fix:
+    {{VIRTUAL_BIN}}/ruff check --fix {{PROJECT_NAME}}/ {{TEST_DIR}}/
+    {{VIRTUAL_BIN}}/ruff format {{PROJECT_NAME}}/ {{TEST_DIR}}/
 
 # Install the project locally
 install:
     {{PYTHON_BINARY}} -m venv {{VIRTUAL_ENV}}
     {{VIRTUAL_BIN}}/pip install -e ."[dev]"
-
-# Sorts imports throughout the project
-isort:
-    {{VIRTUAL_BIN}}/isort {{PROJECT_NAME}}/ {{TEST_DIR}}/
-
-# Checks that imports throughout the project are sorted correctly
-isort-check:
-    {{VIRTUAL_BIN}}/isort {{PROJECT_NAME}}/ {{TEST_DIR}}/ --check-only
-
-# Run flake8 checks against the project
-flake8:
-    {{VIRTUAL_BIN}}/flake8 {{PROJECT_NAME}}/ {{TEST_DIR}}/
 
 # Run mypy type checking on the project
 mypy:

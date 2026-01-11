@@ -443,7 +443,6 @@ def test_non_critical_warnings_raised(
     mock_upload_checksum_file,
     mock_system_exit,
 ):
-
     with patch("homebrew_releaser.git._run_git_subprocess") as mock_run_git_subprocess:
         mock_run_git_subprocess.side_effect = subprocess.CalledProcessError(
             returncode=1, cmd=["git", "commit"], output="nothing to commit"

@@ -15,7 +15,6 @@ jobs:
       - name: Update stable git tag
         run: |
           git tag --force $STABLE_TAG ${GITHUB_REF##*/}
-          git push origin --delete $STABLE_TAG
-          git push origin $STABLE_TAG
+          git push origin --force $STABLE_TAG
         env:
           STABLE_TAG: v3

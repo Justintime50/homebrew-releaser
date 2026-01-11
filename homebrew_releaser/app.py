@@ -189,7 +189,7 @@ def run_github_action():
         version_no_v if VERSION else None,
     )
 
-    formula_filename = f'{repository["name"]}.rb'
+    formula_filename = f"{repository['name']}.rb"
     formula_dir = os.path.join(
         os.sep,
         "home",
@@ -242,7 +242,7 @@ def run_github_action():
     if non_critical_warnings:
         logger.info("The following non-critical warnings were raised during execution:")
         for i, warning in enumerate(non_critical_warnings):
-            logger.warning(f"{i+1}. {warning}")
+            logger.warning(f"{i + 1}. {warning}")
         raise SystemExit(
             "Your release most likely succeeded (check logs above); however, we are failing the build to surface these non-critical warnings to you."  # noqa
         )
