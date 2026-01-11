@@ -12,19 +12,16 @@ inputs:
     required: true
   formula_folder:
     description: 'The name of the folder in your homebrew tap where formula will be committed to.'
-    required: true
-    default: 'Formula'
+    required: false
   github_token:
     description: 'The GitHub Token (saved as a repo secret) that has `repo` permissions for the homebrew tap you want to release to.'
     required: true
   commit_owner:
     description: 'Git author info used to commit to the homebrew tap.'
     required: false
-    default: 'homebrew-releaser@example.com'
   commit_email:
     description: 'Git author info used to commit to the homebrew tap.'
     required: false
-    default: 'homebrew-releaser@example.com'
   depends_on:
     description: 'Custom dependencies in case other formulas are needed to build the current one (can be multiline).'
     required: false

@@ -6,7 +6,10 @@ from unittest.mock import (
 import pytest
 import requests
 
-from homebrew_releaser.constants import GITHUB_HEADERS
+from homebrew_releaser.constants import (
+    GITHUB_BASE_API_URL,
+    GITHUB_HEADERS,
+)
 from homebrew_releaser.utils import (
     get_filename_from_path,
     make_github_get_request,
@@ -16,7 +19,7 @@ from homebrew_releaser.utils import (
 
 @patch("requests.get")
 def test_make_github_get_request(mock_request):
-    url = "https://api.github.com/repos/Justintime50/homebrew-releaser"
+    url = f"{GITHUB_BASE_API_URL}/repos/Justintime50/homebrew-releaser"
     make_github_get_request(url=url)
 
     mock_request.assert_called_once_with(
@@ -31,7 +34,7 @@ def test_make_github_get_request(mock_request):
 @patch("requests.get")
 def test_make_github_get_request_stream(mock_request):
     """Tests that we setup a request correctly when we enable streaming."""
-    url = "https://api.github.com/repos/Justintime50/homebrew-releaser"
+    url = f"{GITHUB_BASE_API_URL}/repos/Justintime50/homebrew-releaser"
     make_github_get_request(url=url, stream=True)
 
     headers = GITHUB_HEADERS.copy()
@@ -48,7 +51,7 @@ def test_make_github_get_request_stream(mock_request):
 
 @patch("requests.get", side_effect=requests.exceptions.RequestException("mock-error"))
 def test_make_github_get_request_exception(mock_request):
-    url = "https://api.github.com/repos/Justintime50/homebrew-releaser"
+    url = f"{GITHUB_BASE_API_URL}/repos/Justintime50/homebrew-releaser"
     with pytest.raises(requests.exceptions.RequestException) as error:
         make_github_get_request(url=url)
 

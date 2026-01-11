@@ -5,6 +5,7 @@
 - Adds `custom_tarball` parameter, allowing you to bundle your distributable assets however you'd like (closes #63)
 - Homebrew Releaser now warns instead of raising an exception and exiting with a failure if the `git commit` operation is unsuccessful due to "nothing to commit". This is useful if you want to test back to back releases or need to recreate a release but the underlying assets have not changed (closes #69)
 - Optimizes how asset URL selection occurs when downloading assets to generate checksums for
+- Makes `formula_folder` optional as we always had a default of `Formula`, now allows users to omit its inclusion in their yaml
 
 ## v3.1.0 (2025-12-26)
 

@@ -158,9 +158,9 @@ jobs:
           # Use a custom tarball on your release instead of the auto generated or templated arch URLs listed above.
           # NOTE: Although you can use whatever packaging and naming conventions you want, Homebrew Releaser will look
           # for your tarball at the following URL: https://github.com/{user}/{repo}/releases/download/{release_name}/{custom_tarball}.tar.gz
-          # Custom tarball pre-existing path example: https://github.com/justintime50/myrepo/releases/download/v1.2.0/v1.2.0.tar.gz
+          # Custom tarball pre-existing path example: https://github.com/justintime50/myrepo/releases/download/v1.2.0/foo.tar.gz
           # Optional - string
-          custom_tarball: v1.2.0
+          custom_tarball: foo
 
           # Update your homebrew tap's README with a table of all projects in the tap.
           # This is done by pulling the information from all your formula.rb files - eg:

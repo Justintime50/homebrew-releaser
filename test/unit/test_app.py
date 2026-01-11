@@ -8,6 +8,10 @@ from homebrew_releaser.app import (
     _setup_logger,
     run_github_action,
 )
+from homebrew_releaser.constants import (
+    GITHUB_BASE_API_URL,
+    GITHUB_BASE_URL,
+)
 
 
 @patch("homebrew_releaser.app.SKIP_COMMIT", True)
@@ -330,7 +334,7 @@ def test_check_required_env_variables_missing_env_variable(mock_system_exit):
 @patch("homebrew_releaser.app.write_file")
 @patch("homebrew_releaser.app.make_github_get_request")
 def test_download_public_archive(mock_make_github_get_request, mock_write_file):
-    url = "https://github.com/repos/Justintime50/homebrew-releaser/archive/refs/tags/v0.1.0.tar.gz"
+    url = f"{GITHUB_BASE_URL}/repos/Justintime50/homebrew-releaser/archive/refs/tags/v0.1.0.tar.gz"
     _download_archive(url, True)
 
     mock_make_github_get_request.assert_called_once_with(url=url, stream=True)
@@ -340,7 +344,7 @@ def test_download_public_archive(mock_make_github_get_request, mock_write_file):
 @patch("homebrew_releaser.app.write_file")
 @patch("homebrew_releaser.app.make_github_get_request")
 def test_download_private_archive(mock_make_github_get_request, mock_write_file):
-    url = "https://api.github.com/repos/Justintime50/homebrew-releaser/tarball/v0.1.0"
+    url = f"{GITHUB_BASE_API_URL}/repos/Justintime50/homebrew-releaser/tarball/v0.1.0"
     _download_archive(url, False)
 
     mock_make_github_get_request.assert_called_once_with(url=url, stream=False)

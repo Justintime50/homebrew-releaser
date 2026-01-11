@@ -5,6 +5,7 @@ from unittest.mock import (
 
 import pytest
 
+from homebrew_releaser.constants import GITHUB_BASE_URL
 from homebrew_releaser.readme_updater import (
     _does_readme_exist,
     _format_formula_data,
@@ -89,7 +90,7 @@ def test_format_formula_data():
     assert formulas[1] == {
         "name": "test-generate-formula",
         "desc": "Tool to release... scripts, binaries, & executables to github",
-        "homepage": "https://github.com/Justintime50/test-generate-formula",
+        "homepage": f"{GITHUB_BASE_URL}/Justintime50/test-generate-formula",
     }
 
 
@@ -110,7 +111,7 @@ def test_generate_table():
     formulas = [
         {
             "name": "mock-formula",
-            "homepage": "https://github.com/justintime50/mock-formula",
+            "homepage": f"{GITHUB_BASE_URL}/justintime50/mock-formula",
             "desc": "mock description",
         },
     ]
@@ -121,7 +122,7 @@ def test_generate_table():
         '<!-- project_table_start -->\n'
         '| Project                                                      | Description      | Install                     |\n' # noqa
         '| ------------------------------------------------------------ | ---------------- | --------------------------- |\n' # noqa
-        '| [mock-formula](https://github.com/justintime50/mock-formula) | mock description | `brew install mock-formula` |\n' # noqa
+        f'| [mock-formula]({GITHUB_BASE_URL}/justintime50/mock-formula) | mock description | `brew install mock-formula` |\n' # noqa
         '<!-- project_table_end -->\n'
     )
     # fmt: on

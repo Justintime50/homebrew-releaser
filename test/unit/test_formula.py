@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 import pytest
 
+from homebrew_releaser.constants import GITHUB_BASE_URL
 from homebrew_releaser.formula import (
     _generate_class_name,
     generate_formula_data,
@@ -73,7 +74,7 @@ def test_generate_formula():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         # We use a badly written description string here on purpose to test our formatting code, this includes:
@@ -97,7 +98,7 @@ def test_generate_formula():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -119,9 +120,9 @@ def test_generate_formula():
         in formula
     )
     assert (
-        '''desc "Tool to release... scripts, binaries, & executables to github"
-  homepage "https://github.com/Justintime50/test-generate-formula"
-  url "https://github.com/Justintime50/test-generate-formula/archive/refs/tags/v0.1.0.tar.gz"
+        f'''desc "Tool to release... scripts, binaries, & executables to github"
+  homepage "{GITHUB_BASE_URL}/Justintime50/test-generate-formula"
+  url "{GITHUB_BASE_URL}/Justintime50/test-generate-formula/archive/refs/tags/v0.1.0.tar.gz"
   sha256 "0000000000000000000000000000000000000000000000000000000000000000"
   license "MIT"'''
         in formula
@@ -150,7 +151,7 @@ def test_generate_formula_no_article_description():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         # Here we don't start the description off with an article
@@ -167,7 +168,7 @@ def test_generate_formula_no_article_description():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -191,7 +192,7 @@ def test_generate_formula_formula_name_starts_description():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         # Here we don't start the description off with an article
@@ -208,7 +209,7 @@ def test_generate_formula_formula_name_starts_description():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -231,7 +232,7 @@ def test_generate_formula_no_depends_on():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         "description": DESCRIPTION,
@@ -247,7 +248,7 @@ def test_generate_formula_no_depends_on():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -270,7 +271,7 @@ def test_generate_formula_no_test():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         "description": DESCRIPTION,
@@ -286,7 +287,7 @@ def test_generate_formula_no_test():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -310,7 +311,7 @@ def test_generate_formula_multiline_fields():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         "description": DESCRIPTION,
@@ -326,7 +327,7 @@ def test_generate_formula_multiline_fields():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -381,7 +382,7 @@ def test_generate_formula_complete_matrix():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         "description": DESCRIPTION,
@@ -397,7 +398,7 @@ def test_generate_formula_complete_matrix():
                 "test-generate-formula-complete-matrix.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-generate-formula-complete-matrix"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-generate-formula-complete-matrix"  # noqa
                     ),
                 },
             },
@@ -405,7 +406,7 @@ def test_generate_formula_complete_matrix():
                 "test-formula-0.1.0-darwin-amd64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -413,7 +414,7 @@ def test_generate_formula_complete_matrix():
                 "test-formula-0.1.0-darwin-arm64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -421,7 +422,7 @@ def test_generate_formula_complete_matrix():
                 "test-formula-0.1.0-linux-amd64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -429,7 +430,7 @@ def test_generate_formula_complete_matrix():
                 "test-formula-0.1.0-linux-arm64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-arm64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-arm64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -459,7 +460,7 @@ def test_generate_formula_darwin_matrix():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         "description": "Release scripts, binaries, and executables to GitHub",
@@ -475,7 +476,7 @@ def test_generate_formula_darwin_matrix():
                 "test-generate-formula-darwin-matrix.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-generate-formula-darwin-matrix.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-generate-formula-darwin-matrix.tar.gz"  # noqa
                     ),
                 },
             },
@@ -483,7 +484,7 @@ def test_generate_formula_darwin_matrix():
                 "test-formula-0.1.0-darwin-amd64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -491,7 +492,7 @@ def test_generate_formula_darwin_matrix():
                 "test-formula-0.1.0-darwin-arm64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -519,7 +520,7 @@ def test_generate_formula_linux_matrix():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         "description": "Release scripts, binaries, and executables to GitHub",
@@ -535,7 +536,7 @@ def test_generate_formula_linux_matrix():
                 "test-generate-formula-linux-matrix.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-generate-formula-linux-matrix.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-generate-formula-linux-matrix.tar.gz"  # noqa
                     ),
                 },
             },
@@ -543,7 +544,7 @@ def test_generate_formula_linux_matrix():
                 "test-formula-0.1.0-linux-amd64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -551,7 +552,7 @@ def test_generate_formula_linux_matrix():
                 "test-formula-0.1.0-linux-arm64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-arm64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-arm64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -580,7 +581,7 @@ def test_one_of_each_matrix():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         "description": DESCRIPTION,
@@ -596,7 +597,7 @@ def test_one_of_each_matrix():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             },
@@ -604,7 +605,7 @@ def test_one_of_each_matrix():
                 "test-formula-0.1.0-darwin-arm64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -612,7 +613,7 @@ def test_one_of_each_matrix():
                 "test-formula-0.1.0-linux-amd64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -643,7 +644,7 @@ def test_generate_formula_string_false_configs():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         "description": DESCRIPTION,
@@ -659,7 +660,7 @@ def test_generate_formula_string_false_configs():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -687,7 +688,7 @@ def test_generate_formula_empty_fields():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {}  # purposefully empty to test missing fields
 
@@ -700,7 +701,7 @@ def test_generate_formula_empty_fields():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -728,7 +729,7 @@ def test_generate_formula_download_strategy():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         "description": DESCRIPTION,
@@ -744,7 +745,7 @@ def test_generate_formula_download_strategy():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             },
@@ -752,7 +753,7 @@ def test_generate_formula_download_strategy():
                 "test-formula-0.1.0-darwin-amd64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-amd64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -760,7 +761,7 @@ def test_generate_formula_download_strategy():
                 "test-formula-0.1.0-darwin-arm64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-darwin-arm64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -768,7 +769,7 @@ def test_generate_formula_download_strategy():
                 "test-formula-0.1.0-linux-amd64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-amd64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -776,7 +777,7 @@ def test_generate_formula_download_strategy():
                 "test-formula-0.1.0-linux-arm64.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        "https://github.com/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-arm64.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/test-formula/releases/download/0.1.0/test-formula-0.1.0-linux-arm64.tar.gz"  # noqa
                     ),
                 },
             },
@@ -802,7 +803,7 @@ def test_generate_formula_override_version():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         "description": DESCRIPTION,
@@ -818,7 +819,7 @@ def test_generate_formula_override_version():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -840,7 +841,7 @@ def test_generate_formula_formula_includes():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/archive/refs/tags/v0.1.0.tar.gz"
 
     repository = {
         "description": DESCRIPTION,
@@ -856,7 +857,7 @@ def test_generate_formula_formula_includes():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }
@@ -881,7 +882,7 @@ def test_generate_formula_update_python_resources():
     """
     formula_filename = "homebrew_releaser.rb"
     repo_name = "homebrew-releaser"
-    mock_tar_url = f"https://github.com/justintime50/{repo_name}/archive/refs/tags/v1.0.0.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/justintime50/{repo_name}/archive/refs/tags/v1.0.0.tar.gz"
 
     repository = {
         "description": DESCRIPTION,
@@ -897,7 +898,7 @@ def test_generate_formula_update_python_resources():
                 f"{repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{repo_name}/releases/download/1.0.0/{repo_name}-1.0.0.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{repo_name}/releases/download/1.0.0/{repo_name}-1.0.0.tar.gz"  # noqa
                     ),
                 },
             }
@@ -949,7 +950,7 @@ def test_generate_formula_custom_tarball():
     """
     formula_filename = f"{inspect.stack()[0][3]}.rb"
     mock_repo_name = formula_filename.replace("_", "-").replace(".rb", "")
-    mock_tar_url = f"https://github.com/{USERNAME}/{mock_repo_name}/download/v0.1.0/custom_tarball.tar.gz"
+    mock_tar_url = f"{GITHUB_BASE_URL}/{USERNAME}/{mock_repo_name}/download/v0.1.0/custom_tarball.tar.gz"
 
     repository = {
         "description": DESCRIPTION,
@@ -965,7 +966,7 @@ def test_generate_formula_custom_tarball():
                 f"{mock_repo_name}.tar.gz": {
                     "checksum": CHECKSUM,
                     "url": (
-                        f"https://github.com/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
+                        f"{GITHUB_BASE_URL}/justintime50/{mock_repo_name}/archive/refs/tags/{mock_repo_name}-{VERSION}.tar.gz"  # noqa
                     ),
                 },
             }

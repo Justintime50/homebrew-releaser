@@ -11,6 +11,7 @@ import woodchips
 from homebrew_releaser.constants import (
     ARTICLES,
     CUSTOM_TARBALL,
+    GITHUB_BASE_URL,
     LOGGER_NAME,
     MAX_DESC_FIELD_LENGTH,
     TARGET_DARWIN_AMD64,
@@ -136,7 +137,7 @@ class {{class_name}} < Formula
 
   {{/ formula_includes}}
   desc "{{{description}}}"
-  homepage "https://github.com/{{owner}}/{{repo_name}}"
+  homepage "{{github_base_url}}/{{owner}}/{{repo_name}}"
   url "{{tar_url}}"{{# download_strategy}}, using: {{download_strategy}}{{/ download_strategy}}
   {{# version}}
   version "{{version}}"
@@ -234,6 +235,7 @@ end
         "linux_amd_and_arm": linux_amd_and_arm,
         "darwin": target_darwin,
         "linux": target_linux,
+        "github_base_url": GITHUB_BASE_URL,
     }
 
     # TODO: We replace the multiple newlines here for shortcomings in the chevron template above so that

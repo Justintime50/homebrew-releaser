@@ -10,14 +10,22 @@ from homebrew_releaser.checksum import (
 )
 from homebrew_releaser.constants import (
     CHECKSUM_FILE,
+    COMMIT_EMAIL,
+    COMMIT_OWNER,
     CUSTOM_REQUIRE,
     CUSTOM_TARBALL,
+    DEBUG,
+    DEPENDS_ON,
     DOWNLOAD_STRATEGY,
     FORMULA_INCLUDES,
+    GITHUB_BASE_API_URL,
+    GITHUB_BASE_URL,
     GITHUB_OWNER,
     GITHUB_REPO,
     GITHUB_TOKEN,
+    HOMEBREW_OWNER,
     HOMEBREW_TAP,
+    INSTALL,
     LOGGER_NAME,
     SKIP_CHECKSUM,
     SKIP_COMMIT,
@@ -25,7 +33,9 @@ from homebrew_releaser.constants import (
     TARGET_DARWIN_ARM64,
     TARGET_LINUX_AMD64,
     TARGET_LINUX_ARM64,
+    TEST,
     UPDATE_PYTHON_RESOURCES,
+    UPDATE_README_TABLE,
     VERSION,
 )
 from homebrew_releaser.formula import generate_formula_data
@@ -48,25 +58,6 @@ from homebrew_releaser.utils import (
     make_github_get_request,
     write_file,
 )
-
-
-GITHUB_BASE_URL = "https://api.github.com"
-
-# Required GitHub Action env variables from user
-INSTALL = os.getenv("INPUT_INSTALL")
-HOMEBREW_OWNER = os.getenv("INPUT_HOMEBREW_OWNER", "").lower()
-
-# Optional GitHub Action env variables from user
-COMMIT_OWNER = os.getenv("INPUT_COMMIT_OWNER", "homebrew-releaser")
-COMMIT_EMAIL = os.getenv("INPUT_COMMIT_EMAIL", "homebrew-releaser@example.com")
-DEPENDS_ON = os.getenv("INPUT_DEPENDS_ON")
-TEST = os.getenv("INPUT_TEST")
-UPDATE_README_TABLE = (
-    os.getenv("INPUT_UPDATE_README_TABLE", False) if os.getenv("INPUT_UPDATE_README_TABLE") != "false" else False
-)  # Must check for string `false` since GitHub Actions passes the bool as a string
-DEBUG = (
-    os.getenv("INPUT_DEBUG", False) if os.getenv("INPUT_DEBUG") != "false" else False
-)  # Must check for string `false` since GitHub Actions passes the bool as a string
 
 
 def run_github_action():
@@ -99,9 +90,9 @@ def run_github_action():
     make_formula_folder(HOMEBREW_TAP)
 
     logger.info(f"Collecting data about {GITHUB_REPO}...")
-    repository = make_github_get_request(url=f"{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}").json()
+    repository = make_github_get_request(url=f"{GITHUB_BASE_API_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}").json()
     latest_release = make_github_get_request(
-        url=f"https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/latest"
+        url=f"{GITHUB_BASE_API_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}/releases/latest"
     ).json()
     assets = latest_release["assets"]
     version = VERSION or latest_release["tag_name"]
@@ -115,12 +106,12 @@ def run_github_action():
     # Auto-generated tar URL must come first for later use (order is important)
     if repository["private"]:
         logger.debug("Repository is private. Using auto-generated release tarball and zipball REST API endpoints.")
-        archive_base_url = f"{GITHUB_BASE_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}"
+        archive_base_url = f"{GITHUB_BASE_API_URL}/repos/{GITHUB_OWNER}/{GITHUB_REPO}"
         auto_generated_release_tar_url = f"{archive_base_url}/tarball/{version}"
         auto_generated_release_zip_url = f"{archive_base_url}/zipball/{version}"
     else:
         logger.debug("Repository is public. Using auto-generated release tarball and zipball public URLs.")
-        archive_base_url = f"https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/archive/refs/tags/{version}"
+        archive_base_url = f"{GITHUB_BASE_URL}/{GITHUB_OWNER}/{GITHUB_REPO}/archive/refs/tags/{version}"
         auto_generated_release_tar_url = f"{archive_base_url}.tar.gz"
         auto_generated_release_zip_url = f"{archive_base_url}.zip"
 
@@ -128,7 +119,7 @@ def run_github_action():
     archive_urls.append(auto_generated_release_zip_url)
 
     target_browser_download_base_url = (
-        f"https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}"
+        f"{GITHUB_BASE_URL}/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{GITHUB_REPO}-{version_no_v}"
     )
     if TARGET_DARWIN_AMD64:
         archive_urls.append(f"{target_browser_download_base_url}-darwin-amd64.tar.gz")
@@ -142,7 +133,7 @@ def run_github_action():
     custom_tarball_url = None
     if CUSTOM_TARBALL:
         custom_tarball_url = (
-            f"https://github.com/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{CUSTOM_TARBALL}.tar.gz"
+            f"{GITHUB_BASE_URL}/{GITHUB_OWNER}/{GITHUB_REPO}/releases/download/{version}/{CUSTOM_TARBALL}.tar.gz"
         )
         logger.debug(
             f"Using the following custom tarball URL instead of auto-generated tarball URL: {custom_tarball_url}"
