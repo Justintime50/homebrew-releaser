@@ -1,7 +1,4 @@
-from unittest.mock import (
-    mock_open,
-    patch,
-)
+from unittest.mock import mock_open, patch
 
 import pytest
 
@@ -73,7 +70,7 @@ def test_format_formula_data_no_ruby_files():
     with pytest.raises(SystemExit) as error:
         _format_formula_data("./")
 
-    assert str(error.value) == 'No Ruby files found in the "formula_folder" provided.'
+    assert str(error.value) == "No Ruby files found in test/unit."
 
 
 @patch("homebrew_releaser.utils.WORKING_DIR", "")
@@ -103,7 +100,9 @@ def test_format_formula_data_error_reading_formula():
         with pytest.raises(SystemExit) as error:
             _format_formula_data("test")
 
-    assert str(error.value) == "There was a problem opening or reading the formula data: "
+    assert (
+        str(error.value) == "There was a problem opening or reading the formula data: "
+    )
 
 
 def test_generate_table():
@@ -154,7 +153,8 @@ here is some mock data...
 def test_retrieve_old_table(table_content):
     """Tests that we retrieve only the old table data when start and end tags exist.
 
-    We ensure that regardless of table content (null, filled, or newline) that this works."""
+    We ensure that regardless of table content (null, filled, or newline) that this works.
+    """
     with patch("builtins.open", mock_open(read_data=table_content)):
         old_table, old_table_found = _retrieve_old_table("./")
 
@@ -168,7 +168,9 @@ def test_retrieve_old_table_no_readme(mock_logger):
     """Tests that we retrieve only the old table data when start and end tags exist."""
     old_table, old_table_found = _retrieve_old_table("test")
 
-    mock_logger.assert_called_once_with("Could not find a valid README in this project to update.")
+    mock_logger.assert_called_once_with(
+        "Could not find a valid README in this project to update."
+    )
     assert old_table == ""
     assert old_table_found is False
 
