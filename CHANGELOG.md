@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v3.2.1 (2026-01-11)
+
+- Copy defaults from inside Python app to GitHub Action definition resulting in more reproducable runs
+- Pass in missing `branch` param from GitHub Actions to Docker image
+
 ## v3.2.0 (2026-01-11)
 
 - Adds `custom_tarball` parameter, allowing you to bundle your distributable assets however you'd like (closes #63)

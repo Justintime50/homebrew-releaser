@@ -1,10 +1,6 @@
 import os
 import re
-from typing import (
-    Any,
-    Optional,
-    Tuple,
-)
+from typing import Any, Optional, Tuple
 
 import pretty_tables
 import woodchips
@@ -15,7 +11,6 @@ from homebrew_releaser.constants import (
     non_critical_warnings,
 )
 from homebrew_releaser.utils import build_dir_path
-
 
 TABLE_START_TAG = "<!-- project_table_start -->"
 TABLE_END_TAG = "<!-- project_table_end -->"
@@ -44,7 +39,7 @@ def _format_formula_data(homebrew_tap: str) -> list[dict[str, Any]]:
     files = os.listdir(build_dir_path(homebrew_tap, FORMULA_FOLDER))
 
     if not any([file.endswith(".rb") for file in files]):
-        raise SystemExit('No Ruby files found in the "formula_folder" provided.')
+        raise SystemExit(f"No Ruby files found in {FORMULA_FOLDER}.")
 
     try:
         for filename in sorted(files):

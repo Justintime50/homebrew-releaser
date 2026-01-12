@@ -9,7 +9,7 @@ services:
       - GITHUB_REPOSITORY=justintime50/github-actions-test
       - INPUT_HOMEBREW_OWNER=justintime50
       - INPUT_HOMEBREW_TAP=homebrew-test
-      - INPUT_FORMULA_FOLDER=Formula
+      - INPUT_FORMULA_FOLDER=
       - INPUT_BRANCH=
       - INPUT_GITHUB_TOKEN=
       - INPUT_COMMIT_OWNER=justintime50

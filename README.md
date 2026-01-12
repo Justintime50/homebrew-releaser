@@ -108,11 +108,11 @@ jobs:
           commit_email: homebrew-releaser@example.com
 
           # Install command for your formula.
-          # Required - string
+          # Required - multiline string
           install: 'bin.install "src/my-script.sh" => "my-script"'
 
           # Test command for your formula, used for `brew test`.
-          # Optional - string
+          # Optional - multiline string
           test: 'assert_match("my script output", shell_output("my-script-command"))'
 
           # Custom dependencies in case other formulas are needed to build the current one.
