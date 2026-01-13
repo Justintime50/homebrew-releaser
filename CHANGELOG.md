@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Next Release
+
+Use `uv` instead of `pip` for faster dependency installation
+
 ## v3.2.1 (2026-01-11)
 
 - Copy defaults from inside Python app to GitHub Action definition resulting in more reproducable runs
