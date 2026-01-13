@@ -1,8 +1,9 @@
 # CHANGELOG
 
-## Next Release
+## v3.3.0 (2026-01-13)
 
-Use `uv` instead of `pip` for faster dependency installation
+- Adds `ignore_warnings` param to skip failing the action at the end for raised non-critical warnings
+- Use `uv` instead of `pip` for faster dependency installation
 
 ## v3.2.1 (2026-01-11)
 

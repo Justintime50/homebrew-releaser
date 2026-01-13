@@ -1,6 +1,13 @@
 import os
 
 
+def _get_bool_env_var(var_name: str, default: bool = False) -> bool:
+    value = os.getenv(var_name)
+    if not value:
+        return default
+    return value.lower() != "false"
+
+
 # Global variables
 non_critical_warnings: list[str] = []
 
@@ -24,31 +31,16 @@ UPDATE_PYTHON_RESOURCES = (
     else False
 )
 VERSION = os.getenv("INPUT_VERSION")
-TARGET_DARWIN_AMD64 = (
-    os.getenv("INPUT_TARGET_DARWIN_AMD64", False) if os.getenv("INPUT_TARGET_DARWIN_AMD64") != "false" else False
-)  # Must check for string `false` since GitHub Actions passes the bool as a string
-TARGET_DARWIN_ARM64 = (
-    os.getenv("INPUT_TARGET_DARWIN_ARM64", False) if os.getenv("INPUT_TARGET_DARWIN_ARM64") != "false" else False
-)  # Must check for string `false` since GitHub Actions passes the bool as a string
-TARGET_LINUX_AMD64 = (
-    os.getenv("INPUT_TARGET_LINUX_AMD64", False) if os.getenv("INPUT_TARGET_LINUX_AMD64") != "false" else False
-)  # Must check for string `false` since GitHub Actions passes the bool as a string
-TARGET_LINUX_ARM64 = (
-    os.getenv("INPUT_TARGET_LINUX_ARM64", False) if os.getenv("INPUT_TARGET_LINUX_ARM64") != "false" else False
-)  # Must check for string `false` since GitHub Actions passes the bool as a string
+TARGET_DARWIN_AMD64 = _get_bool_env_var("INPUT_TARGET_DARWIN_AMD64")
+TARGET_DARWIN_ARM64 = _get_bool_env_var("INPUT_TARGET_DARWIN_ARM64")
+TARGET_LINUX_AMD64 = _get_bool_env_var("INPUT_TARGET_LINUX_AMD64")
+TARGET_LINUX_ARM64 = _get_bool_env_var("INPUT_TARGET_LINUX_ARM64")
 CUSTOM_TARBALL = os.getenv("INPUT_CUSTOM_TARBALL")
-UPDATE_README_TABLE = (
-    os.getenv("INPUT_UPDATE_README_TABLE", False) if os.getenv("INPUT_UPDATE_README_TABLE") != "false" else False
-)  # Must check for string `false` since GitHub Actions passes the bool as a string
-SKIP_COMMIT = (
-    os.getenv("INPUT_SKIP_COMMIT", False) if os.getenv("INPUT_SKIP_COMMIT") != "false" else False
-)  # Must check for string `false` since GitHub Actions passes the bool as a string
-SKIP_CHECKSUM = (
-    os.getenv("INPUT_SKIP_CHECKSUM", False) if os.getenv("INPUT_SKIP_CHECKSUM") != "false" else False
-)  # Must check for string `false` since GitHub Actions passes the bool as a string
-DEBUG = (
-    os.getenv("INPUT_DEBUG", False) if os.getenv("INPUT_DEBUG") != "false" else False
-)  # Must check for string `false` since GitHub Actions passes the bool as a string
+UPDATE_README_TABLE = _get_bool_env_var("INPUT_UPDATE_README_TABLE")
+SKIP_COMMIT = _get_bool_env_var("INPUT_SKIP_COMMIT")
+SKIP_CHECKSUM = _get_bool_env_var("INPUT_SKIP_CHECKSUM")
+DEBUG = _get_bool_env_var("INPUT_DEBUG")
+IGNORE_WARNINGS = _get_bool_env_var("INPUT_IGNORE_WARNINGS")
 
 # App Constants
 LOGGER_NAME = "homebrew-releaser"

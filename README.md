@@ -195,6 +195,10 @@ jobs:
           # Logs debugging info to console.
           # Default is shown - boolean
           debug: false
+
+          # Ignores non-critical warnings by not raising them at the end and failing the action.
+          # Default is shown - boolean
+          ignore_warnings: false
 ```
 
 #### Python Formula

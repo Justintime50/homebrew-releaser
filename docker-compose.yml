@@ -31,3 +31,4 @@ services:
       - INPUT_SKIP_COMMIT=
       - INPUT_SKIP_CHECKSUM=
       - INPUT_DEBUG=true
+      - INPUT_IGNORE_WARNINGS=

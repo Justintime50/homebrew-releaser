@@ -86,6 +86,10 @@ inputs:
     description: 'Logs debugging info to console.'
     required: false
     default: 'false'
+  ignore_warnings:
+    description: 'Ignores non-critical warnings by not raising them at the end and failing the action.'
+    required: false
+    default: 'false'
 runs:
   using: docker
   image: docker://justintime50/homebrew-releaser:3.2.1
@@ -114,3 +118,4 @@ runs:
     - ${{ inputs.skip_commit }}
     - ${{ inputs.skip_checksum }}
     - ${{ inputs.debug }}
+    - ${{ inputs.ignore_warnings }}

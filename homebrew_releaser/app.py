@@ -26,6 +26,7 @@ from homebrew_releaser.constants import (
     GITHUB_TOKEN,
     HOMEBREW_OWNER,
     HOMEBREW_TAP,
+    IGNORE_WARNINGS,
     INSTALL,
     LOGGER_NAME,
     SKIP_CHECKSUM,
@@ -239,7 +240,7 @@ def run_github_action():
             upload_checksum_file(latest_release)
         logger.info(f"Successfully released {version} of {GITHUB_REPO} to {HOMEBREW_TAP}.")
 
-    if non_critical_warnings:
+    if non_critical_warnings and not IGNORE_WARNINGS:
         logger.info("The following non-critical warnings were raised during execution:")
         for i, warning in enumerate(non_critical_warnings):
             logger.warning(f"{i + 1}. {warning}")
