@@ -1,5 +1,4 @@
-PYTHON_BINARY := "python3"
-VIRTUAL_ENV := "venv"
+VIRTUAL_ENV := ".venv"
 VIRTUAL_BIN := VIRTUAL_ENV / "bin"
 PROJECT_NAME := "homebrew_releaser"
 TEST_DIR := "test"
@@ -41,8 +40,8 @@ lint-fix:
 
 # Install the project locally
 install:
-    {{PYTHON_BINARY}} -m venv {{VIRTUAL_ENV}}
-    {{VIRTUAL_BIN}}/pip install -e ."[dev]"
+    uv venv
+    uv pip install -e '.[dev]'
 
 # Run mypy type checking on the project
 mypy:
