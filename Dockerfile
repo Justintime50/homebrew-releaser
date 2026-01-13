@@ -24,12 +24,12 @@ RUN \
 
 USER linuxbrew
 
-RUN brew install python@3.14
+RUN brew install python@3.14 uv
 
 COPY pyproject.toml .
 COPY homebrew_releaser homebrew_releaser
 
-RUN python3 -m venv venv && \
-    venv/bin/pip install .
+RUN uv venv && \
+    uv pip install .
 
-ENTRYPOINT ["/app/venv/bin/python", "/app/homebrew_releaser/app.py"]
+ENTRYPOINT ["/app/.venv/bin/python", "/app/homebrew_releaser/app.py"]
