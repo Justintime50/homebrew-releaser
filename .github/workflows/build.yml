@@ -54,6 +54,7 @@ jobs:
             -e INPUT_DEPENDS_ON='"python@3.14"' \
             -e INPUT_UPDATE_PYTHON_RESOURCES=true \
             -e INPUT_SKIP_CHECKSUM=true \
+            -e INPUT_IGNORE_WARNINGS=true \
             justintime50/homebrew-releaser
   coverage:
     if: github.ref == 'refs/heads/main'
