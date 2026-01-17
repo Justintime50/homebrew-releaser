@@ -11,7 +11,6 @@ from homebrew_releaser.formula import (
 )
 from homebrew_releaser.homebrew import update_python_resources
 
-
 FORMULA_PATH = "test/formulas"
 USERNAME = "Justintime50"
 VERSION = "0.1.0"

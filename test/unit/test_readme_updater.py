@@ -100,9 +100,7 @@ def test_format_formula_data_error_reading_formula():
         with pytest.raises(SystemExit) as error:
             _format_formula_data("test")
 
-    assert (
-        str(error.value) == "There was a problem opening or reading the formula data: "
-    )
+    assert str(error.value) == "There was a problem opening or reading the formula data: "
 
 
 def test_generate_table():
@@ -168,9 +166,7 @@ def test_retrieve_old_table_no_readme(mock_logger):
     """Tests that we retrieve only the old table data when start and end tags exist."""
     old_table, old_table_found = _retrieve_old_table("test")
 
-    mock_logger.assert_called_once_with(
-        "Could not find a valid README in this project to update."
-    )
+    mock_logger.assert_called_once_with("Could not find a valid README in this project to update.")
     assert old_table == ""
     assert old_table_found is False
 
