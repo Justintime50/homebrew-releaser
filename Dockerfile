@@ -7,6 +7,7 @@ ENV HOMEBREW_CACHE=/tmp/homebrew-cache \
     HOMEBREW_NO_INSTALL_CLEANUP=1 \
     HOMEBREW_NO_ENV_HINTS=1 \
     HOMEBREW_NO_ANALYTICS=1 \
+    HOMEBREW_NO_REQUIRE_TAP_TRUST=1 \
     PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
 
 RUN \
@@ -19,7 +20,7 @@ RUN \
     useradd -m linuxbrew && \
     curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | \
         su - linuxbrew -c "NONINTERACTIVE=1 /bin/bash" && \
-    su - linuxbrew -c "git -C /home/linuxbrew/.linuxbrew/Homebrew checkout 5.0.9" && \
+    su - linuxbrew -c "git -C /home/linuxbrew/.linuxbrew/Homebrew checkout 6.0.18" && \
     chown -R linuxbrew:linuxbrew /app
 
 USER linuxbrew

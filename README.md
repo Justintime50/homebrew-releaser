@@ -28,6 +28,7 @@ When you cut a new release when using this GitHub Action, Homebrew Releaser will
 - Homebrew Releaser is **not** compatible with monorepos.
 - Every precaution will be made to ensure that major releases of this action remain compatible (eg: every release of this action rebuilds and packages the current major release such as `v3` as a convenience to users). If you value stability over convenience, it's highly recommended to pin a specific version or commit hash of this action when using it (eg: `v2.0.1`).
   - Because we pre-build and pin the Docker image used instead of referencing a local Dockerfile, you **cannot** use the `latest` version/tag of this action and expect it to reflect the latest changes.
+- To avoid releasing interruptions, we set `HOMEBREW_NO_REQUIRE_TAP_TRUST` meaning that any taps used skip trust verification
 
 ### GitHub Actions YAML
 
@@ -50,7 +51,7 @@ jobs:
     name: homebrew-releaser
     steps:
       - name: Release project to Homebrew tap
-        uses: Justintime50/homebrew-releaser@v3
+        uses: Justintime50/homebrew-releaser@v4
         with:
           # The name of the homebrew tap to publish your formula to as it appears on GitHub (Homebrew taps must start with `homebrew-`).
           # Required - strings
@@ -83,7 +84,7 @@ jobs:
     name: homebrew-releaser
     steps:
       - name: Release project to Homebrew tap
-        uses: Justintime50/homebrew-releaser@v3
+        uses: Justintime50/homebrew-releaser@v4
         with:
           # The name of the homebrew tap to publish your formula to as it appears on GitHub (Homebrew taps must start with `homebrew-`).
           # Required - strings
@@ -218,7 +219,7 @@ jobs:
     name: homebrew-releaser
     steps:
       - name: Release my project to my Homebrew tap
-        uses: Justintime50/homebrew-releaser@v3
+        uses: Justintime50/homebrew-releaser@v4
         with:
           homebrew_owner: Justintime50
           homebrew_tap: homebrew-formulas

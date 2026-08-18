@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v4.0.0 (2026-08-18)
+
+- Upgrades from homebrew v5 to v6 allowing for parallelization and better security
+
 ## v3.3.0 (2026-01-13)
 
 - Adds `ignore_warnings` param to skip failing the action at the end for raised non-critical warnings
