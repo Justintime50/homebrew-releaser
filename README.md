@@ -273,3 +273,7 @@ docker buildx build --platform linux/amd64 -t justintime50/homebrew-releaser:3.0
 ```
 
 By following these steps, we push the pre-built Docker image to Docker Hub, we then push our source code to GitHub, we then publish the new version of the Action which references the updated pre-built Docker image (dramatically improves performance by using a pre-built image instead of rebuilding on every run). Users will then either use the stable (eg: v3) tag or an explicit commit hash or version.
+
+#### Major Releases
+
+If updating a major release of this action, ensure you update the `STABLE_TAG` in `update-stable.yml`

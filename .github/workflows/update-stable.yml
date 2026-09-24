@@ -9,7 +9,7 @@ jobs:
   update-stable:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: '0'
       - name: Update stable git tag
@@ -17,4 +17,4 @@ jobs:
           git tag --force $STABLE_TAG ${GITHUB_REF##*/}
           git push origin --force $STABLE_TAG
         env:
-          STABLE_TAG: v3
+          STABLE_TAG: v4
