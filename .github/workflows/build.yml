@@ -26,7 +26,7 @@ jobs:
       - uses: justintime50/composite-actions/bootstrap-python@v1
         with:
           python-version: '3.14'
-      - uses: Homebrew/actions/setup-homebrew@master
+      - uses: Homebrew/actions/setup-homebrew@848c272c7bfe984a197bd4d16383f4c106ec61e6 # 2026.09.21.1
       # These Homebrew packages are needed since we have them as fake dependencies for some test output
       - name: Setup required Homebrew packages
         run: brew install bash gcc
